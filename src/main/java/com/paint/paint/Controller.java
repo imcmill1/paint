@@ -3,12 +3,16 @@ package com.paint.paint;
 import javafx.fxml.FXML;
 import javafx.scene.control.Label;
 
-public class fxml {
-    @FXML
-    private Label welcomeText;
+import java.io.IOException;
+
+public class Controller {
 
     @FXML
-    protected void onHelloButtonClick() {
-        welcomeText.setText("Welcome to JavaFX Application!");
-    }
+    protected void open() throws IOException { fileIO.open();}
+
+    @FXML
+    protected void save() { fileIO.save();}
+
+    @FXML
+    protected void saveAs() { fileIO.saveAs();}
 }
