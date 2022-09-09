@@ -13,13 +13,18 @@
                   <MenuItem mnemonicParsing="false" onAction="#open" text="Open" />
                   <MenuItem mnemonicParsing="false" onAction="#save" text="Save" />
                   <MenuItem mnemonicParsing="false" onAction="#saveAs" text="Save As..." />
-              <MenuItem mnemonicParsing="false" text="Close" />
+              <MenuItem mnemonicParsing="false" onAction="#closeLast" text="Close Last" />
+                  <MenuItem mnemonicParsing="false" onAction="#closeAll" text="Close All" />
             </items>
           </Menu>
         </menus>
       </MenuBar>
    </top>
    <center>
-      <Canvas height="200.0" width="200.0" BorderPane.alignment="CENTER" />
+      <StackPane fx:id="displayPane" prefHeight="150.0" prefWidth="200.0" BorderPane.alignment="CENTER">
+         <children>
+            <Canvas id="baseCanvas" fx:id="baseCanvas" height="375.0" width="600.0" />
+         </children>
+      </StackPane>
    </center>
 </BorderPane>
