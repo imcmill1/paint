@@ -31,7 +31,7 @@ public class Controller { //static controller class
     protected void save() throws IOException { fileIO.save(baseCanvas);}
 
     @FXML
-    protected void saveAs() { fileIO.saveAs();}
+    protected void saveAs() throws IOException { fileIO.saveAs(baseCanvas);}
 
     //=====DISPLAY METHODS=====//
     //Methods from the Display class. Similar to above, these methods must be wrapped in a method inside the controller class.
