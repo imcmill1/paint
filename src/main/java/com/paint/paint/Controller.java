@@ -15,7 +15,7 @@ public class Controller { //static controller class
     @FXML private StackPane displayPane; //inject the stackpane for the display
     @FXML
     private Canvas baseCanvas; //injects canvas and creates graphics context variable.
-    private GraphicsContext gc;
+    private GraphicsContext GraphContext;
 
 
     //=====FILE IO METHODS=====//
@@ -46,6 +46,6 @@ public class Controller { //static controller class
     //placeholder initialize method for things not directly injected into FXML.
     //Direct injection is preferred.
     public void initialize() {
-        gc = baseCanvas.getGraphicsContext2D();
+        GraphContext = baseCanvas.getGraphicsContext2D();
     }
 }

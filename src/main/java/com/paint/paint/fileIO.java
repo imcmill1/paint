@@ -1,14 +1,10 @@
 package com.paint.paint;
 
-import javafx.geometry.Rectangle2D;
-import javafx.scene.SnapshotParameters;
 import javafx.scene.canvas.Canvas;
-import javafx.scene.image.Image;
 import javafx.scene.image.WritableImage;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 import javax.imageio.ImageIO;
-import java.awt.image.RenderedImage;
 import java.io.File;
 import java.io.IOException;
 import javafx.embed.swing.SwingFXUtils;
@@ -43,10 +39,7 @@ public class fileIO { //create public class fileIO which is static by default as
         File file = saveFile.showSaveDialog(fileStage);
         if (file != null) {
             WritableImage saveImg = new WritableImage((int)canvas.getWidth(), (int)canvas.getHeight()); //type cast for now; fix later
-            SnapshotParameters sp = new SnapshotParameters();
-            sp.setViewport(new Rectangle2D(0,0,canvas.getWidth(), canvas.getHeight()));
-            canvas.snapshot(sp, saveImg);
-            //RenderedImage rendImage = SwingFXUtils.fromFXImage(saveImg, null);
+            canvas.snapshot(null, saveImg);
             ImageIO.write(SwingFXUtils.fromFXImage(saveImg, null), "png", file);
             lastSavedFile = file;
         }
@@ -56,7 +49,6 @@ public class fileIO { //create public class fileIO which is static by default as
         if (lastSavedFile != null) {//check if lastSaved file not blank, if true, take snapshot and save at lastSavedFile
             WritableImage saveImg = new WritableImage((int)canvas.getWidth(), (int)canvas.getHeight()); //type cast for now; fix later
             canvas.snapshot(null, saveImg);
-            RenderedImage rendImage = SwingFXUtils.fromFXImage(saveImg, null);
             ImageIO.write(SwingFXUtils.fromFXImage(saveImg, null), "png", lastSavedFile);
         }
 
