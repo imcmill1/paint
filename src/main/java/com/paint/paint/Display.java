@@ -2,9 +2,12 @@ package com.paint.paint;
 
 import javafx.scene.Node;
 import javafx.scene.canvas.Canvas;
+import javafx.scene.canvas.GraphicsContext;
+import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.StackPane;
 
+import java.awt.*;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -22,9 +25,9 @@ public class Display {
            ImageView img = new ImageView(path); //creates a new ImageView object using the filepath passed in from the controller
            imgList.add(img); //adds that image to the list
            img.setPreserveRatio(true); //turns on preserve ration to make sure the aspect ratio is retained when image is resized to fit
-           img.setFitHeight(canvas.getHeight()); //sets a height limit for the image to be fit to. 200px is an arbitrary selection.
+           img.setFitHeight(canvas.getHeight()); //sets a height limit for the image to be fit to
            img.setFitWidth(canvas.getWidth()); //same as above but for width
-           pane.getChildren().addAll(img); //adds the image to the StackPane passed in from the controller.
+           pane.getChildren().addAll(img, canvas); //adds the image to the StackPane passed in from the controller.
        }
        catch (Exception e) {
            //empty catch so that nothing happens when an empty path is received, or an improper filetype is received.

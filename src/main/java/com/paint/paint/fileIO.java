@@ -15,6 +15,8 @@ import javafx.embed.swing.SwingFXUtils;
 *  that can be passed into Controller.java. */
 
 public class fileIO { //create public class fileIO which is static by default as top level class
+    static File lastSavedFile;
+
     public static String open() throws IOException { //create an open() method
         Stage fileStage = new Stage(); //creates a JavaFX stage for the file explorer that the File Chooser object will be placed on later.
         FileChooser openFile = new FileChooser(); //creates a File Chooser object called openFile
@@ -24,27 +26,35 @@ public class fileIO { //create public class fileIO which is static by default as
         try { //try catch block. if user cancels the file explorer, selectedImg will be null, and throw an exception when we try to get its path
             String imgPath = selectedImg.getAbsolutePath(); //converts the selected image file into a string containing the filepath
             return imgPath; //returns the filepath
-        }
-        catch (Exception e) { //the catch block returns null if needed
+        } catch (Exception e) { //the catch block returns null if needed
             return null;
         }
     }
 
-    public static void save(Canvas canvas) throws IOException { // placeholder save method
+    public static void saveAs(Canvas canvas) throws IOException { //placeholder saveAs method
         Stage fileStage = new Stage();
         FileChooser saveFile = new FileChooser();
-        saveFile.setTitle("Save Image");
+        saveFile.getExtensionFilters().addAll(new FileChooser.ExtensionFilter("PNG Files", "*.png"));
+        saveFile.setTitle("Save As...");
         File file = saveFile.showSaveDialog(fileStage);
         if (file != null) {
-            WritableImage saveImg = new WritableImage((int)canvas.getHeight(), (int)canvas.getWidth()); //type cast for now; fix later
+            WritableImage saveImg = new WritableImage((int)canvas.getWidth(), (int)canvas.getHeight()); //type cast for now; fix later
             canvas.snapshot(null, saveImg);
             ImageIO.write(SwingFXUtils.fromFXImage(saveImg, null), "png", file);
+            lastSavedFile = file;
         }
     }
 
-    public static void saveAs() { //placeholder saveAs method
-        System.out.println("saveAs");
+    public static void save(Canvas canvas) throws IOException { // placeholder save method
+        if (lastSavedFile != null) {//check if lastSaved file not blank, if true, take snapshot and save at lastSavedFile
+            WritableImage saveImg = new WritableImage((int)canvas.getWidth(), (int)canvas.getHeight()); //type cast for now; fix later
+            canvas.snapshot(null, saveImg);
+            ImageIO.write(SwingFXUtils.fromFXImage(saveImg, null), "png", lastSavedFile);
+        }
+
+        else {
+            fileIO.saveAs(canvas);
+        } //if it was null, call saveAs instead
     }
 
 }
-
