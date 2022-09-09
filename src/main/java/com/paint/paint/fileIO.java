@@ -1,8 +1,13 @@
 package com.paint.paint;
 
+import javafx.scene.canvas.Canvas;
+import javafx.scene.image.WritableImage;
+import javafx.stage.FileChooser;
+import javafx.stage.Stage;
+import javax.imageio.ImageIO;
 import java.io.File;
 import java.io.IOException;
-import java.awt.Desktop;
+//import javafx.swing.SwingFXUtils;
 
 /*==========fileIO Class==========*/
 /* The purpose of this class is to
@@ -10,19 +15,34 @@ import java.awt.Desktop;
 *  that can be passed into Controller.java. */
 
 public class fileIO { //create public class fileIO which is static by default as top level class
-    public static void open() throws IOException { //create an open() method
-        File file = new File ("C://Users//ianmc//OneDrive//Pictures");
-        Desktop desktop = Desktop.getDesktop();
-        desktop.open(file);
+    public static String open() throws IOException { //create an open() method
+        Stage fileStage = new Stage(); //creates a JavaFX stage for the file explorer that the File Chooser object will be placed on later.
+        FileChooser openFile = new FileChooser(); //creates a File Chooser object called openFile
+        openFile.setTitle("Select an image file"); //gives the File Chooser a title
+        openFile.getExtensionFilters().addAll(new FileChooser.ExtensionFilter("Image Files", "*.jpg", "*.png")); //sets extension filters so only valid file extensions are shown
+        File selectedImg = openFile.showOpenDialog(fileStage); //creates a file object called selected file that is assigned to be whatever file is selected from the file chooser
+        try { //try catch block. if user cancels the file explorer, selectedImg will be null, and throw an exception when we try to get its path
+            String imgPath = selectedImg.getAbsolutePath(); //converts the selected image file into a string containing the filepath
+            return imgPath; //returns the filepath
+        }
+        catch (Exception e) { //the catch block returns null if needed
+            return null;
+        }
     }
 
-    // placeholder save method
-    public static void save() {
-        System.out.println("save");
+    public static void save(Canvas canvas) throws IOException { // placeholder save method
+        Stage fileStage = new Stage();
+        FileChooser saveFile = new FileChooser();
+        saveFile.setTitle("Save Image");
+        File file = saveFile.showSaveDialog(fileStage);
+        if (file != null) {
+            WritableImage saveImg = new WritableImage((int)canvas.getHeight(), (int)canvas.getWidth()); //type cast for now; fix later
+            canvas.snapshot(null, saveImg);
+            //ImageIO.write(SwingFXUtils.fromFXImage(saveImg, null), "png", file);
+        }
     }
 
-    //placeholder saveAs method
-    public static void saveAs() {
+    public static void saveAs() { //placeholder saveAs method
         System.out.println("saveAs");
     }
 
