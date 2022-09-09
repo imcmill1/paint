@@ -35,7 +35,7 @@ public class Controller { //static controller class
 
     //=====DISPLAY METHODS=====//
     //Methods from the Display class. Similar to above, these methods must be wrapped in a method inside the controller class.
-    //Note: one exception is that currently the showImage() method is not wrapped. Instead it is called directly from the Controller.open() method.
+    //Note: one exception is that currently the showImage() method is not wrapped. Instead, it is called directly from the Controller.open() method.
     @FXML
     protected void closeLast() {Display.closeLast(displayPane);}
 
