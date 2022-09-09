@@ -7,7 +7,7 @@ import javafx.stage.Stage;
 import javax.imageio.ImageIO;
 import java.io.File;
 import java.io.IOException;
-//import javafx.swing.SwingFXUtils;
+import javafx.embed.swing.SwingFXUtils;
 
 /*==========fileIO Class==========*/
 /* The purpose of this class is to
@@ -38,7 +38,7 @@ public class fileIO { //create public class fileIO which is static by default as
         if (file != null) {
             WritableImage saveImg = new WritableImage((int)canvas.getHeight(), (int)canvas.getWidth()); //type cast for now; fix later
             canvas.snapshot(null, saveImg);
-            //ImageIO.write(SwingFXUtils.fromFXImage(saveImg, null), "png", file);
+            ImageIO.write(SwingFXUtils.fromFXImage(saveImg, null), "png", file);
         }
     }
 
