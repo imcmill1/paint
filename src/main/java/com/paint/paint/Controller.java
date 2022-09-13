@@ -3,27 +3,24 @@ package com.paint.paint;
 import javafx.fxml.FXML;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
+import javafx.scene.control.ScrollPane;
 import javafx.scene.layout.StackPane;
 import java.io.IOException;
 
 //TO DO LIST:
 /*
-- Fix display so images can't overlap the toolbar
-- Pin image to top left corner of stackpane to mimic paint display
-- Remove close, closeAll, reimplement close as 'new' function that clears the canvas
 - Implement sprint 2 features:
     - Draw a line
     - Save image with that line on it
-    - DONE: Canvas that resizes to image being opened
-    - Add scroll bars to navigate left/right and up/down
     - Control width of line drawn (line weight)
-    - Have a color chooser, does not need to change color of line yet
     - Have a help menu button with "Help and about" options
 */
 
 public class Controller { //static controller class
     //=====FXML LOADS=====//
     @FXML private StackPane displayPane; //inject the stackpane for the display
+
+    @FXML private ScrollPane scrollPane;
     @FXML
     private Canvas baseCanvas; //injects canvas and creates graphics context variable.
     private GraphicsContext GraphContext;
@@ -47,7 +44,7 @@ public class Controller { //static controller class
     //Methods from the Display class. Similar to above, these methods must be wrapped in a method inside the controller class.
     //Note: one exception is that currently the showImage() method is not wrapped. Instead, it is called directly from the Controller.open() method.
     @FXML
-    protected void newCanvas() { Display.newCanvas(displayPane);}
+    protected void newCanvas() { Display.newCanvas(baseCanvas, GraphContext);}
 
 
     //=====INITIALIZE=====//
@@ -55,5 +52,6 @@ public class Controller { //static controller class
     //Direct injection is preferred.
     public void initialize() {
         GraphContext = baseCanvas.getGraphicsContext2D();
+        scrollPane.setContent(baseCanvas);
     }
 }

@@ -1,29 +1,62 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import javafx.scene.*?>
 <?import javafx.scene.canvas.*?>
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 
 <BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/17.0.2-ea" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.paint.paint.Controller">
-    <top>
-      <MenuBar BorderPane.alignment="CENTER">
-        <menus>
-          <Menu mnemonicParsing="false" text="File">
-            <items>
-              <MenuItem mnemonicParsing="false" onAction="#newCanvas" text="New" />
-                  <MenuItem mnemonicParsing="false" onAction="#open" text="Open" />
-                  <MenuItem mnemonicParsing="false" onAction="#save" text="Save" />
-                  <MenuItem mnemonicParsing="false" onAction="#saveAs" text="Save As..." />
-            </items>
-          </Menu>
-        </menus>
-      </MenuBar>
-   </top>
    <center>
-      <StackPane fx:id="displayPane" prefHeight="150.0" prefWidth="200.0" BorderPane.alignment="CENTER">
+      <StackPane fx:id="displayPane" prefHeight="150.0" prefWidth="200.0" BorderPane.alignment="TOP_LEFT">
          <children>
-            <Canvas id="baseCanvas" fx:id="baseCanvas" height="375.0" width="600.0" />
+            <ScrollPane fx:id="scrollPane" hbarPolicy="ALWAYS" pannable="true" prefHeight="200.0" prefWidth="200.0" vbarPolicy="ALWAYS">
+              <content>
+                <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="200.0" prefWidth="200.0">
+                     <children>
+                        <Canvas id="baseCanvas" fx:id="baseCanvas" height="375.0" width="600.0">
+                           <cursor>
+                              <Cursor fx:constant="CROSSHAIR" />
+                           </cursor>
+                        </Canvas>
+                     </children>
+                  </AnchorPane>
+              </content>
+            </ScrollPane>
          </children>
       </StackPane>
    </center>
+   <top>
+      <TabPane prefHeight="50.0" prefWidth="200.0" tabClosingPolicy="UNAVAILABLE" BorderPane.alignment="CENTER">
+        <tabs>
+          <Tab fx:id="menuTab" text="Menu">
+            <content>
+              <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
+                     <children>
+                        <MenuBar>
+                          <menus>
+                            <Menu mnemonicParsing="false" text="File">
+                              <items>
+                                <MenuItem mnemonicParsing="false" onAction="#newCanvas" text="New" />
+                                    <MenuItem mnemonicParsing="false" onAction="#open" text="Open" />
+                                    <MenuItem mnemonicParsing="false" onAction="#save" text="Save" />
+                                    <MenuItem mnemonicParsing="false" onAction="#saveAs" text="Save As..." />
+                              </items>
+                            </Menu>
+                          </menus>
+                        </MenuBar>
+                     </children>
+                  </AnchorPane>
+            </content>
+          </Tab>
+          <Tab text="Home">
+            <content>
+              <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
+                     <children>
+                        <ColorPicker />
+                     </children></AnchorPane>
+            </content>
+          </Tab>
+        </tabs>
+      </TabPane>
+   </top>
 </BorderPane>

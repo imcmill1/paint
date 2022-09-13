@@ -29,8 +29,8 @@ public class Display {
        }
     }
 
-    public static void newCanvas(StackPane pane){ //closeLast method will close the image on the top layer of the canvas
-
+    public static void newCanvas(Canvas canvas, GraphicsContext gc){ //closeLast method will close the image on the top layer of the canvas
+        gc.clearRect(0,0, canvas.getWidth(), canvas.getHeight());
     }
 
 }
