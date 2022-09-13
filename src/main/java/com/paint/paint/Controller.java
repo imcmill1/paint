@@ -7,6 +7,14 @@ import javafx.scene.control.ScrollPane;
 import javafx.scene.layout.StackPane;
 import java.io.IOException;
 
+/*======Controller Class======*/
+/*
+    The purpose of this class is to wrap methods from other classes
+    and pass them to FXML. Beyond initialization of objects and other
+    overhead that cannot be completed in Main(), there should be no
+    backend code in this class.
+ */
+
 //TO DO LIST:
 /*
 - Implement sprint 2 features:

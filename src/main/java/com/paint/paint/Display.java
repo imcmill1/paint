@@ -8,7 +8,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 /*=======Display Class========*/
-/* The purpose of this class is to handle
+/*
+    The purpose of this class is to handle
     displaying canvases, images, layering
     canvases, and canvas selection.
  */

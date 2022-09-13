@@ -10,9 +10,11 @@ import java.io.IOException;
 import javafx.embed.swing.SwingFXUtils;
 
 /*==========fileIO Class==========*/
-/* The purpose of this class is to
-*  implement basic file I/O methods
-*  that can be passed into Controller.java. */
+/*
+   The purpose of this class is to
+   implement basic file I/O methods
+   that can be passed into Controller.java.
+*/
 
 public class fileIO { //create public class fileIO which is static by default as top level class
     static File lastSavedFile;
