@@ -1,14 +1,11 @@
 package com.paint.paint;
 
 import javafx.fxml.FXML;
-import javafx.scene.control.Label;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.layout.StackPane;
-import javafx.scene.paint.Color;
-
 import java.io.IOException;
-import java.io.File;
+
 
 public class Controller { //static controller class
     //=====FXML LOADS=====//
@@ -17,14 +14,13 @@ public class Controller { //static controller class
     private Canvas baseCanvas; //injects canvas and creates graphics context variable.
     private GraphicsContext GraphContext;
 
-
     //=====FILE IO METHODS=====//
     //These are the methods from the fileIO static class. They have to be wrapped in a method here in the controller for them to be used
     //in FXML. Most are one line commands.
     @FXML
     protected void open() throws IOException { //wrapped open() function
         String selectedImg = fileIO.open(); //creates string selectedImg and assigns it to a call of fileIO.open()
-        Display.showImage(displayPane, baseCanvas, selectedImg); //passes that string as the path into showImage
+        Display.showImage(baseCanvas, GraphContext, selectedImg); //passes that string as the path into showImage
     }
 
     @FXML
@@ -37,10 +33,10 @@ public class Controller { //static controller class
     //Methods from the Display class. Similar to above, these methods must be wrapped in a method inside the controller class.
     //Note: one exception is that currently the showImage() method is not wrapped. Instead, it is called directly from the Controller.open() method.
     @FXML
-    protected void closeLast() {Display.closeLast(displayPane);}
+    protected void closeLast() { Display.closeLast(displayPane);}
 
     @FXML
-    protected void closeAll() {Display.closeAll(displayPane);}
+    protected void closeAll() { Display.closeAll(displayPane);}
 
     //=====INITIALIZE=====//
     //placeholder initialize method for things not directly injected into FXML.
