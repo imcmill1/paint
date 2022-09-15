@@ -37,6 +37,8 @@ public class Display {
 
     public static void newCanvas(Canvas canvas, GraphicsContext GraphContext){ //closeLast method will close the image on the top layer of the canvas
         GraphContext.clearRect(0,0, canvas.getWidth(), canvas.getHeight());
+        canvas.setHeight(350);
+        canvas.setWidth(600);
         GraphContext.setFill(Color.WHITE);
         GraphContext.fillRect(0,0, canvas.getWidth(), canvas.getHeight());
     }
