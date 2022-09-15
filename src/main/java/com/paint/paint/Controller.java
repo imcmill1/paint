@@ -3,6 +3,7 @@ package com.paint.paint;
 import javafx.fxml.FXML;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
+import javafx.scene.control.ChoiceBox;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.control.ToggleButton;
 import javafx.scene.layout.StackPane;
@@ -26,18 +27,17 @@ import java.io.IOException;
 //TO DO LIST:
 /*
 - Implement sprint 2 features:
-    - Draw a line
     - Control width of line drawn (line weight)
 */
 
 public class Controller { //static controller class
     //=====FXML LOADS=====//
     @FXML private StackPane displayPane; //inject the stackpane for the display
-
     @FXML private ScrollPane scrollPane;
     @FXML private Canvas baseCanvas; //injects canvas and creates graphics context variable.
-
     @FXML private ToggleButton drawToggleButton;
+
+    @FXML private ChoiceBox widthChoice;
     private GraphicsContext GraphContext;
 
 
