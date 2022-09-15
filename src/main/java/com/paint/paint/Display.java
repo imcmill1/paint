@@ -7,6 +7,7 @@ import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.image.Image;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
+import javafx.scene.paint.Color;
 import javafx.scene.text.Text;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
@@ -36,6 +37,8 @@ public class Display {
 
     public static void newCanvas(Canvas canvas, GraphicsContext GraphContext){ //closeLast method will close the image on the top layer of the canvas
         GraphContext.clearRect(0,0, canvas.getWidth(), canvas.getHeight());
+        GraphContext.setFill(Color.WHITE);
+        GraphContext.fillRect(0,0, canvas.getWidth(), canvas.getHeight());
     }
 
     public static void helpShow(StackPane pane) {

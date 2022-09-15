@@ -8,6 +8,7 @@ import javafx.scene.control.ColorPicker;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.control.ToggleButton;
 import javafx.scene.layout.StackPane;
+import javafx.scene.paint.Color;
 
 import java.awt.*;
 import java.io.IOException;
@@ -85,6 +86,8 @@ public class Controller { //static controller class
     //Direct injection is preferred.
     public void initialize() {
         GraphContext = baseCanvas.getGraphicsContext2D();
+        GraphContext.setFill(Color.WHITE);
+        GraphContext.fillRect(0,0, baseCanvas.getWidth(), baseCanvas.getHeight());
         scrollPane.setContent(baseCanvas);
         Menu.widthChoiceConfig(widthChoice, GraphContext);
         Menu.colorPickerConfig(colorPicker, GraphContext);
