@@ -4,9 +4,12 @@ import javafx.fxml.FXML;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.control.ChoiceBox;
+import javafx.scene.control.ColorPicker;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.control.ToggleButton;
 import javafx.scene.layout.StackPane;
+
+import java.awt.*;
 import java.io.IOException;
 
 //VERSION NUMBERING
@@ -26,8 +29,7 @@ import java.io.IOException;
 
 //TO DO LIST:
 /*
-- Implement sprint 2 features:
-    - Control width of line drawn (line weight)
+
 */
 
 public class Controller { //static controller class
@@ -36,8 +38,8 @@ public class Controller { //static controller class
     @FXML private ScrollPane scrollPane;
     @FXML private Canvas baseCanvas; //injects canvas and creates graphics context variable.
     @FXML private ToggleButton drawToggleButton;
-
     @FXML private ChoiceBox widthChoice;
+    @FXML private ColorPicker colorPicker;
     private GraphicsContext GraphContext;
 
 
@@ -69,8 +71,12 @@ public class Controller { //static controller class
     //Methods from the Edit class. As with above, these methods must be wrapped in a controller method
 
     @FXML
+    protected void updateWidth() {Edit.updateWidth(GraphContext, widthChoice);}
+
+    @FXML
+    protected void updateColor() {Edit.updateColor(GraphContext, colorPicker);}
+    @FXML
     protected void drawUpdate() {
-        //Edit.drawToggle(drawToggleButton);
         Edit.drawUpdate(baseCanvas, GraphContext, drawToggleButton);
     }
 
@@ -80,6 +86,8 @@ public class Controller { //static controller class
     public void initialize() {
         GraphContext = baseCanvas.getGraphicsContext2D();
         scrollPane.setContent(baseCanvas);
+        Menu.widthChoiceConfig(widthChoice, GraphContext);
+        Menu.colorPickerConfig(colorPicker, GraphContext);
         drawToggleButton.setSelected(false);
     }
 }

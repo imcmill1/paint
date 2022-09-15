@@ -13,7 +13,7 @@
               <content>
                 <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="200.0" prefWidth="200.0">
                      <children>
-                        <Canvas id="baseCanvas" fx:id="baseCanvas" height="375.0" width="600.0">
+                        <Canvas id="baseCanvas" fx:id="baseCanvas" height="375.0" onMouseEntered="#updateWidth" width="600.0">
                            <cursor>
                               <Cursor fx:constant="CROSSHAIR" />
                            </cursor>
@@ -57,7 +57,7 @@
             <content>
               <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
                      <children>
-                        <ColorPicker layoutX="194.0" layoutY="-2.0" />
+                        <ColorPicker fx:id="colorPicker" layoutX="194.0" layoutY="-2.0" onAction="#updateColor" />
                         <ChoiceBox fx:id="widthChoice" layoutX="44.0" layoutY="-2.0" prefWidth="150.0" />
                         <ToggleButton fx:id="drawToggleButton" layoutY="-2.0" mnemonicParsing="false" onAction="#drawUpdate" text="Draw" />
                      </children></AnchorPane>
