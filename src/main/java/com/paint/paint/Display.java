@@ -20,12 +20,12 @@ import javafx.stage.Stage;
 
 public class Display {
 
-    public static void showImage(Canvas canvas, GraphicsContext gc, String path) { //method to show an image
+    public static void showImage(Canvas canvas, GraphicsContext GraphContext, String path) { //method to show an image
        try { //try block catches an empty path being passed in. if path is null, goes to an empty catch
            Image img = new Image(path); //creates a new Image object using the filepath passed in from the controller
            canvas.setHeight(img.getHeight()); //resize canvas height to size of image
            canvas.setWidth(img.getWidth()); //resize canvas width to size of image
-           gc.drawImage(img, 0,0); //draw that image on the canvas
+           GraphContext.drawImage(img, 0,0); //draw that image on the canvas
        }
 
        catch (Exception e) {
@@ -34,8 +34,8 @@ public class Display {
        }
     }
 
-    public static void newCanvas(Canvas canvas, GraphicsContext gc){ //closeLast method will close the image on the top layer of the canvas
-        gc.clearRect(0,0, canvas.getWidth(), canvas.getHeight());
+    public static void newCanvas(Canvas canvas, GraphicsContext GraphContext){ //closeLast method will close the image on the top layer of the canvas
+        GraphContext.clearRect(0,0, canvas.getWidth(), canvas.getHeight());
     }
 
     public static void helpShow(StackPane pane) {

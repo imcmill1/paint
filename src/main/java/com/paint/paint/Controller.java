@@ -4,8 +4,16 @@ import javafx.fxml.FXML;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.control.ScrollPane;
+import javafx.scene.control.ToggleButton;
 import javafx.scene.layout.StackPane;
 import java.io.IOException;
+
+//VERSION NUMBERING
+/* With minor exception, version numbers will be assigned as follows:
+   X.x.x - assigned to updates after completing a sprint
+   x.X.x - assigned to feature additions within each sprint
+   x.x.X - assigned to incremental updates to features
+ */
 
 /*======Controller Class======*/
 /*
@@ -19,7 +27,6 @@ import java.io.IOException;
 /*
 - Implement sprint 2 features:
     - Draw a line
-    - Save image with that line on it
     - Control width of line drawn (line weight)
 */
 
@@ -28,9 +35,11 @@ public class Controller { //static controller class
     @FXML private StackPane displayPane; //inject the stackpane for the display
 
     @FXML private ScrollPane scrollPane;
-    @FXML
-    private Canvas baseCanvas; //injects canvas and creates graphics context variable.
+    @FXML private Canvas baseCanvas; //injects canvas and creates graphics context variable.
+
+    @FXML private ToggleButton drawToggleButton;
     private GraphicsContext GraphContext;
+
 
     //=====FILE IO METHODS=====//
     //These are the methods from the fileIO static class. They have to be wrapped in a method here in the controller for them to be used
@@ -56,6 +65,14 @@ public class Controller { //static controller class
     @FXML
     protected void helpShow() {Display.helpShow(displayPane);}
 
+    //=====EDIT METHODS=====//
+    //Methods from the Edit class. As with above, these methods must be wrapped in a controller method
+
+    @FXML
+    protected void drawUpdate() {
+        //Edit.drawToggle(drawToggleButton);
+        Edit.drawUpdate(baseCanvas, GraphContext, drawToggleButton);
+    }
 
     //=====INITIALIZE=====//
     //placeholder initialize method for things not directly injected into FXML.
@@ -63,5 +80,6 @@ public class Controller { //static controller class
     public void initialize() {
         GraphContext = baseCanvas.getGraphicsContext2D();
         scrollPane.setContent(baseCanvas);
+        drawToggleButton.setSelected(false);
     }
 }
