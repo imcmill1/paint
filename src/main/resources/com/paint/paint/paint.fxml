@@ -9,7 +9,7 @@
    <center>
       <StackPane fx:id="displayPane" prefHeight="150.0" prefWidth="200.0" BorderPane.alignment="TOP_LEFT">
          <children>
-            <ScrollPane fx:id="scrollPane" hbarPolicy="ALWAYS" pannable="true" prefHeight="200.0" prefWidth="200.0" vbarPolicy="ALWAYS">
+            <ScrollPane fx:id="scrollPane" hbarPolicy="ALWAYS" prefHeight="200.0" prefWidth="200.0" vbarPolicy="ALWAYS">
               <content>
                 <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="200.0" prefWidth="200.0">
                      <children>
@@ -34,7 +34,7 @@
                      <children>
                         <MenuBar>
                           <menus>
-                            <Menu mnemonicParsing="false" text="File">
+                            <Menu fx:id="fileMenu" mnemonicParsing="false" text="File">
                               <items>
                                 <MenuItem mnemonicParsing="false" onAction="#newCanvas" text="New" />
                                     <MenuItem mnemonicParsing="false" onAction="#open" text="Open" />
@@ -42,6 +42,11 @@
                                     <MenuItem mnemonicParsing="false" onAction="#saveAs" text="Save As..." />
                               </items>
                             </Menu>
+                              <Menu fx:id="helpMenu" mnemonicParsing="false" text="Help">
+                                <items>
+                                  <MenuItem mnemonicParsing="false" onAction="#helpShow" text="Help &amp; About" />
+                                </items>
+                              </Menu>
                           </menus>
                         </MenuBar>
                      </children>

@@ -21,7 +21,6 @@ import java.io.IOException;
     - Draw a line
     - Save image with that line on it
     - Control width of line drawn (line weight)
-    - Have a help menu button with "Help and about" options
 */
 
 public class Controller { //static controller class
@@ -53,6 +52,9 @@ public class Controller { //static controller class
     //Note: one exception is that currently the showImage() method is not wrapped. Instead, it is called directly from the Controller.open() method.
     @FXML
     protected void newCanvas() { Display.newCanvas(baseCanvas, GraphContext);}
+
+    @FXML
+    protected void helpShow() {Display.helpShow(displayPane);}
 
 
     //=====INITIALIZE=====//
