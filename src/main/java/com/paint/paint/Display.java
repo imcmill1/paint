@@ -52,7 +52,7 @@ public class Display {
         VBox helpMsg = new VBox(20);
         helpMsg.setAlignment(Pos.CENTER);
         helpMsg.getChildren().add(new Text("About this application:\n" +
-                                              "ISM Pain(t) v1.1.0\n" +
+                                              "ISM Pain(t) v2.0.3\n" +
                                               "Author: Ian McMillan\n" +
                                               "Questions? Email the author:\n" +
                                               "ian.mcmillan1@valpo.edu\n"));
