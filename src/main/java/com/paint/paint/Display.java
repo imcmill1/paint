@@ -4,8 +4,8 @@ import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
+import javafx.scene.control.ScrollPane;
 import javafx.scene.image.Image;
-import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Text;
@@ -43,7 +43,7 @@ public class Display {
         GraphContext.fillRect(0,0, canvas.getWidth(), canvas.getHeight());
     }
 
-    public static void helpShow(StackPane pane) {
+    public static void helpShow(ScrollPane pane) {
         Stage helpWin = new Stage();
         helpWin.setTitle("Help & About");
         Stage ownerStage = (Stage) pane.getScene().getWindow();

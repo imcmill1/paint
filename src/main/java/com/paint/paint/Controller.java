@@ -66,7 +66,7 @@ public class Controller { //static controller class
     protected void newCanvas() { Display.newCanvas(baseCanvas, GraphContext);}
 
     @FXML
-    protected void helpShow() {Display.helpShow(displayPane);}
+    protected void helpShow() {Display.helpShow(scrollPane);}
 
     //=====EDIT METHODS=====//
     //Methods from the Edit class. As with above, these methods must be wrapped in a controller method
