@@ -5,6 +5,8 @@ import javafx.scene.Scene;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.control.ScrollPane;
+import javafx.scene.control.Tab;
+import javafx.scene.control.TabPane;
 import javafx.scene.image.Image;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
@@ -35,20 +37,27 @@ public class Display {
        }
     }
 
-    public static void newCanvas(Canvas canvas, GraphicsContext GraphContext){ //closeLast method will close the image on the top layer of the canvas
-        GraphContext.clearRect(0,0, canvas.getWidth(), canvas.getHeight());
-        canvas.setHeight(350);
-        canvas.setWidth(600);
-        GraphContext.setFill(Color.WHITE);
-        GraphContext.fillRect(0,0, canvas.getWidth(), canvas.getHeight());
+    public static Tab newTab(TabPane tabPane, String name) { //creates a new tab and attaches it to the tabPane
+        Tab newTab = new Tab();
+        newTab.setText(name);
+        tabPane.getTabs().add(newTab);
+        return newTab;
     }
 
-    public static void newScroll() {
-
+    public static ScrollPane newScroll(Tab tab) {
+        ScrollPane newScroll = new ScrollPane();
+        tab.setContent(newScroll);
+        return newScroll;
     }
 
-    public static void newTab() {
-        
+    public static Canvas newCanvas(ScrollPane scrollPane){ //closeLast method will close the image on the top layer of the canvas
+        Canvas newCanvas = new Canvas();
+        scrollPane.setContent(newCanvas);
+        return newCanvas;
+    }
+
+    public static void createNewTab(TabPane tabPane, String tabName) {
+        newCanvas(newScroll(newTab(tabPane, tabName)));
     }
 
     public static void helpShow(ScrollPane pane) {

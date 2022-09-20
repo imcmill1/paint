@@ -3,10 +3,8 @@ package com.paint.paint;
 import javafx.fxml.FXML;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
-import javafx.scene.control.ChoiceBox;
-import javafx.scene.control.ColorPicker;
+import javafx.scene.control.*;
 import javafx.scene.control.ScrollPane;
-import javafx.scene.control.ToggleButton;
 import javafx.scene.layout.StackPane;
 import javafx.scene.paint.Color;
 
@@ -35,8 +33,8 @@ import java.io.IOException;
 
 public class Controller { //static controller class
     //=====FXML LOADS=====//
-    @FXML private StackPane displayPane; //inject the stackpane for the display
     @FXML private ScrollPane scrollPane;
+    @FXML private TabPane imageTabs;
     @FXML private Canvas baseCanvas; //injects canvas and creates graphics context variable.
     @FXML private ToggleButton drawToggleButton;
     @FXML private ChoiceBox widthChoice;
@@ -62,8 +60,9 @@ public class Controller { //static controller class
     //=====DISPLAY METHODS=====//
     //Methods from the Display class. Similar to above, these methods must be wrapped in a method inside the controller class.
     //Note: one exception is that currently the showImage() method is not wrapped. Instead, it is called directly from the Controller.open() method.
+
     @FXML
-    protected void newCanvas() { Display.newCanvas(baseCanvas, GraphContext);}
+    protected void createNewTab() {Display.createNewTab(imageTabs, "untitled");}
 
     @FXML
     protected void helpShow() {Display.helpShow(scrollPane);}
@@ -85,12 +84,12 @@ public class Controller { //static controller class
     //placeholder initialize method for things not directly injected into FXML.
     //Direct injection is preferred.
     public void initialize() {
-        GraphContext = baseCanvas.getGraphicsContext2D();
+        /*GraphContext = baseCanvas.getGraphicsContext2D();
         GraphContext.setFill(Color.WHITE);
         GraphContext.fillRect(0,0, baseCanvas.getWidth(), baseCanvas.getHeight());
         scrollPane.setContent(baseCanvas);
         Menu.widthChoiceConfig(widthChoice, GraphContext);
         Menu.colorPickerConfig(colorPicker, GraphContext);
-        drawToggleButton.setSelected(false);
+        drawToggleButton.setSelected(false);*/
     }
 }
