@@ -43,6 +43,14 @@ public class Display {
         GraphContext.fillRect(0,0, canvas.getWidth(), canvas.getHeight());
     }
 
+    public static void newScroll() {
+
+    }
+
+    public static void newTab() {
+        
+    }
+
     public static void helpShow(ScrollPane pane) {
         Stage helpWin = new Stage();
         helpWin.setTitle("Help & About");
