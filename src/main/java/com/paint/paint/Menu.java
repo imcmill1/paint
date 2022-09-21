@@ -19,14 +19,12 @@ import java.awt.*;
  */
 
 public class Menu {
-    public static void widthChoiceConfig(ChoiceBox widthChoice, GraphicsContext GraphContext) {
+    public static void widthChoiceConfig(ChoiceBox widthChoice) {
         widthChoice.setValue("Width");
         widthChoice.setItems(FXCollections.observableArrayList("Width = 1px", "Width = 3px", "Width = 5px", "Width = 8px"));
-        GraphContext.setLineWidth(1); //set default initial value of 1px
     }
 
-    public static void colorPickerConfig(ColorPicker colorPicker, GraphicsContext GraphContext) {
+    public static void colorPickerConfig(ColorPicker colorPicker) {
         colorPicker.setValue(Color.BLACK);
-        GraphContext.setStroke(colorPicker.getValue());
     }
 }

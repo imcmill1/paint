@@ -23,7 +23,7 @@ public class fileIO { //create public class fileIO which is static by default as
         Stage fileStage = new Stage(); //creates a JavaFX stage for the file explorer that the File Chooser object will be placed on later.
         FileChooser openFile = new FileChooser(); //creates a File Chooser object called openFile
         openFile.setTitle("Select an image file"); //gives the File Chooser a title
-        openFile.getExtensionFilters().addAll(new FileChooser.ExtensionFilter("Image Files", "*.jpg", "*.png")); //sets extension filters so only valid file extensions are shown
+        openFile.getExtensionFilters().addAll(new FileChooser.ExtensionFilter("Image Files", "*.jpg", "*.png", "*.bmp")); //sets extension filters so only valid file extensions are shown
         File selectedImg = openFile.showOpenDialog(fileStage); //creates a file object called selected file that is assigned to be whatever file is selected from the file chooser
         try { //try catch block. if user cancels the file explorer, selectedImg will be null, and throw an exception when we try to get its path
             String imgPath = selectedImg.getAbsolutePath(); //converts the selected image file into a string containing the filepath

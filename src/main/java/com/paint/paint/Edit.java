@@ -7,6 +7,7 @@ import javafx.scene.control.ChoiceBox;
 import javafx.scene.control.ColorPicker;
 import javafx.scene.control.ToggleButton;
 import javafx.scene.input.MouseEvent;
+import javafx.scene.paint.Color;
 
 import java.awt.*;
 
@@ -19,22 +20,28 @@ import java.awt.*;
  */
 public class Edit {
     public static void updateWidth(GraphicsContext GraphContext, ChoiceBox widthChoice) {
-        String choice = widthChoice.getValue().toString();
-        switch (choice) {
-            case "Width = 1px":
-                GraphContext.setLineWidth(1);
-                break;
-            case "Width = 3px":
-                GraphContext.setLineWidth(3);
-                break;
-            case "Width = 5px":
-                GraphContext.setLineWidth(5);
-                break;
-            case "Width = 8px":
-                GraphContext.setLineWidth(8);
-                break;
+        if (widthChoice.getValue() == null) { //runs if width has been selected
+            GraphContext.setLineWidth(1);
         }
-    }
+
+        else {
+            String choice = widthChoice.getValue().toString();
+            switch (choice) {
+                case "Width = 1px":
+                    GraphContext.setLineWidth(1);
+                    break;
+                case "Width = 3px":
+                    GraphContext.setLineWidth(3);
+                    break;
+                case "Width = 5px":
+                    GraphContext.setLineWidth(5);
+                    break;
+                case "Width = 8px":
+                    GraphContext.setLineWidth(8);
+                    break;
+                }
+            }
+        }
 
     public static void updateColor(GraphicsContext GraphContext, ColorPicker colorPicker) {
         GraphContext.setStroke(colorPicker.getValue());

@@ -1,6 +1,7 @@
 package com.paint.paint;
 
 import javafx.geometry.Pos;
+import javafx.scene.Cursor;
 import javafx.scene.Scene;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
@@ -23,6 +24,8 @@ import javafx.stage.Stage;
 
 public class Display {
 
+    public static Canvas activeCanvas;
+    public static boolean firstTab;
     public static void showImage(Canvas canvas, GraphicsContext GraphContext, String path) { //method to show an image
        try { //try block catches an empty path being passed in. if path is null, goes to an empty catch
            Image img = new Image(path); //creates a new Image object using the filepath passed in from the controller
@@ -47,20 +50,42 @@ public class Display {
     public static ScrollPane newScroll(Tab tab) {
         ScrollPane newScroll = new ScrollPane();
         tab.setContent(newScroll);
+        tab.selectedProperty().addListener((observableValue, wasSelected, isSelected) -> {
+            if (isSelected) {
+                setActiveCanvas(tab);
+                ScrollPane activeScrollPane = (ScrollPane) tab.getContent();
+                activeCanvas = (Canvas) activeScrollPane.getContent();
+            }
+        });
         return newScroll;
     }
 
     public static Canvas newCanvas(ScrollPane scrollPane){ //closeLast method will close the image on the top layer of the canvas
         Canvas newCanvas = new Canvas();
+        newCanvas.setHeight(250);
+        newCanvas.setWidth(600);
+        newCanvas.getGraphicsContext2D().setFill(Color.WHITE);
+        newCanvas.getGraphicsContext2D().fillRect(0, 0, newCanvas.getWidth(), newCanvas.getHeight());
+        newCanvas.setCursor(Cursor.CROSSHAIR);
         scrollPane.setContent(newCanvas);
         return newCanvas;
     }
 
     public static void createNewTab(TabPane tabPane, String tabName) {
-        newCanvas(newScroll(newTab(tabPane, tabName)));
+        Canvas currCanvas = newCanvas(newScroll(newTab(tabPane, tabName)));
+        if (firstTab = true) activeCanvas = currCanvas;
     }
 
-    public static void helpShow(ScrollPane pane) {
+    public static void setActiveCanvas(Tab tab) {
+        ScrollPane activeScrollPane = (ScrollPane) tab.getContent();
+        activeCanvas = (Canvas) activeScrollPane.getContent();
+    }
+
+    public static Canvas getActiveCanvas() {
+        return activeCanvas;
+    }
+
+    public static void helpShow(TabPane pane) {
         Stage helpWin = new Stage();
         helpWin.setTitle("Help & About");
         Stage ownerStage = (Stage) pane.getScene().getWindow();

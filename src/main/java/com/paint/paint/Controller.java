@@ -28,18 +28,30 @@ import java.io.IOException;
 
 //TO DO LIST:
 /*
-
+ * have width controls
+ * draw square, circle, rectangle, ellipse
+ * three image types
+ * keyboard shortcuts (control S for save, etc)
+ * text label for colors (hex/rgb/English name)
+ * color grabber
+ * resize canvas (for larger drawing)
+ * pencil or straight line (whichever you didn't do last time)
+ * dashed line
+ * smart/aware save ("you're about to close without saving...")
+ *
+ * KNOWN ISSUES TO FIX:
+ *  - Open and createNewTab should both make the newest tab the active tab
+ *  - Can't close tabs yet
 */
 
 public class Controller { //static controller class
     //=====FXML LOADS=====//
-    @FXML private ScrollPane scrollPane;
     @FXML private TabPane imageTabs;
-    @FXML private Canvas baseCanvas; //injects canvas and creates graphics context variable.
     @FXML private ToggleButton drawToggleButton;
     @FXML private ChoiceBox widthChoice;
     @FXML private ColorPicker colorPicker;
-    private GraphicsContext GraphContext;
+
+    private int tabsOpened = 1;
 
 
     //=====FILE IO METHODS=====//
@@ -47,49 +59,65 @@ public class Controller { //static controller class
     //in FXML. Most are one line commands.
     @FXML
     protected void open() throws IOException { //wrapped open() function
+        Display.createNewTab(imageTabs, "untitled" + tabsOpened);
         String selectedImg = fileIO.open(); //creates string selectedImg and assigns it to a call of fileIO.open()
-        Display.showImage(baseCanvas, GraphContext, selectedImg); //passes that string as the path into showImage
+        Display.showImage(Display.getActiveCanvas(), Display.getActiveCanvas().getGraphicsContext2D(), selectedImg); //passes that string as the path into showImage
+        tabsOpened++;
     }
 
     @FXML
-    protected void save() throws IOException { fileIO.save(baseCanvas);}
+    protected void save() throws IOException { fileIO.save(Display.getActiveCanvas());}
 
     @FXML
-    protected void saveAs() throws IOException { fileIO.saveAs(baseCanvas);}
+    protected void saveAs() throws IOException { fileIO.saveAs(Display.getActiveCanvas());}
 
     //=====DISPLAY METHODS=====//
     //Methods from the Display class. Similar to above, these methods must be wrapped in a method inside the controller class.
     //Note: one exception is that currently the showImage() method is not wrapped. Instead, it is called directly from the Controller.open() method.
 
     @FXML
-    protected void createNewTab() {Display.createNewTab(imageTabs, "untitled");}
+    protected void createNewTab() {
+        Display.createNewTab(imageTabs, "untitled" + tabsOpened);
+        try {Edit.drawUpdate(Display.getActiveCanvas(), Display.getActiveCanvas().getGraphicsContext2D(), drawToggleButton);}
+
+        catch (Exception e) {}
+        tabsOpened++;
+    }
 
     @FXML
-    protected void helpShow() {Display.helpShow(scrollPane);}
+    protected void helpShow() {Display.helpShow(imageTabs);}
 
     //=====EDIT METHODS=====//
     //Methods from the Edit class. As with above, these methods must be wrapped in a controller method
 
     @FXML
-    protected void updateWidth() {Edit.updateWidth(GraphContext, widthChoice);}
+    protected void updateWidth() {
+        try {Edit.updateWidth(Display.getActiveCanvas().getGraphicsContext2D(), widthChoice);}
+
+        catch (Exception e) {}
+    }
 
     @FXML
-    protected void updateColor() {Edit.updateColor(GraphContext, colorPicker);}
+    protected void updateColor() {
+        try {Edit.updateColor(Display.getActiveCanvas().getGraphicsContext2D(), colorPicker);}
+
+        catch (Exception e) {}
+    }
+
     @FXML
     protected void drawUpdate() {
-        Edit.drawUpdate(baseCanvas, GraphContext, drawToggleButton);
+        try {Edit.drawUpdate(Display.getActiveCanvas(), Display.getActiveCanvas().getGraphicsContext2D(), drawToggleButton);}
+
+        catch (Exception e) {}
     }
 
     //=====INITIALIZE=====//
     //placeholder initialize method for things not directly injected into FXML.
     //Direct injection is preferred.
     public void initialize() {
-        /*GraphContext = baseCanvas.getGraphicsContext2D();
-        GraphContext.setFill(Color.WHITE);
-        GraphContext.fillRect(0,0, baseCanvas.getWidth(), baseCanvas.getHeight());
-        scrollPane.setContent(baseCanvas);
-        Menu.widthChoiceConfig(widthChoice, GraphContext);
-        Menu.colorPickerConfig(colorPicker, GraphContext);
-        drawToggleButton.setSelected(false);*/
+        Menu.widthChoiceConfig(widthChoice);
+        Menu.colorPickerConfig(colorPicker);
+        drawToggleButton.setSelected(false);
+        Display.firstTab = true;
     }
 }
