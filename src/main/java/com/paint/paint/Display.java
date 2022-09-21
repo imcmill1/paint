@@ -73,7 +73,10 @@ public class Display {
 
     public static void createNewTab(TabPane tabPane, String tabName) {
         Canvas currCanvas = newCanvas(newScroll(newTab(tabPane, tabName)));
-        if (firstTab = true) activeCanvas = currCanvas;
+        if (firstTab = true) {
+            activeCanvas = currCanvas;
+            firstTab = false;
+        }
     }
 
     public static void setActiveCanvas(Tab tab) {
@@ -83,6 +86,11 @@ public class Display {
 
     public static Canvas getActiveCanvas() {
         return activeCanvas;
+    }
+
+    public static void clearActiveCanvas(Canvas activeCanvas) {
+        activeCanvas.getGraphicsContext2D().setFill(Color.WHITE);
+        activeCanvas.getGraphicsContext2D().fillRect(0, 0, activeCanvas.getWidth(), activeCanvas.getHeight());
     }
 
     public static void helpShow(TabPane pane) {

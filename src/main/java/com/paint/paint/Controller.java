@@ -85,6 +85,11 @@ public class Controller { //static controller class
     }
 
     @FXML
+    protected void clearActiveCanvas() {
+        Display.clearActiveCanvas(Display.getActiveCanvas());
+    };
+
+    @FXML
     protected void helpShow() {Display.helpShow(imageTabs);}
 
     //=====EDIT METHODS=====//
@@ -117,7 +122,7 @@ public class Controller { //static controller class
     public void initialize() {
         Menu.widthChoiceConfig(widthChoice);
         Menu.colorPickerConfig(colorPicker);
-        drawToggleButton.setSelected(false);
+        Menu.drawToggleConfig(drawToggleButton);
         Display.firstTab = true;
     }
 }
