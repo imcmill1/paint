@@ -2,6 +2,8 @@ package com.paint.paint;
 
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
+import javafx.scene.layout.BorderPane;
+
 import java.io.IOException;
 
 //VERSION NUMBERING
@@ -21,25 +23,24 @@ import java.io.IOException;
 
 /**@TO-DO-LIST
 /*
- * keyboard shortcuts (control S for save, etc.)
  * resize canvas (for larger drawing)
  * smart/aware save ("you're about to close without saving...")
  * KNOWN ISSUES TO FIX:
  *  - Open and createNewTab should both make the newest tab the active tab
- *  - Can't close tabs yet
- *  - Add custom icons, cursor
+ *  - Add custom icons for the shapes and tools toolbar
 */
 
 public class Controller { //static controller class
     //=====FXML LOADS=====//
+    @FXML private BorderPane rootPane;
+    @FXML private TabPane menuTabs;
     @FXML private TabPane imageTabs;
-    @FXML private ToggleButton drawToggleButton;
+    @FXML private MenuButton fileButton;
     @FXML private ToggleGroup editToggles;
     @FXML private ChoiceBox widthChoice;
     @FXML private ColorPicker colorPicker;
 
     private int tabsOpened = 1;
-
 
     //=====FILE IO METHODS=====//
     //These are the methods from the fileIO static class. They have to be wrapped in a method here in the controller for them to be used
@@ -109,7 +110,6 @@ public class Controller { //static controller class
     public void initialize() {
         Menu.widthChoiceConfig(widthChoice);
         Menu.colorPickerConfig(colorPicker);
-        Menu.drawToggleConfig(drawToggleButton);
         Display.firstTab = true;
         Display.createNewTab(imageTabs, "untitled");
     }

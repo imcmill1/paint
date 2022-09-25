@@ -95,7 +95,7 @@ public class Display {
 
     public static void helpShow(TabPane pane) {
         Stage helpWin = new Stage();
-        helpWin.setTitle("Help & About");
+        helpWin.setTitle("Help");
         Stage ownerStage = (Stage) pane.getScene().getWindow();
         helpWin.initModality(Modality.APPLICATION_MODAL);
         helpWin.initOwner(ownerStage);
