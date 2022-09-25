@@ -9,7 +9,7 @@
         <tabs>
           <Tab fx:id="menuTab" text="Menu">
             <content>
-              <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
+              <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="800.0">
                      <children>
                         <MenuBar>
                           <menus>
@@ -38,7 +38,10 @@
                      <children>
                         <ColorPicker fx:id="colorPicker" layoutX="637.0" layoutY="1.0" onAction="#updateColor" prefHeight="70.0" prefWidth="163.0" />
                         <ChoiceBox fx:id="widthChoice" layoutX="487.0" layoutY="1.0" onMouseExited="#updateWidth" prefHeight="70.0" prefWidth="150.0" />
-                        <ToggleButton fx:id="drawToggleButton" layoutX="262.0" layoutY="1.0" mnemonicParsing="false" onAction="#drawUpdate" prefHeight="70.0" prefWidth="60.0" text="Draw" />
+                        <ToggleButton fx:id="drawToggle" layoutX="262.0" layoutY="1.0" mnemonicParsing="false" onAction="#cursorUpdate" prefHeight="70.0" prefWidth="60.0" text="Draw">
+                           <toggleGroup>
+                              <ToggleGroup fx:id="editToggles" />
+                           </toggleGroup></ToggleButton>
                         <Button layoutY="-2.0" mnemonicParsing="false" onAction="#clearActiveCanvas" text="Clear" />
                         <GridPane fx:id="shapesPane" layoutX="322.0" layoutY="1.0" prefHeight="70.0" prefWidth="165.0">
                           <columnConstraints>
@@ -51,12 +54,12 @@
                             <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
                           </rowConstraints>
                            <children>
-                              <ToggleButton mnemonicParsing="false" prefHeight="25.0" prefWidth="88.0" text="Dashed Line" GridPane.columnIndex="1" />
-                              <ToggleButton mnemonicParsing="false" prefHeight="25.0" prefWidth="87.0" text="Rectangle" GridPane.rowIndex="1" />
-                              <ToggleButton mnemonicParsing="false" prefHeight="25.0" prefWidth="86.0" text="Square" GridPane.columnIndex="1" GridPane.rowIndex="1" />
-                              <ToggleButton mnemonicParsing="false" prefHeight="25.0" prefWidth="88.0" text="Circle" GridPane.rowIndex="2" />
-                              <ToggleButton mnemonicParsing="false" prefHeight="25.0" prefWidth="86.0" text="Ellipse" GridPane.columnIndex="1" GridPane.rowIndex="2" />
-                              <ToggleButton mnemonicParsing="false" prefHeight="25.0" prefWidth="90.0" text="Line" />
+                              <ToggleButton fx:id="dashToggle" mnemonicParsing="false" onAction="#cursorUpdate" prefHeight="25.0" prefWidth="88.0" text="Dashed Line" toggleGroup="$editToggles" GridPane.columnIndex="1" />
+                              <ToggleButton fx:id="rectToggle" mnemonicParsing="false" onAction="#cursorUpdate" prefHeight="25.0" prefWidth="87.0" text="Rectangle" toggleGroup="$editToggles" GridPane.rowIndex="1" />
+                              <ToggleButton fx:id="sqreToggle" mnemonicParsing="false" onAction="#cursorUpdate" prefHeight="25.0" prefWidth="86.0" text="Square" toggleGroup="$editToggles" GridPane.columnIndex="1" GridPane.rowIndex="1" />
+                              <ToggleButton fx:id="circToggle" mnemonicParsing="false" onAction="#cursorUpdate" prefHeight="25.0" prefWidth="88.0" text="Circle" toggleGroup="$editToggles" GridPane.rowIndex="2" />
+                              <ToggleButton fx:id="ellpToggle" mnemonicParsing="false" onAction="#cursorUpdate" prefHeight="25.0" prefWidth="86.0" text="Ellipse" toggleGroup="$editToggles" GridPane.columnIndex="1" GridPane.rowIndex="2" />
+                              <ToggleButton fx:id="lineToggle" mnemonicParsing="false" onAction="#cursorUpdate" prefHeight="25.0" prefWidth="90.0" text="Line" toggleGroup="$editToggles" />
                            </children>
                         </GridPane>
                         <Label layoutX="386.0" layoutY="69.0" prefHeight="10.0" prefWidth="38.0" text="Shapes" />
@@ -71,12 +74,12 @@
                               <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
                            </rowConstraints>
                            <children>
-                              <ToggleButton mnemonicParsing="false" prefHeight="37.0" prefWidth="55.0" />
-                              <ToggleButton mnemonicParsing="false" prefHeight="45.0" prefWidth="55.0" GridPane.columnIndex="1" />
-                              <ToggleButton mnemonicParsing="false" prefHeight="46.0" prefWidth="55.0" text="Eraser" GridPane.rowIndex="1" />
-                              <ToggleButton mnemonicParsing="false" prefHeight="46.0" prefWidth="55.0" text="Color Grabber" GridPane.columnIndex="1" GridPane.rowIndex="1" />
-                              <ToggleButton mnemonicParsing="false" prefHeight="45.0" prefWidth="55.0" GridPane.columnIndex="2" />
-                              <ToggleButton mnemonicParsing="false" prefHeight="36.0" prefWidth="55.0" GridPane.columnIndex="2" GridPane.rowIndex="1" />
+                              <ToggleButton mnemonicParsing="false" onAction="#cursorUpdate" prefHeight="37.0" prefWidth="55.0" toggleGroup="$editToggles" />
+                              <ToggleButton mnemonicParsing="false" onAction="#cursorUpdate" prefHeight="45.0" prefWidth="55.0" toggleGroup="$editToggles" GridPane.columnIndex="1" />
+                              <ToggleButton fx:id="erseToggle" mnemonicParsing="false" onAction="#cursorUpdate" prefHeight="46.0" prefWidth="55.0" text="Eraser" toggleGroup="$editToggles" GridPane.rowIndex="1" />
+                              <ToggleButton fx:id="grabToggle" mnemonicParsing="false" onAction="#cursorUpdate" prefHeight="46.0" prefWidth="55.0" text="Color Grabber" toggleGroup="$editToggles" GridPane.columnIndex="1" GridPane.rowIndex="1" />
+                              <ToggleButton mnemonicParsing="false" onAction="#cursorUpdate" prefHeight="45.0" prefWidth="55.0" toggleGroup="$editToggles" GridPane.columnIndex="2" />
+                              <ToggleButton mnemonicParsing="false" onAction="#cursorUpdate" prefHeight="36.0" prefWidth="55.0" toggleGroup="$editToggles" GridPane.columnIndex="2" GridPane.rowIndex="1" />
                            </children>
                         </GridPane>
                         <Label layoutX="161.0" layoutY="69.0" prefHeight="10.0" prefWidth="38.0" text="Tools" />
@@ -87,6 +90,6 @@
       </TabPane>
    </top>
    <center>
-      <TabPane fx:id="imageTabs" onMouseClicked="#drawUpdate" onMouseEntered="#updateWidth" onMouseExited="#updateWidth" prefHeight="200.0" prefWidth="200.0" tabClosingPolicy="UNAVAILABLE" BorderPane.alignment="CENTER" />
+      <TabPane fx:id="imageTabs" onMouseClicked="#cursorUpdate" onMouseEntered="#updateWidth" onMouseExited="#updateWidth" prefHeight="200.0" prefWidth="200.0" tabClosingPolicy="UNAVAILABLE" BorderPane.alignment="CENTER" />
    </center>
 </BorderPane>

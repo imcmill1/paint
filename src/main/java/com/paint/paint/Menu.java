@@ -1,14 +1,9 @@
 package com.paint.paint;
 
 import javafx.collections.FXCollections;
-import javafx.scene.canvas.GraphicsContext;
-import javafx.scene.control.ChoiceBox;
-import javafx.scene.control.ColorPicker;
-import javafx.scene.control.ToggleButton;
+import javafx.scene.control.*;
 import javafx.scene.image.ImageView;
 import javafx.scene.paint.Color;
-
-import java.awt.*;
 
 import static javafx.scene.control.ContentDisplay.CENTER;
 
@@ -33,9 +28,10 @@ public class Menu {
     }
 
     public static void drawToggleConfig(ToggleButton drawToggleButton) {
-        drawToggleButton.setSelected(false);
+        /*drawToggleButton.setSelected(false);
         ImageView drawIcon = new ImageView("https://www.google.com/url?sa=i&url=https%3A%2F%2Fimgbin.com%2Fpng%2FC31hN87E%2Fcomputer-icons-writing-implement-pen-png&psig=AOvVaw0CAycaN2pgfTLgRlsXfMhb&ust=1663880839361000&source=images&cd=vfe&ved=0CAwQjRxqFwoTCLC1ravlpvoCFQAAAAAdAAAAABAD");
         drawToggleButton.setGraphic(drawIcon);
-        drawToggleButton.setContentDisplay(CENTER);
+        drawToggleButton.setContentDisplay(CENTER);*/
     }
+
 }

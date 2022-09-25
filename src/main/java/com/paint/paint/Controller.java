@@ -1,14 +1,7 @@
 package com.paint.paint;
 
 import javafx.fxml.FXML;
-import javafx.scene.canvas.Canvas;
-import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.control.*;
-import javafx.scene.control.ScrollPane;
-import javafx.scene.layout.StackPane;
-import javafx.scene.paint.Color;
-
-import java.awt.*;
 import java.io.IOException;
 
 //VERSION NUMBERING
@@ -26,28 +19,22 @@ import java.io.IOException;
     backend code in this class.
  */
 
-//TO DO LIST:
+/**@TO-DO-LIST
 /*
- * have width controls
- * draw square, circle, rectangle, ellipse
- * three image types
- * keyboard shortcuts (control S for save, etc)
- * text label for colors (hex/rgb/English name)
- * color grabber
+ * keyboard shortcuts (control S for save, etc.)
  * resize canvas (for larger drawing)
- * pencil or straight line (whichever you didn't do last time)
- * dashed line
  * smart/aware save ("you're about to close without saving...")
- *
  * KNOWN ISSUES TO FIX:
  *  - Open and createNewTab should both make the newest tab the active tab
  *  - Can't close tabs yet
+ *  - Add custom icons, cursor
 */
 
 public class Controller { //static controller class
     //=====FXML LOADS=====//
     @FXML private TabPane imageTabs;
     @FXML private ToggleButton drawToggleButton;
+    @FXML private ToggleGroup editToggles;
     @FXML private ChoiceBox widthChoice;
     @FXML private ColorPicker colorPicker;
 
@@ -78,7 +65,7 @@ public class Controller { //static controller class
     @FXML
     protected void createNewTab() {
         Display.createNewTab(imageTabs, "untitled" + tabsOpened);
-        try {Edit.drawUpdate(Display.getActiveCanvas(), Display.getActiveCanvas().getGraphicsContext2D(), drawToggleButton);}
+        try {Edit.cursorUpdate(Display.getActiveCanvas(), Display.getActiveCanvas().getGraphicsContext2D(), editToggles, colorPicker);}
 
         catch (Exception e) {}
         tabsOpened++;
@@ -87,7 +74,7 @@ public class Controller { //static controller class
     @FXML
     protected void clearActiveCanvas() {
         Display.clearActiveCanvas(Display.getActiveCanvas());
-    };
+    }
 
     @FXML
     protected void helpShow() {Display.helpShow(imageTabs);}
@@ -110,8 +97,8 @@ public class Controller { //static controller class
     }
 
     @FXML
-    protected void drawUpdate() {
-        try {Edit.drawUpdate(Display.getActiveCanvas(), Display.getActiveCanvas().getGraphicsContext2D(), drawToggleButton);}
+    protected void cursorUpdate() {
+        try {Edit.cursorUpdate(Display.getActiveCanvas(), Display.getActiveCanvas().getGraphicsContext2D(), editToggles, colorPicker);}
 
         catch (Exception e) {}
     }
@@ -124,5 +111,6 @@ public class Controller { //static controller class
         Menu.colorPickerConfig(colorPicker);
         Menu.drawToggleConfig(drawToggleButton);
         Display.firstTab = true;
+        Display.createNewTab(imageTabs, "untitled");
     }
 }

@@ -26,12 +26,12 @@ public class Display {
 
     public static Canvas activeCanvas;
     public static boolean firstTab;
-    public static void showImage(Canvas canvas, GraphicsContext GraphContext, String path) { //method to show an image
+    public static void showImage(Canvas canvas, GraphicsContext graphContext, String path) { //method to show an image
        try { //try block catches an empty path being passed in. if path is null, goes to an empty catch
            Image img = new Image(path); //creates a new Image object using the filepath passed in from the controller
            canvas.setHeight(img.getHeight()); //resize canvas height to size of image
            canvas.setWidth(img.getWidth()); //resize canvas width to size of image
-           GraphContext.drawImage(img, 0,0); //draw that image on the canvas
+           graphContext.drawImage(img, 0,0); //draw that image on the canvas
        }
 
        catch (Exception e) {
