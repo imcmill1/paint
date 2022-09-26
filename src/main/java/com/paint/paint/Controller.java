@@ -25,6 +25,7 @@ import java.io.IOException;
  * KNOWN ISSUES TO FIX:
  *  - Open and createNewTab should both make the newest tab the active tab
  *  - Add custom icons for the shapes and tools toolbar
+ *  - Make smart save not scuffed
 */
 
 public class Controller { //static controller class
