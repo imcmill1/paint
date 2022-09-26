@@ -1,16 +1,8 @@
 package com.paint.paint;
 
 import javafx.fxml.FXML;
-import javafx.scene.canvas.Canvas;
-import javafx.scene.canvas.GraphicsContext;
-import javafx.scene.control.ChoiceBox;
-import javafx.scene.control.ColorPicker;
-import javafx.scene.control.ScrollPane;
-import javafx.scene.control.ToggleButton;
-import javafx.scene.layout.StackPane;
-import javafx.scene.paint.Color;
+import javafx.scene.control.*;
 
-import java.awt.*;
 import java.io.IOException;
 
 //VERSION NUMBERING
@@ -28,20 +20,22 @@ import java.io.IOException;
     backend code in this class.
  */
 
-//TO DO LIST:
+/**@TO-DO-LIST
 /*
-
+ * KNOWN ISSUES TO FIX:
+ *  - Open and createNewTab should both make the newest tab the active tab
+ *  - Add custom icons for the shapes and tools toolbar
 */
 
 public class Controller { //static controller class
     //=====FXML LOADS=====//
-    @FXML private StackPane displayPane; //inject the stackpane for the display
-    @FXML private ScrollPane scrollPane;
-    @FXML private Canvas baseCanvas; //injects canvas and creates graphics context variable.
-    @FXML private ToggleButton drawToggleButton;
+    @FXML private TabPane imageTabs;
+    @FXML private ToggleGroup editToggles;
     @FXML private ChoiceBox widthChoice;
     @FXML private ColorPicker colorPicker;
-    private GraphicsContext GraphContext;
+    @FXML private Slider canvasSizeSlider;
+
+    private int tabsOpened = 1;
 
 
     //=====FILE IO METHODS=====//
@@ -49,48 +43,82 @@ public class Controller { //static controller class
     //in FXML. Most are one line commands.
     @FXML
     protected void open() throws IOException { //wrapped open() function
+        Display.createNewTab(imageTabs, "untitled" + tabsOpened);
         String selectedImg = fileIO.open(); //creates string selectedImg and assigns it to a call of fileIO.open()
-        Display.showImage(baseCanvas, GraphContext, selectedImg); //passes that string as the path into showImage
+        Display.showImage(Display.getActiveCanvas(), Display.getActiveCanvas().getGraphicsContext2D(), selectedImg); //passes that string as the path into showImage
+        tabsOpened++;
     }
 
     @FXML
-    protected void save() throws IOException { fileIO.save(baseCanvas);}
+    protected void save() throws IOException {
+        fileIO.save(Display.getActiveCanvas());
+        Display.setUnsavedChanges(false);
+    }
 
     @FXML
-    protected void saveAs() throws IOException { fileIO.saveAs(baseCanvas);}
+    protected void saveAs() throws IOException {
+        fileIO.saveAs(Display.getActiveCanvas());
+        Display.setUnsavedChanges(false);
+    }
 
     //=====DISPLAY METHODS=====//
     //Methods from the Display class. Similar to above, these methods must be wrapped in a method inside the controller class.
     //Note: one exception is that currently the showImage() method is not wrapped. Instead, it is called directly from the Controller.open() method.
-    @FXML
-    protected void newCanvas() { Display.newCanvas(baseCanvas, GraphContext);}
 
     @FXML
-    protected void helpShow() {Display.helpShow(scrollPane);}
+    protected void createNewTab() {
+        Display.createNewTab(imageTabs, "untitled" + tabsOpened);
+        try {Edit.cursorUpdate(Display.getActiveCanvas(), Display.getActiveCanvas().getGraphicsContext2D(), editToggles, colorPicker);}
+
+        catch (Exception e) {}
+        tabsOpened++;
+    }
+
+    @FXML
+    protected void clearActiveCanvas() {
+        Display.clearActiveCanvas(Display.getActiveCanvas());
+    }
+
+    @FXML
+    protected void helpShow() {Display.helpShow(imageTabs);}
+
+    @FXML
+    protected void canvasSizeUpdate() {Display.updateCanvasSize(Display.getActiveCanvas(), Display.getActiveCanvas().getGraphicsContext2D(), canvasSizeSlider);}
 
     //=====EDIT METHODS=====//
     //Methods from the Edit class. As with above, these methods must be wrapped in a controller method
 
     @FXML
-    protected void updateWidth() {Edit.updateWidth(GraphContext, widthChoice);}
+    protected void updateWidth() {
+        try {Edit.updateWidth(Display.getActiveCanvas().getGraphicsContext2D(), widthChoice);}
+
+        catch (Exception e) {}
+    }
 
     @FXML
-    protected void updateColor() {Edit.updateColor(GraphContext, colorPicker);}
+    protected void updateColor() {
+        try {Edit.updateColor(Display.getActiveCanvas().getGraphicsContext2D(), colorPicker);}
+
+        catch (Exception e) {}
+    }
+
     @FXML
-    protected void drawUpdate() {
-        Edit.drawUpdate(baseCanvas, GraphContext, drawToggleButton);
+    protected void cursorUpdate() {
+        try {
+            Display.setUnsavedChanges(true);
+            Edit.cursorUpdate(Display.getActiveCanvas(), Display.getActiveCanvas().getGraphicsContext2D(), editToggles, colorPicker);
+        }
+
+        catch (Exception e) {}
     }
 
     //=====INITIALIZE=====//
     //placeholder initialize method for things not directly injected into FXML.
     //Direct injection is preferred.
     public void initialize() {
-        GraphContext = baseCanvas.getGraphicsContext2D();
-        GraphContext.setFill(Color.WHITE);
-        GraphContext.fillRect(0,0, baseCanvas.getWidth(), baseCanvas.getHeight());
-        scrollPane.setContent(baseCanvas);
-        Menu.widthChoiceConfig(widthChoice, GraphContext);
-        Menu.colorPickerConfig(colorPicker, GraphContext);
-        drawToggleButton.setSelected(false);
+        Menu.widthChoiceConfig(widthChoice);
+        Menu.colorPickerConfig(colorPicker);
+        Display.firstTab = true;
+        Display.createNewTab(imageTabs, "untitled");
     }
 }
