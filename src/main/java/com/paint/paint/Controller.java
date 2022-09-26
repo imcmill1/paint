@@ -2,7 +2,6 @@ package com.paint.paint;
 
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
-import javafx.scene.layout.BorderPane;
 
 import java.io.IOException;
 
@@ -23,8 +22,6 @@ import java.io.IOException;
 
 /**@TO-DO-LIST
 /*
- * resize canvas (for larger drawing)
- * smart/aware save ("you're about to close without saving...")
  * KNOWN ISSUES TO FIX:
  *  - Open and createNewTab should both make the newest tab the active tab
  *  - Add custom icons for the shapes and tools toolbar
@@ -32,15 +29,14 @@ import java.io.IOException;
 
 public class Controller { //static controller class
     //=====FXML LOADS=====//
-    @FXML private BorderPane rootPane;
-    @FXML private TabPane menuTabs;
     @FXML private TabPane imageTabs;
-    @FXML private MenuButton fileButton;
     @FXML private ToggleGroup editToggles;
     @FXML private ChoiceBox widthChoice;
     @FXML private ColorPicker colorPicker;
+    @FXML private Slider canvasSizeSlider;
 
     private int tabsOpened = 1;
+
 
     //=====FILE IO METHODS=====//
     //These are the methods from the fileIO static class. They have to be wrapped in a method here in the controller for them to be used
@@ -54,10 +50,16 @@ public class Controller { //static controller class
     }
 
     @FXML
-    protected void save() throws IOException { fileIO.save(Display.getActiveCanvas());}
+    protected void save() throws IOException {
+        fileIO.save(Display.getActiveCanvas());
+        Display.setUnsavedChanges(false);
+    }
 
     @FXML
-    protected void saveAs() throws IOException { fileIO.saveAs(Display.getActiveCanvas());}
+    protected void saveAs() throws IOException {
+        fileIO.saveAs(Display.getActiveCanvas());
+        Display.setUnsavedChanges(false);
+    }
 
     //=====DISPLAY METHODS=====//
     //Methods from the Display class. Similar to above, these methods must be wrapped in a method inside the controller class.
@@ -80,6 +82,9 @@ public class Controller { //static controller class
     @FXML
     protected void helpShow() {Display.helpShow(imageTabs);}
 
+    @FXML
+    protected void canvasSizeUpdate() {Display.updateCanvasSize(Display.getActiveCanvas(), Display.getActiveCanvas().getGraphicsContext2D(), canvasSizeSlider);}
+
     //=====EDIT METHODS=====//
     //Methods from the Edit class. As with above, these methods must be wrapped in a controller method
 
@@ -99,7 +104,10 @@ public class Controller { //static controller class
 
     @FXML
     protected void cursorUpdate() {
-        try {Edit.cursorUpdate(Display.getActiveCanvas(), Display.getActiveCanvas().getGraphicsContext2D(), editToggles, colorPicker);}
+        try {
+            Display.setUnsavedChanges(true);
+            Edit.cursorUpdate(Display.getActiveCanvas(), Display.getActiveCanvas().getGraphicsContext2D(), editToggles, colorPicker);
+        }
 
         catch (Exception e) {}
     }

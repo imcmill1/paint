@@ -91,4 +91,12 @@
         </tabs>
       </TabPane>
    </top>
+   <bottom>
+      <ToolBar prefHeight="40.0" prefWidth="200.0" BorderPane.alignment="CENTER">
+         <items>
+            <Label prefHeight="17.0" prefWidth="64.0" text="Canvas Size" />
+            <Slider fx:id="canvasSizeSlider" max="1.0" min="-1.0" onMouseReleased="#canvasSizeUpdate" />
+         </items>
+      </ToolBar>
+   </bottom>
 </BorderPane>

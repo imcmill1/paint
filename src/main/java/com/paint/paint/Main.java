@@ -11,7 +11,7 @@ public class Main extends Application { //creates main class extending Applicati
     public void start(Stage stage) throws IOException {
         FXMLLoader fxmlLoader = new FXMLLoader(Main.class.getResource("paint.fxml")); //creates an FXML loader object
 
-        Scene scene = new Scene(fxmlLoader.load(), 1000, 500); //creates a new scene and loads to FXML file into it
+        Scene scene = new Scene(fxmlLoader.load(), 1100, 925); //creates a new scene and loads to FXML file into it
 
         stage.setTitle("Paint"); //titles the window
         stage.setScene(scene); //sets the stage with the scene
