@@ -22,7 +22,7 @@ import static javafx.scene.control.ContentDisplay.CENTER;
 public class Menu extends Node {
     public static void widthChoiceConfig (ChoiceBox widthChoice) {
         widthChoice.setValue("Width");
-        widthChoice.setItems(FXCollections.observableArrayList("Width = 1px", "Width = 3px", "Width = 5px", "Width = 8px"));
+        widthChoice.setItems(FXCollections.observableArrayList("Width = 1px", "Width = 3px", "Width = 5px", "Width = 8px", "Dashed Width = 1px", "Dashed Width = 3px", "Dashed Width = 5px", "Dashed Width = 8px"));
     }
 
     public static void colorPickerConfig (ColorPicker colorPicker) {

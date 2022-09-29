@@ -1,15 +1,17 @@
 package com.paint.paint;
 
+import javafx.event.ActionEvent;
+import javafx.event.Event;
+import javafx.event.EventHandler;
 import javafx.geometry.Pos;
 import javafx.scene.Cursor;
 import javafx.scene.Scene;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
-import javafx.scene.control.ScrollPane;
-import javafx.scene.control.Slider;
-import javafx.scene.control.Tab;
-import javafx.scene.control.TabPane;
+import javafx.scene.control.*;
 import javafx.scene.image.Image;
+import javafx.scene.layout.FlowPane;
+import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Text;
@@ -40,19 +42,48 @@ public class Display {
         return unsavedChanges;
     }
 
-    public static void showSaveWarning(TabPane tabPane) {
+    public static void showSaveWarning(TabPane tabPane, Tab activeTab) {
         Stage unsavedDiag = new Stage();
         unsavedDiag.setTitle("Paint");
         Stage ownerStage = (Stage) tabPane.getScene().getWindow();
         unsavedDiag.initModality(Modality.APPLICATION_MODAL);
         unsavedDiag.initOwner(ownerStage);
+
+        StackPane basePane = new StackPane();
+
         VBox warnMsg = new VBox(20);
         warnMsg.setAlignment(Pos.CENTER);
-        warnMsg.getChildren().add(new Text("You have unsaved changes!"));
-        Scene warnScene = new Scene(warnMsg, 300, 100);
+        warnMsg.getChildren().add(new Text("You have unsaved changes!\n Are you sure you want to close this tab?"));
+        warnMsg.setTranslateY(-25);
+
+        Button yes = new Button("Yes");
+        yes.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent actionEvent) {
+                unsavedDiag.close();
+                tabPane.getTabs().remove(activeTab);
+            }
+        });
+        yes.setTranslateX(-50);
+        yes.setTranslateY(25);
+
+        Button no = new Button("No");
+        no.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent actionEvent) {
+                unsavedDiag.close();
+            }
+        });
+        no.setTranslateX(50);
+        no.setTranslateY(25);
+
+        basePane.getChildren().addAll(warnMsg, yes, no);
+
+        Scene warnScene = new Scene(basePane, 300, 100);
         unsavedDiag.setScene(warnScene);
         unsavedDiag.show();
     }
+
     public static void showImage(Canvas canvas, GraphicsContext graphContext, String path) { //method to show an image
        try { //try block catches an empty path being passed in. if path is null, goes to an empty catch
            Image img = new Image(path); //creates a new Image object using the filepath passed in from the controller
@@ -73,7 +104,7 @@ public class Display {
         newTab.setOnCloseRequest(e -> {
             if(getUnsavedChanges() == true) {
                 e.consume();
-                showSaveWarning(tabPane);
+                showSaveWarning(tabPane, newTab);
             }
             else;
         });
@@ -85,46 +116,81 @@ public class Display {
         ScrollPane newScroll = new ScrollPane();
         tab.setContent(newScroll);
         tab.selectedProperty().addListener((observableValue, wasSelected, isSelected) -> {
-            if (isSelected) {
-                setActiveCanvas(tab);
-                ScrollPane activeScrollPane = (ScrollPane) tab.getContent();
-                activeCanvas = (Canvas) activeScrollPane.getContent();
-            }
+            if (isSelected) {}
         });
         return newScroll;
     }
 
-    public static Canvas newCanvas(ScrollPane scrollPane){ //closeLast method will close the image on the top layer of the canvas
+    public static StackPane newStack(ScrollPane scrollPane) {
+        StackPane newStack = new StackPane();
+        scrollPane.setContent(newStack);
+        return newStack;
+    }
+
+    public static Canvas newCanvas(StackPane stackPane){ //closeLast method will close the image on the top layer of the canvas
         Canvas newCanvas = new Canvas();
         newCanvas.setHeight(baseHeight);
         newCanvas.setWidth(baseWidth);
         newCanvas.getGraphicsContext2D().setFill(Color.WHITE);
         newCanvas.getGraphicsContext2D().fillRect(0, 0, newCanvas.getWidth(), newCanvas.getHeight());
         newCanvas.setCursor(Cursor.CROSSHAIR);
-        scrollPane.setContent(newCanvas);
+        stackPane.getChildren().add(newCanvas);
         return newCanvas;
     }
 
     public static void createNewTab(TabPane tabPane, String tabName) {
-        Canvas currCanvas = newCanvas(newScroll(newTab(tabPane, tabName)));
+        Canvas currCanvas = newCanvas(newStack(newScroll(newTab(tabPane, tabName))));
         if (firstTab = true) {
             activeCanvas = currCanvas;
             firstTab = false;
         }
     }
 
-    public static void setActiveCanvas(Tab tab) {
-        ScrollPane activeScrollPane = (ScrollPane) tab.getContent();
-        activeCanvas = (Canvas) activeScrollPane.getContent();
-    }
-
     public static Canvas getActiveCanvas() {
         return activeCanvas;
     }
 
-    public static void clearActiveCanvas(Canvas activeCanvas) {
-        activeCanvas.getGraphicsContext2D().setFill(Color.WHITE);
-        activeCanvas.getGraphicsContext2D().fillRect(0, 0, activeCanvas.getWidth(), activeCanvas.getHeight());
+    public static void clearActiveCanvas(TabPane tabPane, Canvas activeCanvas) {
+        Stage clearWarn = new Stage();
+        clearWarn.setTitle("Paint");
+        Stage ownerStage = (Stage) tabPane.getScene().getWindow();
+        clearWarn.initModality(Modality.APPLICATION_MODAL);
+        clearWarn.initOwner(ownerStage);
+
+        StackPane basePane = new StackPane();
+
+        VBox warnMsg = new VBox(20);
+        warnMsg.setAlignment(Pos.CENTER);
+        warnMsg.getChildren().add(new Text("Are you sure you want to clear the canvas?"));
+        warnMsg.setTranslateY(-25);
+
+        Button yes = new Button("Yes");
+        yes.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent actionEvent) {
+                activeCanvas.getGraphicsContext2D().setFill(Color.WHITE);
+                activeCanvas.getGraphicsContext2D().fillRect(0, 0, activeCanvas.getWidth(), activeCanvas.getHeight());
+                clearWarn.close();
+            }
+        });
+        yes.setTranslateX(-50);
+        yes.setTranslateY(25);
+
+        Button no = new Button("No");
+        no.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent actionEvent) {
+                clearWarn.close();
+            }
+        });
+        no.setTranslateX(50);
+        no.setTranslateY(25);
+
+        basePane.getChildren().addAll(warnMsg, yes, no);
+        Scene warnScene = new Scene(basePane, 300, 100);
+        clearWarn.setScene(warnScene);
+        clearWarn.show();
+
     }
 
     public static void updateCanvasSize(Canvas activeCanvas, GraphicsContext graphContext, Slider canvasSizeSlider) {

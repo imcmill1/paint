@@ -13,6 +13,7 @@ import javafx.scene.image.WritableImage;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.paint.Color;
 
+import java.util.Arrays;
 import java.util.List;
 
 import static java.lang.Math.abs;
@@ -25,13 +26,13 @@ import static java.lang.Math.abs;
     class.
  */
 public class Edit {
-
     public static void removeHandlers(Canvas canvas) {
         canvas.setOnMousePressed(null);
         canvas.setOnMouseDragged(null);
         canvas.setOnMouseReleased(null);
     }
     public static void updateWidth(GraphicsContext graphContext, ChoiceBox widthChoice) {
+        graphContext.setLineDashes(0);
         if (widthChoice.getValue() == null) { //runs if width has been selected
             graphContext.setLineWidth(1);
         }
@@ -50,6 +51,26 @@ public class Edit {
                     break;
                 case "Width = 8px":
                     graphContext.setLineWidth(8);
+                    break;
+
+                case "Dashed Width = 1px":
+                    graphContext.setLineWidth(1);
+                    graphContext.setLineDashes(10);
+                    break;
+
+                case "Dashed Width = 3px":
+                    graphContext.setLineWidth(3);
+                    graphContext.setLineDashes(10);
+                    break;
+
+                case "Dashed Width = 5px":
+                    graphContext.setLineWidth(5);
+                    graphContext.setLineDashes(10);
+                    break;
+
+                case "Dashed Width = 8px":
+                    graphContext.setLineWidth(8);
+                    graphContext.setLineDashes(10);
                     break;
                 }
             }
@@ -105,25 +126,14 @@ public class Edit {
         canvas.setOnMouseReleased(mouseRel);
     }
 
-    public static void drawDashedLine (Canvas canvas, GraphicsContext graphContext) {
+    public static void drawPolygon (Canvas canvas, GraphicsContext graphContext) {
         final EventHandler<MouseEvent> mousePress = new EventHandler<MouseEvent>() {
             public void handle(MouseEvent mousePress) {
-                graphContext.beginPath();
-                graphContext.moveTo(mousePress.getX(), mousePress.getY());
+
             }
         };
 
-        final EventHandler<MouseEvent> mouseRel = new EventHandler<MouseEvent>() {
-            public void handle(MouseEvent mouseRel) {
-                graphContext.lineTo(mouseRel.getX(), mouseRel.getY());
-                graphContext.setLineDashes(10);
-                graphContext.stroke();
-                graphContext.setLineDashes(0);
-            }
-        };
-
-        canvas.setOnMousePressed(mousePress); //add the above created event handlers to the canvas
-        canvas.setOnMouseReleased(mouseRel);
+        canvas.setOnMousePressed(mousePress);
     }
 
     public static void drawRectangle (Canvas canvas, GraphicsContext graphContext) {
@@ -238,8 +248,32 @@ public class Edit {
         canvas.setOnMousePressed(mousePress); //add the above created event handlers to the canvas
     }
 
-    public static void eraser(GraphicsContext graphContext) {
+    public static void eraser(Canvas canvas, GraphicsContext graphContext) {
         graphContext.setStroke(Color.WHITE);
+        final EventHandler<MouseEvent> mousePress = new EventHandler<MouseEvent>() {
+            public void handle(MouseEvent mousePress) {
+                graphContext.beginPath();
+                graphContext.moveTo(mousePress.getX(), mousePress.getY());
+                graphContext.stroke();
+            }
+        };
+
+        final EventHandler<MouseEvent> mouseDrag = new EventHandler<MouseEvent>() {
+            public void handle(MouseEvent mouseDrag) {
+                graphContext.lineTo(mouseDrag.getX(), mouseDrag.getY());
+                graphContext.stroke();
+            }
+        };
+
+        final EventHandler<MouseEvent> mouseRel = new EventHandler<MouseEvent>() {
+            public void handle(MouseEvent mouseRel) {
+                //empty; no actions to be taken on released mouse
+            }
+        };
+
+        canvas.setOnMousePressed(mousePress); //add the above created event handlers to the canvas
+        canvas.setOnMouseDragged(mouseDrag);
+        canvas.setOnMouseReleased(mouseRel);
     }
 
     public static void cursorUpdate (Canvas canvas, GraphicsContext graphContext, ToggleGroup editToggles, ColorPicker colorPicker) {
@@ -263,6 +297,7 @@ public class Edit {
                 break;
 
             case "'Draw'":
+                graphContext.setStroke(colorPicker.getValue());
                 freeDraw(canvas, graphContext);
                 break;
 
@@ -270,8 +305,9 @@ public class Edit {
                 drawLine(canvas, graphContext);
                 break;
 
-            case "'Dashed Line'":
-                drawDashedLine(canvas, graphContext);
+            case "'Polygon'":
+                System.out.println("Clicked polygon");
+                drawPolygon(canvas, graphContext);
                 break;
 
             case "'Rectangle'":
@@ -295,7 +331,7 @@ public class Edit {
                 break;
 
             case "'Eraser'":
-                eraser(graphContext);
+                eraser(canvas, graphContext);
                 break;
 
         }
