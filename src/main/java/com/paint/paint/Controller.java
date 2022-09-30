@@ -24,10 +24,7 @@ import java.io.IOException;
 /*
     SPRINT 4:
     - Undo/Redo using at least one Stack
-    - Draw any additional shape of your choice
     - Be able to draw a regular sided polygon with any number of sides
-    - Select and copy/paste a PIECE of the image
-    - Select and MOVE a PIECE of the image
 
  * KNOWN ISSUES TO FIX:
  *  - Open and createNewTab should both make the newest tab the active tab

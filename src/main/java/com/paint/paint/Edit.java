@@ -2,6 +2,8 @@ package com.paint.paint;
 
 import javafx.collections.ObservableList;
 import javafx.event.EventHandler;
+import javafx.geometry.Rectangle2D;
+import javafx.scene.SnapshotParameters;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.control.ChoiceBox;
@@ -9,10 +11,15 @@ import javafx.scene.control.ColorPicker;
 import javafx.scene.control.Toggle;
 import javafx.scene.control.ToggleGroup;
 import javafx.scene.effect.Light.Point;
+import javafx.scene.image.Image;
 import javafx.scene.image.WritableImage;
+import javafx.scene.input.Clipboard;
+import javafx.scene.input.ClipboardContent;
 import javafx.scene.input.MouseEvent;
+import javafx.scene.layout.StackPane;
 import javafx.scene.paint.Color;
 
+import java.awt.*;
 import java.util.Arrays;
 import java.util.List;
 
@@ -26,6 +33,9 @@ import static java.lang.Math.abs;
     class.
  */
 public class Edit {
+    public static Rectangle2D selection = new Rectangle2D(0, 0, 0, 0);
+
+    public static Image copiedImage;
     public static void removeHandlers(Canvas canvas) {
         canvas.setOnMousePressed(null);
         canvas.setOnMouseDragged(null);
@@ -126,14 +136,28 @@ public class Edit {
         canvas.setOnMouseReleased(mouseRel);
     }
 
-    public static void drawPolygon (Canvas canvas, GraphicsContext graphContext) {
+    public static void drawRightTri (Canvas canvas, GraphicsContext graphContext) {
+        final Point corner = new Point();
         final EventHandler<MouseEvent> mousePress = new EventHandler<MouseEvent>() {
             public void handle(MouseEvent mousePress) {
-
+                graphContext.beginPath();
+                graphContext.moveTo(mousePress.getX(), mousePress.getY());
+                corner.setX(mousePress.getX());
+                corner.setY(mousePress.getY());
             }
         };
 
-        canvas.setOnMousePressed(mousePress);
+        final EventHandler<MouseEvent> mouseRel = new EventHandler<MouseEvent>() {
+            public void handle(MouseEvent mouseRel) {
+                graphContext.lineTo(mouseRel.getX(), mouseRel.getY());
+                graphContext.lineTo(corner.getX(), mouseRel.getY());
+                graphContext.lineTo(corner.getX(), corner.getY());
+                graphContext.stroke();
+            }
+        };
+
+        canvas.setOnMousePressed(mousePress); //add the above created event handlers to the canvas
+        canvas.setOnMouseReleased(mouseRel);
     }
 
     public static void drawRectangle (Canvas canvas, GraphicsContext graphContext) {
@@ -176,6 +200,37 @@ public class Edit {
             public void handle(MouseEvent mouseRel) {
                 double width = mouseRel.getX() - corner.getX();
                 graphContext.strokeRect(corner.getX(), corner.getY(), width, width);
+            }
+        };
+
+        canvas.setOnMousePressed(mousePress); //add the above created event handlers to the canvas
+        canvas.setOnMouseReleased(mouseRel);
+    }
+
+    public static void drawHexagon (Canvas canvas, GraphicsContext graphContext) {
+        final Point corner = new Point();
+        final EventHandler<MouseEvent> mousePress = new EventHandler<MouseEvent>() {
+            public void handle(MouseEvent mousePress) {
+                graphContext.beginPath();
+                graphContext.moveTo(mousePress.getX(), mousePress.getY());
+                corner.setX(mousePress.getX());
+                corner.setY(mousePress.getY());
+            }
+        };
+
+        final EventHandler<MouseEvent> mouseRel = new EventHandler<MouseEvent>() {
+            public void handle(MouseEvent mouseRel) {
+                double yMid = (mouseRel.getY() + (corner.getY()-mouseRel.getY()));
+                double b2 = Math.pow((yMid - mouseRel.getY()), 2);
+                double c2 =Math.pow((mouseRel.getX() - corner.getX()), 2);
+                double xMid = Math.sqrt(c2 - b2);
+                graphContext.lineTo(mouseRel.getX(), corner.getY());
+                graphContext.lineTo((mouseRel.getX() + xMid), yMid);
+                graphContext.lineTo(mouseRel.getX(), mouseRel.getY());
+                graphContext.lineTo(corner.getX(), mouseRel.getY());
+                graphContext.lineTo((corner.getX() - xMid), yMid);
+                graphContext.lineTo(corner.getX(), corner.getY());
+                graphContext.stroke();
             }
         };
 
@@ -276,6 +331,97 @@ public class Edit {
         canvas.setOnMouseReleased(mouseRel);
     }
 
+    public static void select(Canvas canvas, GraphicsContext graphContext) {
+        final Point corner = new Point();
+        //This block creates event handlers for when the mouse is pressed and released
+        EventHandler<MouseEvent> mousePress = new EventHandler<MouseEvent>() {
+            public void handle(MouseEvent mousePress) {
+                graphContext.beginPath();
+                graphContext.moveTo(mousePress.getX(), mousePress.getY());
+                corner.setX(mousePress.getX());
+                corner.setY(mousePress.getY());
+            }
+        };
+
+        EventHandler<MouseEvent> mouseRel = new EventHandler<MouseEvent>() {
+            public void handle(MouseEvent mouseRel) {
+                double width = mouseRel.getX() - corner.getX();
+                double height = mouseRel.getY() - corner.getY();
+                Rectangle2D internalSelect = new Rectangle2D(corner.getX(), corner.getY(), width, height);
+                selection = internalSelect;
+            }
+        };
+
+        canvas.setOnMousePressed(mousePress); //add the above created event handlers to the canvas
+        canvas.setOnMouseReleased(mouseRel);
+    }
+
+    public static void copy(StackPane stack, GraphicsContext graphContext, Rectangle2D selection) {
+        SnapshotParameters sp = new SnapshotParameters();
+        sp.setViewport(selection);
+        WritableImage img = new WritableImage((int)selection.getWidth(), (int)selection.getHeight());
+        stack.snapshot(sp, img);
+        /*Clipboard clipboard = Clipboard.getSystemClipboard();
+        ClipboardContent content = new ClipboardContent();
+        content.putImage(img);
+        clipboard.setContent(content);*/
+        copiedImage = img;
+    }
+
+    public static void paste(Canvas canvas, GraphicsContext graphContext) {
+        final Point center = new Point();
+        final Clipboard clipboard = Clipboard.getSystemClipboard();
+        EventHandler<MouseEvent> mousePress = new EventHandler<MouseEvent>() {
+            public void handle(MouseEvent mousePress) {
+                graphContext.beginPath();
+                graphContext.moveTo(mousePress.getX(), mousePress.getY());
+                center.setX(mousePress.getX() - (copiedImage.getWidth()/2));
+                center.setY(mousePress.getY() - (copiedImage.getHeight()/2));
+            }
+        };
+
+        EventHandler<MouseEvent> mouseRel = new EventHandler<MouseEvent>() {
+            public void handle(MouseEvent mouseRel) {
+                graphContext.drawImage(copiedImage, center.getX(), center.getY());
+            }
+        };
+
+        canvas.setOnMousePressed(mousePress);
+        canvas.setOnMouseReleased(mouseRel);
+    }
+
+    public static void move(StackPane stack, Canvas canvas, GraphicsContext graphContext, Rectangle2D selection) {
+        final Point center = new Point();
+        SnapshotParameters sp = new SnapshotParameters();
+        sp.setViewport(selection);
+        WritableImage img = new WritableImage((int)selection.getWidth(), (int)selection.getHeight());
+        stack.snapshot(sp, img);
+        /*Clipboard clipboard = Clipboard.getSystemClipboard();
+        ClipboardContent content = new ClipboardContent();
+        content.putImage(img);
+        clipboard.setContent(content);*/
+        copiedImage = img;
+        EventHandler<MouseEvent> mousePress = new EventHandler<MouseEvent>() {
+            public void handle(MouseEvent mousePress) {
+                graphContext.beginPath();
+                graphContext.moveTo(mousePress.getX(), mousePress.getY());
+                center.setX(mousePress.getX() - (copiedImage.getWidth()/2));
+                center.setY(mousePress.getY() - (copiedImage.getHeight()/2));
+                graphContext.setFill(Color.WHITE);
+                graphContext.fillRect(selection.getMinX(), selection.getMinY(), selection.getWidth(), selection.getHeight());
+            }
+        };
+
+        EventHandler<MouseEvent> mouseRel = new EventHandler<MouseEvent>() {
+            public void handle(MouseEvent mouseRel) {
+                graphContext.drawImage(copiedImage, center.getX(), center.getY());
+            }
+        };
+
+        canvas.setOnMousePressed(mousePress);
+        canvas.setOnMouseReleased(mouseRel);
+    }
+
     public static void cursorUpdate (Canvas canvas, GraphicsContext graphContext, ToggleGroup editToggles, ColorPicker colorPicker) {
         removeHandlers(canvas); //start by removing previous event handlers
         String selected; //creates a blank string
@@ -305,9 +451,8 @@ public class Edit {
                 drawLine(canvas, graphContext);
                 break;
 
-            case "'Polygon'":
-                System.out.println("Clicked polygon");
-                drawPolygon(canvas, graphContext);
+            case "'Right Triangle'":
+                drawRightTri(canvas, graphContext);
                 break;
 
             case "'Rectangle'":
@@ -316,6 +461,10 @@ public class Edit {
 
             case "'Square'":
                 drawSquare(canvas, graphContext);
+                break;
+
+            case "'Hexagon'":
+                drawHexagon(canvas, graphContext);
                 break;
 
             case "'Circle'":
@@ -332,6 +481,22 @@ public class Edit {
 
             case "'Eraser'":
                 eraser(canvas, graphContext);
+                break;
+
+            case "'Select'":
+                select(canvas, graphContext);
+                break;
+
+            case "'Copy'":
+                copy((StackPane)canvas.getParent(), graphContext, selection);
+                break;
+
+            case "'Paste'":
+                paste(canvas, graphContext);
+                break;
+
+            case "'Move'":
+                move((StackPane)canvas.getParent(), canvas, graphContext, selection);
                 break;
 
         }
