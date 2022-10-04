@@ -9,16 +9,23 @@ import java.io.File;
 import java.io.IOException;
 import javafx.embed.swing.SwingFXUtils;
 
-/*==========fileIO Class==========*/
-/*
-   The purpose of this class is to
-   implement basic file I/O methods
-   that can be passed into Controller.java.
+/** fileIO.java implements basic file I/O methods that are then passed into Controller.java.
+ * @since 0.1.1
 */
 
 public class fileIO { //create public class fileIO which is static by default as top level class
+
+    /** <p>lastSavedFile is a file object that stores what the last saved file was, so that save()
+     * can function without having to specify file location each time.</p>
+     */
     static File lastSavedFile;
 
+    /**
+     * <p> This method opens a file explorer window for the user to select an image to be opened.</p>
+     * @return imgPath, on successful selection of a file, the path of that file, or null if a file was not selected
+     * @throws IOException due to interfacing with file explorer i/o
+     * @since 0.2.0
+     */
     public static String open() throws IOException { //create an open() method
         Stage fileStage = new Stage(); //creates a JavaFX stage for the file explorer that the File Chooser object will be placed on later.
         FileChooser openFile = new FileChooser(); //creates a File Chooser object called openFile
@@ -33,6 +40,14 @@ public class fileIO { //create public class fileIO which is static by default as
         }
     }
 
+    /**
+     * <p> This method opens a file explorer window for the user to specify where they would like to
+     * save the contents of the active canvas, then takes a snapshot of that canvas and saves it at the specified
+     * location. </p>
+     * @param canvas the active canvas to be saved
+     * @throws IOException due to interfacing with file explorer i/o
+     * @since 1.0.1
+     */
     public static void saveAs(Canvas canvas) throws IOException { //placeholder saveAs method
         Stage fileStage = new Stage();
         FileChooser saveFile = new FileChooser();
@@ -47,6 +62,15 @@ public class fileIO { //create public class fileIO which is static by default as
         }
     }
 
+    /**
+     * <p> This method will save the current canvas to the location of the last saved file,
+     * bypassing the opening of a file explorer instance and selection of a location. Only
+     * one previously saved file is tracked for the application, meaning this method can
+     * overwrite an image saved in one tab with an image from another tab. </p>
+     * @param canvas the active canvas to be saved.
+     * @throws IOException due to interfacing with file explorer i/o
+     * @since 1.0.1
+     */
     public static void save(Canvas canvas) throws IOException { // placeholder save method
         if (lastSavedFile != null) {//check if lastSaved file not blank, if true, take snapshot and save at lastSavedFile
             WritableImage saveImg = new WritableImage((int)canvas.getWidth(), (int)canvas.getHeight()); //type cast for now; fix later

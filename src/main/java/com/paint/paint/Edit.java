@@ -18,29 +18,45 @@ import javafx.scene.input.ClipboardContent;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.StackPane;
 import javafx.scene.paint.Color;
-
 import java.awt.*;
 import java.util.Arrays;
 import java.util.List;
-
 import static java.lang.Math.abs;
 
-/*=====Edit Class=====*/
-/*
-    The purpose of this class is to contain methods
-    for image editing, drawing, etc. Methods from
-    this class will be wrapped in the Controller
-    class.
+/**
+ * <p>Edit.java contains the methods for image editing, drawing, etc.
+ *  Methods from this class will be wrapped in the Controller class.</p>
+ * @since 1.1.1
+ * @author ianmc
  */
+
 public class Edit {
+
+    /** selection is a Rectangle2D object that stores the current selection.*/
     public static Rectangle2D selection = new Rectangle2D(0, 0, 0, 0);
 
+    /** copiedImage is an Image object storing the current object on the "clipboard"*/
     public static Image copiedImage;
+
+    /**
+     * <p> This method is used as a concise, one-line, abstract method to remove the event handlers
+     * from the active canvas.</p>
+     * @param canvas the canvas for event handlers to be removed from.
+     * @since 2.0.0
+     */
     public static void removeHandlers(Canvas canvas) {
         canvas.setOnMousePressed(null);
         canvas.setOnMouseDragged(null);
         canvas.setOnMouseReleased(null);
     }
+
+    /**
+     * <p> This method is used in the Controller to update the width of lines drawn
+     * by the cursor and by tools. </p>
+     * @param graphContext the graphics context to be updated.
+     * @param widthChoice the ChoiceBox containing the width options.
+     * @since 1.4.0
+     */
     public static void updateWidth(GraphicsContext graphContext, ChoiceBox widthChoice) {
         graphContext.setLineDashes(0);
         if (widthChoice.getValue() == null) { //runs if width has been selected
@@ -86,10 +102,25 @@ public class Edit {
             }
         }
 
+    /**
+     * <p> This method is used in the Controller to update the color of lines drawn
+     * by the cursor and tools. </p>
+     * @param graphContext the graphics context to be updated.
+     * @param colorPicker the ColorPicker object for the selected color to be retrieved from.
+     * @since 1.4.0
+     */
     public static void updateColor(GraphicsContext graphContext, ColorPicker colorPicker) {
         graphContext.setStroke(colorPicker.getValue());
     }
 
+    /**
+     * <p> This is one of many methods used internally within the cursorUpdate method.
+     * This particular method configures and adds the event handlers necessary for free
+     * drawing on the canvas. </p>
+     * @param canvas the active canvas.
+     * @param graphContext the active graphics context.
+     * @since 2.2.0
+     */
     public static void freeDraw (Canvas canvas, GraphicsContext graphContext) {
         final EventHandler<MouseEvent> mousePress = new EventHandler<MouseEvent>() {
             public void handle(MouseEvent mousePress) {
@@ -117,6 +148,14 @@ public class Edit {
         canvas.setOnMouseReleased(mouseRel);
     }
 
+    /**
+     * <p> This is one of many methods used internally within the cursorUpdate method.
+     * This particular method configures and adds the event handlers necessary for
+     * drawing a straight line on the canvas. </p>
+     * @param canvas the active canvas.
+     * @param graphContext the active graphics context.
+     * @since 2.2.0
+     */
     public static void drawLine (Canvas canvas, GraphicsContext graphContext) {
         final EventHandler<MouseEvent> mousePress = new EventHandler<MouseEvent>() {
             public void handle(MouseEvent mousePress) {
@@ -136,6 +175,14 @@ public class Edit {
         canvas.setOnMouseReleased(mouseRel);
     }
 
+    /**
+     * <p> This is one of many methods used internally within the cursorUpdate method.
+     * This particular method configures and adds the event handlers necessary for
+     * drawing a right triangle on the canvas. </p>
+     * @param canvas the active canvas.
+     * @param graphContext the active graphics context.
+     * @since 2.2.0
+     */
     public static void drawRightTri (Canvas canvas, GraphicsContext graphContext) {
         final Point corner = new Point();
         final EventHandler<MouseEvent> mousePress = new EventHandler<MouseEvent>() {
@@ -160,6 +207,14 @@ public class Edit {
         canvas.setOnMouseReleased(mouseRel);
     }
 
+    /**
+     * <p> This is one of many methods used internally within the cursorUpdate method.
+     * This particular method configures and adds the event handlers necessary for
+     * drawing a rectangle on the canvas. </p>
+     * @param canvas the active canvas.
+     * @param graphContext the active graphics context.
+     * @since 2.2.0
+     */
     public static void drawRectangle (Canvas canvas, GraphicsContext graphContext) {
         final Point corner = new Point();
         //This block creates event handlers for when the mouse is pressed and released
@@ -184,6 +239,14 @@ public class Edit {
         canvas.setOnMouseReleased(mouseRel);
     }
 
+    /**
+     * <p> This is one of many methods used internally within the cursorUpdate method.
+     * This particular method configures and adds the event handlers necessary for
+     * drawing a square on the canvas. </p>
+     * @param canvas the active canvas.
+     * @param graphContext the active graphics context.
+     * @since 2.2.0
+     */
     public static void drawSquare (Canvas canvas, GraphicsContext graphContext) {
         final Point corner = new Point();
         //This block creates event handlers for when the mouse is pressed and released
@@ -207,6 +270,14 @@ public class Edit {
         canvas.setOnMouseReleased(mouseRel);
     }
 
+    /** NOTE: NON-FUNCTIONAL AND SCHEDULED FOR DEPRECATION.
+     * <p> This is one of many methods used internally within the cursorUpdate method.
+     * This particular method configures and adds the event handlers necessary for
+     * drawing a hexagon on the canvas. </p>
+     * @param canvas the active canvas.
+     * @param graphContext the active graphics context.
+     * @since 2.2.0
+     */
     public static void drawHexagon (Canvas canvas, GraphicsContext graphContext) {
         final Point corner = new Point();
         final EventHandler<MouseEvent> mousePress = new EventHandler<MouseEvent>() {
@@ -238,6 +309,14 @@ public class Edit {
         canvas.setOnMouseReleased(mouseRel);
     }
 
+    /**
+     * <p> This is one of many methods used internally within the cursorUpdate method.
+     * This particular method configures and adds the event handlers necessary for
+     * drawing an ellipse on the canvas. </p>
+     * @param canvas the active canvas.
+     * @param graphContext the active graphics context.
+     * @since 2.2.0
+     */
     public static void drawEllipse (Canvas canvas, GraphicsContext graphContext) {
         final Point bound = new Point();
         //This block creates event handlers for when the mouse is pressed and released
@@ -262,6 +341,14 @@ public class Edit {
         canvas.setOnMouseReleased(mouseRel);
     }
 
+    /**
+     * <p> This is one of many methods used internally within the cursorUpdate method.
+     * This particular method configures and adds the event handlers necessary for
+     * drawing a circle on the canvas. </p>
+     * @param canvas the active canvas.
+     * @param graphContext the active graphics context.
+     * @since 2.2.0
+     */
     public static void drawCircle (Canvas canvas, GraphicsContext graphContext) {
         final Point bound = new Point();
         //This block creates event handlers for when the mouse is pressed and released
@@ -285,6 +372,17 @@ public class Edit {
         canvas.setOnMouseReleased(mouseRel);
     }
 
+    /**
+     * <p> This is one of many methods used internally within the cursorUpdate method.
+     * This particular method configures and adds the event handlers necessary for
+     * a color grabber to select a color off of the canvas and write that color into the
+     * color picker.</p>
+     * @param canvas the active canvas.
+     * @param graphContext the active graphics context.
+     * @param editToggles the ToggleGroup that all tools belong to, for selecting free draw after a color is grabbed.
+     * @param colorPicker the ColorPicker that the grabbed color will be written to.
+     * @since 2.2.0
+     */
     public static void colorGrabber (Canvas canvas, GraphicsContext graphContext, ToggleGroup editToggles, ColorPicker colorPicker) {
         //This block creates event handlers for when the mouse is pressed and released
         ObservableList<Toggle> toggleList = editToggles.getToggles(); //grabs an observable list of all toggles in the editToggles group
@@ -303,6 +401,14 @@ public class Edit {
         canvas.setOnMousePressed(mousePress); //add the above created event handlers to the canvas
     }
 
+    /**
+     * <p> This is one of many methods used internally within the cursorUpdate method.
+     * This particular method configures and adds the event handlers necessary for
+     * an eraser tool. </p>
+     * @param canvas the active canvas.
+     * @param graphContext the active graphics context.
+     * @since 2.2.0
+     */
     public static void eraser(Canvas canvas, GraphicsContext graphContext) {
         graphContext.setStroke(Color.WHITE);
         final EventHandler<MouseEvent> mousePress = new EventHandler<MouseEvent>() {
@@ -331,6 +437,15 @@ public class Edit {
         canvas.setOnMouseReleased(mouseRel);
     }
 
+    /**
+     * <p> This is one of many methods used internally within the cursorUpdate method.
+     * This particular method configures and adds the event handlers necessary for
+     * a selection tool. It creates a 2D rectangle drawn by the cursor and stores it
+     * in the selection field.</p>
+     * @param canvas the active canvas.
+     * @param graphContext the active graphics context.
+     * @since 3.0.0
+     */
     public static void select(Canvas canvas, GraphicsContext graphContext) {
         final Point corner = new Point();
         //This block creates event handlers for when the mouse is pressed and released
@@ -356,7 +471,17 @@ public class Edit {
         canvas.setOnMouseReleased(mouseRel);
     }
 
-    public static void copy(StackPane stack, GraphicsContext graphContext, Rectangle2D selection) {
+    /**
+     * <p> This is one of many methods used internally within the cursorUpdate method.
+     * This particular method configures and adds the event handlers necessary for
+     * copying the selection area. It configures snapshot parameters to take a snapshot
+     * of the entire StackPane within the bounds of the selection rectangle, then takes a
+     * snapshot and stores it to the copiedImage field.</p>
+     * @param stack the StackPane that the active canvas is stacked on.
+     * @param selection the 2D rectangle to be used as snapshot parameters.
+     * @since 3.0.0
+     */
+    public static void copy(StackPane stack, Rectangle2D selection) {
         SnapshotParameters sp = new SnapshotParameters();
         sp.setViewport(selection);
         WritableImage img = new WritableImage((int)selection.getWidth(), (int)selection.getHeight());
@@ -368,6 +493,15 @@ public class Edit {
         copiedImage = img;
     }
 
+    /**
+     * <p> This is one of many methods used internally within the cursorUpdate method.
+     * This particular method configures and adds the event handlers necessary for
+     * a paste tool. It draws the copied image on the canvas at the location of the cursor
+     * when pressed, adjusted so that the image is drawn with the cursor at the center.</p>
+     * @param canvas the active canvas.
+     * @param graphContext the active graphics context.
+     * @since 3.0.0
+     */
     public static void paste(Canvas canvas, GraphicsContext graphContext) {
         final Point center = new Point();
         final Clipboard clipboard = Clipboard.getSystemClipboard();
@@ -390,6 +524,19 @@ public class Edit {
         canvas.setOnMouseReleased(mouseRel);
     }
 
+    /**
+     * <p> This is one of many methods used internally within the cursorUpdate method.
+     * This particular method configures and adds the event handlers necessary for
+     * a move tool. When the mouse is pressed, it first draws a filled rectangle at the
+     * location of the selection rectangle. It then draws the copied image on the canvas
+     * at the location of the cursor when the mouse is released, giving the illusion that
+     * the selection has been picked up and moved.</p>
+     * @param stack the current StackPane that the active canvas is stacked on.
+     * @param canvas the active canvas.
+     * @param graphContext the active graphics context.
+     * @param selection a 2D rectangle object containing the selection area.
+     * @since 3.0.0
+     */
     public static void move(StackPane stack, Canvas canvas, GraphicsContext graphContext, Rectangle2D selection) {
         final Point center = new Point();
         SnapshotParameters sp = new SnapshotParameters();
@@ -422,6 +569,15 @@ public class Edit {
         canvas.setOnMouseReleased(mouseRel);
     }
 
+    /**
+     * <p> This method is called by the Controller to update the cursor so that the selected tool
+     * is being implemented by the cursor. It calls most of the above functions in a large switch
+     * statement to implement this functionality. </p>
+     * @param canvas the active canvas.
+     * @param graphContext the active graphics context.
+     * @param editToggles the ToggleGroup containing all the tool toggle buttons.
+     * @param colorPicker the ColorPicker used for selecting the color to be used by the tools.
+     */
     public static void cursorUpdate (Canvas canvas, GraphicsContext graphContext, ToggleGroup editToggles, ColorPicker colorPicker) {
         removeHandlers(canvas); //start by removing previous event handlers
         String selected; //creates a blank string
@@ -488,7 +644,7 @@ public class Edit {
                 break;
 
             case "'Copy'":
-                copy((StackPane)canvas.getParent(), graphContext, selection);
+                copy((StackPane)canvas.getParent(), selection);
                 break;
 
             case "'Paste'":
