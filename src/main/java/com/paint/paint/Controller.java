@@ -5,7 +5,9 @@
 package com.paint.paint;
 
 import javafx.fxml.FXML;
+import javafx.scene.canvas.Canvas;
 import javafx.scene.control.*;
+import javafx.scene.layout.StackPane;
 
 import java.io.IOException;
 
@@ -16,7 +18,8 @@ import java.io.IOException;
    x.x.X - assigned to incremental updates to features
  */
 
-/*TO-DO-LIST
+//TO-DO LIST
+/*
     SPRINT 4:
     - Undo/Redo using at least one Stack
     - Be able to draw a regular sided polygon with any number of sides
@@ -25,13 +28,11 @@ import java.io.IOException;
     - Add at least 3 unit tests (trivial is OK!)
     - Timer that allows for autosave
     - Timer's countdown shall be visible to the user, with view toggleable on/off
-    - There shall be SOME Javadoc commenting
     - Ability to save in an alternate file format than the file was originally
         - There will be a warning when converting file types that data may be lost
 
 
  * KNOWN ISSUES TO FIX:
- *  - Open and createNewTab should both make the newest tab the active tab
  *  - Add custom icons for the shapes and tools toolbar
 */
 
@@ -65,6 +66,8 @@ public class Controller {
     /** tabsOpened is an internal variable that ticks up every time a new canvas is opened*/
     private int tabsOpened = 1;
 
+    /** changesMade is an internal variable tracking the number of changes made since the stackpane was last collapsed.*/
+    private int changesMade = 0;
 
     //=====FILE IO METHODS=====//
     //These are the methods from the fileIO static class. They have to be wrapped in a method here in the controller for them to be used
@@ -96,7 +99,7 @@ public class Controller {
      */
     @FXML
     protected void save() throws IOException {
-        fileIO.save(Display.getActiveCanvas());
+        fileIO.save(Display.getActiveStack());
         Display.setUnsavedChanges(false);
     }
 
@@ -111,7 +114,7 @@ public class Controller {
      */
     @FXML
     protected void saveAs() throws IOException {
-        fileIO.saveAs(Display.getActiveCanvas());
+        fileIO.saveAs(Display.getActiveStack());
         Display.setUnsavedChanges(false);
     }
 
@@ -197,6 +200,8 @@ public class Controller {
     protected void cursorUpdate() {
         try {
             Display.setUnsavedChanges(true);
+            Edit.updateWidth(Display.getActiveCanvas().getGraphicsContext2D(), widthChoice);
+            Edit.updateColor(Display.getActiveCanvas().getGraphicsContext2D(), colorPicker);
             Edit.cursorUpdate(Display.getActiveCanvas(), Display.getActiveCanvas().getGraphicsContext2D(), editToggles, colorPicker);
         }
 
@@ -204,7 +209,7 @@ public class Controller {
     }
 
     //=====INITIALIZE=====//
-    //placeholder initialize method for things not directly injected into FXML.
+    //Initialize method for things not directly injected into FXML.
     //Direct injection is preferred.
 
     /**

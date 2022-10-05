@@ -2,6 +2,7 @@ package com.paint.paint;
 
 import javafx.scene.canvas.Canvas;
 import javafx.scene.image.WritableImage;
+import javafx.scene.layout.StackPane;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 import javax.imageio.ImageIO;
@@ -44,19 +45,19 @@ public class fileIO { //create public class fileIO which is static by default as
      * <p> This method opens a file explorer window for the user to specify where they would like to
      * save the contents of the active canvas, then takes a snapshot of that canvas and saves it at the specified
      * location. </p>
-     * @param canvas the active canvas to be saved
+     * @param stackPane the active StackPane to be saved
      * @throws IOException due to interfacing with file explorer i/o
      * @since 1.0.1
      */
-    public static void saveAs(Canvas canvas) throws IOException { //placeholder saveAs method
+    public static void saveAs(StackPane stackPane) throws IOException { //placeholder saveAs method
         Stage fileStage = new Stage();
         FileChooser saveFile = new FileChooser();
         saveFile.getExtensionFilters().addAll(new FileChooser.ExtensionFilter("PNG Files", "*.png"));
         saveFile.setTitle("Save As...");
         File file = saveFile.showSaveDialog(fileStage);
         if (file != null) {
-            WritableImage saveImg = new WritableImage((int)canvas.getWidth(), (int)canvas.getHeight()); //type cast for now; fix later
-            canvas.snapshot(null, saveImg);
+            WritableImage saveImg = new WritableImage((int)stackPane.getWidth(), (int)stackPane.getHeight());
+            stackPane.snapshot(null, saveImg);
             ImageIO.write(SwingFXUtils.fromFXImage(saveImg, null), "png", file);
             lastSavedFile = file;
         }
@@ -67,20 +68,20 @@ public class fileIO { //create public class fileIO which is static by default as
      * bypassing the opening of a file explorer instance and selection of a location. Only
      * one previously saved file is tracked for the application, meaning this method can
      * overwrite an image saved in one tab with an image from another tab. </p>
-     * @param canvas the active canvas to be saved.
+     * @param stackPane the active canvas to be saved.
      * @throws IOException due to interfacing with file explorer i/o
      * @since 1.0.1
      */
-    public static void save(Canvas canvas) throws IOException { // placeholder save method
+    public static void save(StackPane stackPane) throws IOException { // placeholder save method
         if (lastSavedFile != null) {//check if lastSaved file not blank, if true, take snapshot and save at lastSavedFile
-            WritableImage saveImg = new WritableImage((int)canvas.getWidth(), (int)canvas.getHeight()); //type cast for now; fix later
-            canvas.snapshot(null, saveImg);
+            WritableImage saveImg = new WritableImage((int)stackPane.getWidth(), (int)stackPane.getHeight());
+            stackPane.snapshot(null, saveImg);
             ImageIO.write(SwingFXUtils.fromFXImage(saveImg, null), "png", lastSavedFile);
         }
 
-        else {
-            fileIO.saveAs(canvas);
-        } //if it was null, call saveAs instead
+        else { //if it was null, call saveAs instead
+            fileIO.saveAs(stackPane);
+        }
     }
 
 }

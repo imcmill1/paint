@@ -1,5 +1,6 @@
 package com.paint.paint;
 
+import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.geometry.Pos;
@@ -9,6 +10,8 @@ import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.control.*;
 import javafx.scene.image.Image;
+import javafx.scene.image.WritableImage;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
@@ -32,6 +35,9 @@ public class Display {
 
     /** activeCanvas object to store which canvas is currently active for editing.*/
     public static Canvas activeCanvas;
+
+    /** activeStack object to store which stack is currently active. */
+    public static StackPane activeStack;
 
     /** firstTab boolean stores if there has been a tab created or not.*/
     public static boolean firstTab;
@@ -167,7 +173,7 @@ public class Display {
         ScrollPane newScroll = new ScrollPane();
         tab.setContent(newScroll);
         tab.selectedProperty().addListener((observableValue, wasSelected, isSelected) -> {
-            if (isSelected) {}
+            if (isSelected) { setActives(tab); }
         });
         return newScroll;
     }
@@ -195,7 +201,7 @@ public class Display {
      * @return newCanvas, the newly created canvas.
      * @since 2.1.1
      */
-    public static Canvas newCanvas(StackPane stackPane){ //closeLast method will close the image on the top layer of the canvas
+    public static Canvas newBaseCanvas(StackPane stackPane){ //closeLast method will close the image on the top layer of the canvas
         Canvas newCanvas = new Canvas();
         newCanvas.setHeight(baseHeight);
         newCanvas.setWidth(baseWidth);
@@ -215,11 +221,54 @@ public class Display {
      * @since 2.1.1
      */
     public static void createNewTab(TabPane tabPane, String tabName) {
-        Canvas currCanvas = newCanvas(newStack(newScroll(newTab(tabPane, tabName))));
+        Tab currTab = newTab(tabPane, tabName); //makes a new tab and adds it to the tabpane
+        ScrollPane currScroll = newScroll(currTab); //adds a scrollpane to that tab
+        StackPane currStack = newStack(currScroll); //adds a stackpane to that scrollpane
+        Canvas currCanvas = newBaseCanvas(currStack); //adds a base canvas to that stackpane (Ho-ro, the rattlin' bog, the bog down in the valley-o....look it up)
+        final EventHandler<MouseEvent> mouseRel = new EventHandler<MouseEvent>() {
+            public void handle(MouseEvent mouseRel) {
+                Display.newStackCanvas((StackPane) Display.getActiveCanvas().getParent(), Display.getActiveCanvas().getHeight(), Display.getActiveCanvas().getWidth());
+                Display.setActives(tabPane.getSelectionModel().getSelectedItem());
+            }
+        };
+        currStack.setOnMouseReleased(mouseRel);
+        tabPane.getSelectionModel().select(currTab);
         if (firstTab = true) {
             activeCanvas = currCanvas;
+            activeStack = currStack;
             firstTab = false;
         }
+    }
+
+    /**
+     * This method creates a transparent canvas and adds it to the current StackPane.
+     * @param stackPane the StackPane that the canvas will be added to.
+     * @param height the height that will be used for the canvas.
+     * @param width the width that will be used for the canvas.
+     * @return newCanvas, the newly created canvas.
+     * @since 3.1.1
+     */
+    public static Canvas newStackCanvas(StackPane stackPane, double height, double width){
+        Canvas newCanvas = new Canvas();
+        newCanvas.setHeight(height);
+        newCanvas.setWidth(width);
+        newCanvas.setCursor(Cursor.CROSSHAIR);
+        stackPane.getChildren().add(newCanvas);
+        return newCanvas;
+    }
+
+    /**
+     * <p>This method sets the active canvas to the one on the top of the StackPane, and the
+     * active stackpane to the one belonging to the currently selected tab.</p>
+     * @param tab the current selected tab.
+     * @since 3.1.1
+     */
+    public static void setActives(Tab tab) {
+        ScrollPane activeScrollPane = (ScrollPane) tab.getContent();
+        StackPane activeStackPane = (StackPane) activeScrollPane.getContent();
+        ObservableList stackList = activeStackPane.getChildren();
+        activeCanvas = (Canvas) stackList.get(stackList.size()-1);
+        activeStack = activeStackPane;
     }
 
     /**
@@ -228,6 +277,13 @@ public class Display {
      * @since 2.1.1
      */
     public static Canvas getActiveCanvas() {return activeCanvas;}
+
+    /**
+     * <p> This method returns the stackpane that is currently active for editing. </p>
+     * @return activeStack, the current active StackPane for editing.
+     * @since 3.1.1
+     */
+    public static StackPane getActiveStack() {return activeStack;}
 
     /**
      * <p> This method takes in the parent TabPane and the active canvas, and will clear the
@@ -301,6 +357,20 @@ public class Display {
             activeCanvas.setWidth(baseWidth);
             activeCanvas.setHeight(baseHeight);
         }
+    }
+
+    /**
+     * <p> This method is used to collapse the active stackpane down into one canvas. It takes a snapshot
+     * of the stackpane, removes all canvases from it, creates a single canvas and draws the snapshot on it, thus "collapsing"
+     * the stackpane. </p>
+     * @param stackPane the active StackPane.
+     */
+    public static void collapseStack(StackPane stackPane) {
+        WritableImage snap = new WritableImage((int)stackPane.getWidth(), (int)stackPane.getHeight());
+        stackPane.snapshot(null, snap);
+        stackPane.getChildren().removeAll();
+        Canvas newCanvas = newStackCanvas(stackPane, stackPane.getHeight(), stackPane.getWidth());
+        newCanvas.getGraphicsContext2D().drawImage(snap, 0, 0);
     }
 
     /**
