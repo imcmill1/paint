@@ -41,7 +41,7 @@
                               <ToggleButton fx:id="circToggle" minHeight="-Infinity" mnemonicParsing="false" onAction="#cursorUpdate" prefHeight="17.0" prefWidth="82.0" text="Circle" toggleGroup="$editToggles" GridPane.rowIndex="3" />
                               <ToggleButton fx:id="ellpToggle" minHeight="-Infinity" mnemonicParsing="false" onAction="#cursorUpdate" prefHeight="17.0" prefWidth="82.0" text="Ellipse" toggleGroup="$editToggles" GridPane.columnIndex="1" GridPane.rowIndex="3" />
                               <ToggleButton fx:id="lineToggle" contentDisplay="CENTER" minHeight="-Infinity" mnemonicParsing="false" onAction="#cursorUpdate" prefHeight="17.0" prefWidth="82.0" text="Line" toggleGroup="$editToggles" />
-                              <ToggleButton fx:id="hexaToggle" layoutX="10.0" layoutY="27.0" minHeight="-Infinity" mnemonicParsing="false" onAction="#cursorUpdate" prefHeight="17.0" prefWidth="82.0" text="Hexagon" toggleGroup="$editToggles" GridPane.rowIndex="2" />
+                              <ToggleButton fx:id="polyToggle" layoutX="10.0" layoutY="27.0" minHeight="-Infinity" mnemonicParsing="false" onAction="#cursorUpdate" prefHeight="17.0" prefWidth="82.0" text="Polygon" toggleGroup="$editToggles" GridPane.rowIndex="2" />
                               <ToggleButton layoutX="92.0" layoutY="27.0" minHeight="-Infinity" mnemonicParsing="false" onAction="#cursorUpdate" prefHeight="17.0" prefWidth="82.0" GridPane.columnIndex="1" GridPane.rowIndex="2">
                                  <toggleGroup>
                                     <ToggleGroup fx:id="editToggles2" />
@@ -108,6 +108,8 @@
                            </children>
                         </GridPane>
                         <Label layoutX="92.0" layoutY="69.0" prefHeight="10.0" prefWidth="38.0" text="Image" />
+                        <Button fx:id="undoButton" layoutY="49.0" mnemonicParsing="false" onAction="#undo" prefWidth="29.0" text="Undo" />
+                        <Button fx:id="redoButton" layoutX="29.0" layoutY="49.0" mnemonicParsing="false" onAction="#redo" prefWidth="29.0" text="Redo" />
                      </children>
                   </AnchorPane>
             </content>

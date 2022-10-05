@@ -20,10 +20,6 @@ import java.io.IOException;
 
 //TO-DO LIST
 /*
-    SPRINT 4:
-    - Undo/Redo using at least one Stack
-    - Be able to draw a regular sided polygon with any number of sides
-
     SPRINT 5:
     - Add at least 3 unit tests (trivial is OK!)
     - Timer that allows for autosave
@@ -34,6 +30,8 @@ import java.io.IOException;
 
  * KNOWN ISSUES TO FIX:
  *  - Add custom icons for the shapes and tools toolbar
+    - Make Undo/Redo less janky. It works, but sometimes does unpredictable things.
+    - Somehow fix copy/paste to use the system clipboard.
 */
 
 /**
@@ -163,6 +161,12 @@ public class Controller {
      */
     @FXML
     protected void canvasSizeUpdate() {Display.updateCanvasSize(Display.getActiveCanvas(), Display.getActiveCanvas().getGraphicsContext2D(), canvasSizeSlider);}
+
+    @FXML
+    protected void undo() { Display.undo(Display.getActiveStack(), Display.getUndoStack()); }
+
+    @FXML
+    protected void redo() { Display.redo(Display.getActiveStack(), Display.getRedoStack()); }
 
     //=====EDIT METHODS=====//
     //Methods from the Edit class. As with above, these methods must be wrapped in a controller method

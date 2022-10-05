@@ -1,12 +1,17 @@
 package com.paint.paint;
 
 import javafx.collections.ObservableList;
+import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.geometry.Rectangle2D;
+import javafx.scene.Scene;
 import javafx.scene.SnapshotParameters;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.control.*;
+import javafx.scene.control.Button;
+import javafx.scene.control.Label;
+import javafx.scene.control.TextField;
 import javafx.scene.effect.Light.Point;
 import javafx.scene.image.Image;
 import javafx.scene.image.WritableImage;
@@ -14,9 +19,10 @@ import javafx.scene.input.Clipboard;
 import javafx.scene.input.ClipboardContent;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.StackPane;
+import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
-import java.awt.*;
-import java.util.Arrays;
+import javafx.stage.Modality;
+import javafx.stage.Stage;
 import java.util.List;
 import static java.lang.Math.abs;
 
@@ -267,38 +273,42 @@ public class Edit {
         canvas.setOnMouseReleased(mouseRel);
     }
 
-    /** NOTE: NON-FUNCTIONAL AND SCHEDULED FOR DEPRECATION.
-     * <p> This is one of many methods used internally within the cursorUpdate method.
-     * This particular method configures and adds the event handlers necessary for
-     * drawing a hexagon on the canvas. </p>
-     * @param canvas the active canvas.
-     * @param graphContext the active graphics context.
-     * @since 2.2.0
-     */
-    public static void drawHexagon (Canvas canvas, GraphicsContext graphContext) {
-        final Point corner = new Point();
+    public static double[] getPolygonSides(double centerX, double centerY, double radius, int sides, boolean x) {
+        double[] returnX = new double[sides];
+        double[] returnY = new double[sides];
+        final double angleStep = Math.PI * 2 / sides;
+        // assumes one point is located directly beneath the center point
+        double angle = 0;
+        for (int i = 0; i < sides; i++, angle += angleStep) {
+            //draws rightside-up; to change, change multiple of angle
+            // x coordinate of the corner
+            returnX[i] = -1 * Math.sin(angle) * radius + centerX;
+            // y coordinate of the corner
+            returnY[i] = -1 * Math.cos(angle) * radius + centerY;
+        }
+        if(x)
+            return returnX;
+        else
+            return returnY;
+    }
+
+    public static void drawPolygon (Canvas canvas, GraphicsContext graphContext) {
+        final Point center = new Point();
         final EventHandler<MouseEvent> mousePress = new EventHandler<MouseEvent>() {
             public void handle(MouseEvent mousePress) {
-                graphContext.beginPath();
-                graphContext.moveTo(mousePress.getX(), mousePress.getY());
-                corner.setX(mousePress.getX());
-                corner.setY(mousePress.getY());
+                center.setX(mousePress.getX());
+                center.setY(mousePress.getY());
             }
         };
 
         final EventHandler<MouseEvent> mouseRel = new EventHandler<MouseEvent>() {
             public void handle(MouseEvent mouseRel) {
-                double yMid = (mouseRel.getY() + (corner.getY()-mouseRel.getY()));
-                double b2 = Math.pow((yMid - mouseRel.getY()), 2);
-                double c2 =Math.pow((mouseRel.getX() - corner.getX()), 2);
-                double xMid = Math.sqrt(c2 - b2);
-                graphContext.lineTo(mouseRel.getX(), corner.getY());
-                graphContext.lineTo((mouseRel.getX() + xMid), yMid);
-                graphContext.lineTo(mouseRel.getX(), mouseRel.getY());
-                graphContext.lineTo(corner.getX(), mouseRel.getY());
-                graphContext.lineTo((corner.getX() - xMid), yMid);
-                graphContext.lineTo(corner.getX(), corner.getY());
-                graphContext.stroke();
+                double radius = Math.sqrt(Math.pow(abs(center.getX() - mouseRel.getX()), 2) + Math.pow(abs(center.getY() - mouseRel.getY()), 2));
+                int sides = Display.promptForSides();
+                double[] xPoints = getPolygonSides(center.getX(), center.getY(), radius, sides, true);
+                double[] yPoints = getPolygonSides(center.getX(), center.getY(), radius, sides, false);
+
+                graphContext.strokePolygon(xPoints, yPoints, sides);
             }
         };
 
@@ -616,8 +626,8 @@ public class Edit {
                 drawSquare(canvas, graphContext);
                 break;
 
-            case "'Hexagon'":
-                drawHexagon(canvas, graphContext);
+            case "'Polygon'":
+                drawPolygon(canvas, graphContext);
                 break;
 
             case "'Circle'":

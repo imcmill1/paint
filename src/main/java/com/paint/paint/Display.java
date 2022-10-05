@@ -10,6 +10,7 @@ import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.control.*;
 import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.scene.image.WritableImage;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.StackPane;
@@ -18,6 +19,9 @@ import javafx.scene.paint.Color;
 import javafx.scene.text.Text;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * <p> Display.java handles displaying content in the application, including images,
@@ -44,6 +48,14 @@ public class Display {
 
     /** unsavedChanges boolean tracks whether changes have been made since the last save.*/
     public static boolean unsavedChanges = false;
+
+    public static ArrayList<Image> undoStack = new ArrayList<Image>(29);
+
+    public static ArrayList<Image> redoStack = new ArrayList<Image>(29);
+
+    public static int undoIndex = 0;
+
+    public static int redoIndex = 0;
 
     /**
      * <p>This method sets the unsaved changes boolean to true or false. This is set by the
@@ -212,6 +224,15 @@ public class Display {
         return newCanvas;
     }
 
+    public static Canvas newStackCanvas(StackPane stackPane, double height, double width){ //closeLast method will close the image on the top layer of the canvas
+        Canvas newCanvas = new Canvas();
+        newCanvas.setHeight(height);
+        newCanvas.setWidth(width);
+        newCanvas.setCursor(Cursor.CROSSHAIR);
+        stackPane.getChildren().add(newCanvas);
+        return newCanvas;
+    }
+
     /**
      * <p>This method uses the newTab, newScroll, newStack, and newCanvas methods sequentially to
      * create a new tab and add the appropriate components to it for correct functioning of the
@@ -227,8 +248,13 @@ public class Display {
         Canvas currCanvas = newBaseCanvas(currStack); //adds a base canvas to that stackpane (Ho-ro, the rattlin' bog, the bog down in the valley-o....look it up)
         final EventHandler<MouseEvent> mouseRel = new EventHandler<MouseEvent>() {
             public void handle(MouseEvent mouseRel) {
-                Display.newStackCanvas((StackPane) Display.getActiveCanvas().getParent(), Display.getActiveCanvas().getHeight(), Display.getActiveCanvas().getWidth());
-                Display.setActives(tabPane.getSelectionModel().getSelectedItem());
+                WritableImage snap = new WritableImage((int) activeCanvas.getWidth(), (int) activeCanvas.getHeight());
+                activeCanvas.snapshot(null, snap);
+                undoStack.add(snap);
+                undoIndex++;
+                if (undoIndex == 30) undoIndex = 0;
+                redoStack.clear();
+                redoIndex = 0;
             }
         };
         currStack.setOnMouseReleased(mouseRel);
@@ -238,23 +264,6 @@ public class Display {
             activeStack = currStack;
             firstTab = false;
         }
-    }
-
-    /**
-     * This method creates a transparent canvas and adds it to the current StackPane.
-     * @param stackPane the StackPane that the canvas will be added to.
-     * @param height the height that will be used for the canvas.
-     * @param width the width that will be used for the canvas.
-     * @return newCanvas, the newly created canvas.
-     * @since 3.1.1
-     */
-    public static Canvas newStackCanvas(StackPane stackPane, double height, double width){
-        Canvas newCanvas = new Canvas();
-        newCanvas.setHeight(height);
-        newCanvas.setWidth(width);
-        newCanvas.setCursor(Cursor.CROSSHAIR);
-        stackPane.getChildren().add(newCanvas);
-        return newCanvas;
     }
 
     /**
@@ -283,7 +292,7 @@ public class Display {
      * @return activeStack, the current active StackPane for editing.
      * @since 3.1.1
      */
-    public static StackPane getActiveStack() {return activeStack;}
+    public static StackPane getActiveStack() { return activeStack; }
 
     /**
      * <p> This method takes in the parent TabPane and the active canvas, and will clear the
@@ -359,19 +368,35 @@ public class Display {
         }
     }
 
-    /**
-     * <p> This method is used to collapse the active stackpane down into one canvas. It takes a snapshot
-     * of the stackpane, removes all canvases from it, creates a single canvas and draws the snapshot on it, thus "collapsing"
-     * the stackpane. </p>
-     * @param stackPane the active StackPane.
-     */
-    public static void collapseStack(StackPane stackPane) {
-        WritableImage snap = new WritableImage((int)stackPane.getWidth(), (int)stackPane.getHeight());
-        stackPane.snapshot(null, snap);
-        stackPane.getChildren().removeAll();
-        Canvas newCanvas = newStackCanvas(stackPane, stackPane.getHeight(), stackPane.getWidth());
-        newCanvas.getGraphicsContext2D().drawImage(snap, 0, 0);
+    public static void undo(StackPane activeStack, ArrayList undoStack) {
+        if(undoIndex > 1) {
+            Image undoImage = (Image) undoStack.get(undoIndex - 2);
+            activeCanvas.getGraphicsContext2D().drawImage(undoImage, 0, 0);
+            redoStack.add((Image) undoStack.get(undoIndex-1));
+            redoIndex++;
+            if (undoIndex > 0) undoIndex--;
+        }
+
+        else {
+            activeCanvas = newBaseCanvas(activeStack);
+        }
     }
+
+    public static void redo(StackPane activeStack, ArrayList redoStack) {
+        try {
+            Image redoImage = (Image) redoStack.get(redoIndex - 1);
+            activeCanvas.getGraphicsContext2D().drawImage(redoImage, 0, 0);
+            redoStack.remove(redoIndex - 1);
+            if (redoIndex > 0) redoIndex--;
+            undoIndex++;
+        }
+        catch(Exception e) {}
+
+    }
+
+    public static ArrayList getUndoStack() { return undoStack; }
+
+    public static ArrayList getRedoStack() { return redoStack; }
 
     /**
      * <p> This method is simply used to display a help and about dialogue window when the user
@@ -394,6 +419,26 @@ public class Display {
         Scene helpScene = new Scene(helpMsg, 200, 100);
         helpWin.setScene(helpScene);
         helpWin.show();
+    }
+
+    public static int promptForSides() {
+        final int[] numSides = {0};
+        Stage promptStage = new Stage();
+        VBox box = new VBox(20);
+        TextField textBox = new TextField();
+        Label commentLabel = new Label("Enter number of sides:");
+        Button okButton = new Button("Enter");
+        okButton.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent actionEvent) {
+                promptStage.close();
+                numSides[0] = Integer.parseInt(textBox.getText());
+            }
+        });
+        box.getChildren().addAll(commentLabel, textBox, okButton);
+        promptStage.setScene(new Scene(box, 200, 150));
+        promptStage.showAndWait();
+        return numSides[0];
     }
 
 }
