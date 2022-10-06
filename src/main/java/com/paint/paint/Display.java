@@ -158,8 +158,8 @@ public class Display {
      * @return newTab, the newly created tab.
      * @since 2.1.1
      */
-    public static Tab newTab(TabPane tabPane, String name) { //creates a new tab and attaches it to the tabPane
-        Tab newTab = new Tab();
+    public static imageTab newTab(TabPane tabPane, String name) { //creates a new tab and attaches it to the tabPane
+        imageTab newTab = new imageTab();
         newTab.setText(name);
         newTab.setOnCloseRequest(e -> {
             if(getUnsavedChanges() == true) {
@@ -242,7 +242,7 @@ public class Display {
      * @since 2.1.1
      */
     public static void createNewTab(TabPane tabPane, String tabName) {
-        Tab currTab = newTab(tabPane, tabName); //makes a new tab and adds it to the tabpane
+        imageTab currTab = newTab(tabPane, tabName); //makes a new tab and adds it to the tabpane
         ScrollPane currScroll = newScroll(currTab); //adds a scrollpane to that tab
         StackPane currStack = newStack(currScroll); //adds a stackpane to that scrollpane
         Canvas currCanvas = newBaseCanvas(currStack); //adds a base canvas to that stackpane (Ho-ro, the rattlin' bog, the bog down in the valley-o....look it up)
@@ -257,6 +257,10 @@ public class Display {
                 redoIndex = 0;
             }
         };
+        currTab.setParentTabPane(tabPane);
+        currTab.setScrollPane(currScroll);
+        currTab.setStackPane(currStack);
+        currTab.setCanvas(currCanvas);
         currStack.setOnMouseReleased(mouseRel);
         tabPane.getSelectionModel().select(currTab);
         if (firstTab = true) {
@@ -368,6 +372,12 @@ public class Display {
         }
     }
 
+    /**
+     * <p>This method is tied to the undo button, and provides undo functionality using a single shared stack.</p>
+     * @param activeStack the current active StackPane
+     * @param undoStack the shared undo stack (which is an array of images)
+     * @since 3.2.0
+     */
     public static void undo(StackPane activeStack, ArrayList undoStack) {
         if(undoIndex > 1) {
             Image undoImage = (Image) undoStack.get(undoIndex - 2);
@@ -382,6 +392,12 @@ public class Display {
         }
     }
 
+    /**
+     * <p> This method is tied to the redo button, and provides redo functionality using a single shared stack. </p>
+     * @param activeStack the active StackPane
+     * @param redoStack the shared redo stack, which is an array of images.
+     * @since 3.2.0
+     */
     public static void redo(StackPane activeStack, ArrayList redoStack) {
         try {
             Image redoImage = (Image) redoStack.get(redoIndex - 1);
@@ -394,8 +410,18 @@ public class Display {
 
     }
 
+    /**
+     * <p> This method only returns the shared undo stack.</p>
+     * @return undoStack, the shared undo stack.
+     * @since 3.2.0
+     */
     public static ArrayList getUndoStack() { return undoStack; }
 
+    /**
+     * <p> This method only returns the shared redo stack.</p>
+     * @return redoStack, the shared undo stack.
+     * @since 3.2.0
+     */
     public static ArrayList getRedoStack() { return redoStack; }
 
     /**
@@ -421,6 +447,11 @@ public class Display {
         helpWin.show();
     }
 
+    /**
+     * <p> This method launches a popup window that prompts the user to enter a number of sides. </p>
+     * @return numSides, the integer containing the user's inputted number of sides.
+     * @since 3.2.0
+     */
     public static int promptForSides() {
         final int[] numSides = {0};
         Stage promptStage = new Stage();

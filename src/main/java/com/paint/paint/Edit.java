@@ -1,28 +1,19 @@
 package com.paint.paint;
 
 import javafx.collections.ObservableList;
-import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.geometry.Rectangle2D;
-import javafx.scene.Scene;
 import javafx.scene.SnapshotParameters;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.control.*;
-import javafx.scene.control.Button;
-import javafx.scene.control.Label;
-import javafx.scene.control.TextField;
 import javafx.scene.effect.Light.Point;
 import javafx.scene.image.Image;
 import javafx.scene.image.WritableImage;
 import javafx.scene.input.Clipboard;
-import javafx.scene.input.ClipboardContent;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.StackPane;
-import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
-import javafx.stage.Modality;
-import javafx.stage.Stage;
 import java.util.List;
 import static java.lang.Math.abs;
 
@@ -273,6 +264,17 @@ public class Edit {
         canvas.setOnMouseReleased(mouseRel);
     }
 
+    /**
+     * <p> This method is used to do the math required to compute the locations of all points of a polygon
+     * given the desired number of sides. </p>
+     * @param centerX the x-coordinate of the centerpoint of the polygon whose points are to be computed.
+     * @param centerY the y-coordinate of the centerpoint of the polygon whose points are to be computed.
+     * @param radius the "radius" of the polygon, ie the radius of a circle that would contain the polygon's points
+     * @param sides the number of sides of the desired polygon
+     * @param x a boolean input that tells the method whether to return the x-coordinates of the polygon's points, or the y-coordinates.
+     * @return returnX, a double array of x-coordinates, or returnY, a double array of y-coordinates
+     * @since 3.4.0
+     */
     public static double[] getPolygonSides(double centerX, double centerY, double radius, int sides, boolean x) {
         double[] returnX = new double[sides];
         double[] returnY = new double[sides];
@@ -292,6 +294,14 @@ public class Edit {
             return returnY;
     }
 
+    /**
+     * <p> This is one of many methods used internally within the cursorUpdate method.
+     * This particular method configures and adds the event handlers necessary for
+     * drawing a straight line on the canvas. </p>
+     * @param canvas the active canvas.
+     * @param graphContext the active graphics context.
+     * @since 3.4.0
+     */
     public static void drawPolygon (Canvas canvas, GraphicsContext graphContext) {
         final Point center = new Point();
         final EventHandler<MouseEvent> mousePress = new EventHandler<MouseEvent>() {

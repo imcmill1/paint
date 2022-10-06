@@ -1,6 +1,8 @@
 package com.paint.paint;
 
-import javafx.scene.canvas.Canvas;
+import javafx.scene.Parent;
+import javafx.scene.control.ScrollPane;
+import javafx.scene.control.TabPane;
 import javafx.scene.image.WritableImage;
 import javafx.scene.layout.StackPane;
 import javafx.stage.FileChooser;
@@ -49,7 +51,7 @@ public class fileIO { //create public class fileIO which is static by default as
      * @throws IOException due to interfacing with file explorer i/o
      * @since 1.0.1
      */
-    public static void saveAs(StackPane stackPane) throws IOException { //placeholder saveAs method
+    public static void saveAs(StackPane stackPane, TabPane parentTabPane) throws IOException { //placeholder saveAs method
         Stage fileStage = new Stage();
         FileChooser saveFile = new FileChooser();
         saveFile.getExtensionFilters().addAll(new FileChooser.ExtensionFilter("PNG Files", "*.png"));
@@ -59,7 +61,8 @@ public class fileIO { //create public class fileIO which is static by default as
             WritableImage saveImg = new WritableImage((int)stackPane.getWidth(), (int)stackPane.getHeight());
             stackPane.snapshot(null, saveImg);
             ImageIO.write(SwingFXUtils.fromFXImage(saveImg, null), "png", file);
-            lastSavedFile = file;
+            imageTab tempTab = (imageTab) parentTabPane.getSelectionModel().getSelectedItem();
+            tempTab.setLastSavedFile(file);
         }
     }
 
@@ -72,15 +75,16 @@ public class fileIO { //create public class fileIO which is static by default as
      * @throws IOException due to interfacing with file explorer i/o
      * @since 1.0.1
      */
-    public static void save(StackPane stackPane) throws IOException { // placeholder save method
-        if (lastSavedFile != null) {//check if lastSaved file not blank, if true, take snapshot and save at lastSavedFile
+    public static void save(StackPane stackPane, TabPane parentTabPane) throws IOException { // placeholder save method
+        imageTab currTab = (imageTab) parentTabPane.getSelectionModel().getSelectedItem();
+        if ( currTab.getLastSavedFile() != null) {//check if lastSaved file not blank, if true, take snapshot and save at lastSavedFile
             WritableImage saveImg = new WritableImage((int)stackPane.getWidth(), (int)stackPane.getHeight());
             stackPane.snapshot(null, saveImg);
-            ImageIO.write(SwingFXUtils.fromFXImage(saveImg, null), "png", lastSavedFile);
+            ImageIO.write(SwingFXUtils.fromFXImage(saveImg, null), "png", currTab.getLastSavedFile());
         }
 
         else { //if it was null, call saveAs instead
-            fileIO.saveAs(stackPane);
+            fileIO.saveAs(stackPane, parentTabPane);
         }
     }
 

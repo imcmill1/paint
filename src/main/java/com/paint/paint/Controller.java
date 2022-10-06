@@ -10,6 +10,8 @@ import javafx.scene.control.*;
 import javafx.scene.layout.StackPane;
 
 import java.io.IOException;
+import java.util.Timer;
+import java.util.TimerTask;
 
 //VERSION NUMBERING
 /* With minor exception, version numbers will be assigned as follows:
@@ -64,8 +66,6 @@ public class Controller {
     /** tabsOpened is an internal variable that ticks up every time a new canvas is opened*/
     private int tabsOpened = 1;
 
-    /** changesMade is an internal variable tracking the number of changes made since the stackpane was last collapsed.*/
-    private int changesMade = 0;
 
     //=====FILE IO METHODS=====//
     //These are the methods from the fileIO static class. They have to be wrapped in a method here in the controller for them to be used
@@ -97,7 +97,7 @@ public class Controller {
      */
     @FXML
     protected void save() throws IOException {
-        fileIO.save(Display.getActiveStack());
+        fileIO.save(Display.getActiveStack(), imageTabs);
         Display.setUnsavedChanges(false);
     }
 
@@ -112,7 +112,7 @@ public class Controller {
      */
     @FXML
     protected void saveAs() throws IOException {
-        fileIO.saveAs(Display.getActiveStack());
+        fileIO.saveAs(Display.getActiveStack(), imageTabs);
         Display.setUnsavedChanges(false);
     }
 
