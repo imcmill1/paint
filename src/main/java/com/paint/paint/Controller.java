@@ -22,14 +22,11 @@ import java.util.TimerTask;
 
 //TO-DO LIST
 /*
-    SPRINT 5:
-    - Timer's countdown shall be visible to the user, with view toggleable on/off
-
-
  * KNOWN ISSUES TO FIX:
  *  - Add custom icons for the shapes and tools toolbar
     - Make Undo/Redo less janky. It works, but sometimes does unpredictable things.
     - Somehow fix copy/paste to use the system clipboard.
+    - Fix timer display so that it displays only the current tab's autosave timer
 */
 
 /**
@@ -59,6 +56,10 @@ public class Controller {
     /** canvasSizeSlider is the slider allowing for resizing of the active canvas*/
     @FXML private Slider canvasSizeSlider;
 
+    @FXML private CheckBox timerDispToggle;
+
+    @FXML private Label timerDispBox;
+
     /** tabsOpened is an internal variable that ticks up every time a new canvas is opened*/
     private int tabsOpened = 1;
 
@@ -76,7 +77,7 @@ public class Controller {
      */
     @FXML
     protected void open() throws IOException { //wrapped open() function
-        Display.createNewTab(imageTabs, "untitled" + tabsOpened);
+        Display.createNewTab(imageTabs, "untitled" + tabsOpened, timerDispBox);
         String selectedImg = fileIO.open(imageTabs); //creates string selectedImg and assigns it to a call of fileIO.open()
         Display.showImage(Display.getActiveCanvas(), Display.getActiveCanvas().getGraphicsContext2D(), selectedImg); //passes that string as the path into showImage
         tabsOpened++;
@@ -125,7 +126,7 @@ public class Controller {
      */
     @FXML
     protected void createNewTab() {
-        Display.createNewTab(imageTabs, "untitled" + tabsOpened);
+        Display.createNewTab(imageTabs, "untitled" + tabsOpened, timerDispBox);
         try {Edit.cursorUpdate(Display.getActiveCanvas(), Display.getActiveCanvas().getGraphicsContext2D(), editToggles, colorPicker);}
 
         catch (Exception e) {}
@@ -163,6 +164,9 @@ public class Controller {
 
     @FXML
     protected void redo() { Display.redo(Display.getActiveStack(), Display.getRedoStack()); }
+
+    @FXML
+    protected void timerDisplayUpdate() { Display.timerDisplayUpdate(timerDispToggle, timerDispBox); }
 
     //=====EDIT METHODS=====//
     //Methods from the Edit class. As with above, these methods must be wrapped in a controller method
@@ -223,9 +227,12 @@ public class Controller {
         Menu.widthChoiceConfig(widthChoice);
         Menu.colorPickerConfig(colorPicker);
         Display.firstTab = true;
-        Display.createNewTab(imageTabs, "untitled");
+        Display.createNewTab(imageTabs, "untitled", timerDispBox);
+        Menu.timerDisplayConfig(timerDispBox);
+        /*
         paintTest.getPolygonXSidesTest();
         paintTest.getPolygonYSidesTest();
         paintTest.canvasRescaleTest();
+        */
     }
 }

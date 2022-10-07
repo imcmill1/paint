@@ -1,5 +1,6 @@
 package com.paint.paint;
 
+import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.scene.Node;
 import javafx.scene.control.*;
@@ -36,5 +37,9 @@ public class Menu extends Node {
      * @param colorPicker the ColorPicker object to be configured.
      */
     public static void colorPickerConfig (ColorPicker colorPicker) {colorPicker.setValue(Color.BLACK);}
+
+    public static void timerDisplayConfig (Label timerDisplayBox) {
+        timerDisplayBox.setVisible(false);
+    }
 
 }
