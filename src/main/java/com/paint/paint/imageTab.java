@@ -21,7 +21,7 @@ public class imageTab extends Tab {
     public Timer autoSave;
     public imageTab() {
         imageTab newTab = this;
-        autoSave = new Timer();
+        autoSave = new Timer(true);
         autoSave.scheduleAtFixedRate( new TimerTask() {
             public void run() {
                 Platform.runLater(() -> {
