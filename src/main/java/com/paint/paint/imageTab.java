@@ -33,15 +33,12 @@ public class imageTab extends Tab {
             }
         },0,30000);  // start immediately, run every 30 seconds
     }
-
     public void setParentTabPane (TabPane tabPane) { parentTabPane = tabPane; }
     public void setScrollPane (ScrollPane inputScroll) { scrollPane = inputScroll; }
     public void setStackPane (StackPane inputStack) { stackPane = inputStack; }
 
     public void setCanvas (Canvas inputCanvas) { canvas = inputCanvas; }
-
     public void setLastSavedFile (File inputFile) { lastSavedFile = inputFile; }
-
     public TabPane getParentTabPane() { return parentTabPane; }
 
     public ScrollPane getScrollPane() { return scrollPane; }
@@ -49,6 +46,5 @@ public class imageTab extends Tab {
     public StackPane getStackPane() { return stackPane; }
 
     public Canvas getCanvas() { return canvas; }
-
     public File getLastSavedFile() { return lastSavedFile; }
 }

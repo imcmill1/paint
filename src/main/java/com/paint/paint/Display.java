@@ -401,11 +401,11 @@ public class Display {
      * for the base width and height to be multiplied by.</p>
      * @param activeCanvas the active canvas to be resized.
      * @param graphContext the graphics context of the active canvas.
-     * @param canvasSizeSlider the slider for resizing the canvas.
+     * @param sliderVal the value of the slider for resizing the canvas.
      * @since 2.3.1
      */
-    public static void updateCanvasSize(Canvas activeCanvas, GraphicsContext graphContext, Slider canvasSizeSlider) {
-        double scale = canvasSizeSlider.getValue() + 1;
+    public static double updateCanvasSize(Canvas activeCanvas, GraphicsContext graphContext, double sliderVal) {
+        double scale = sliderVal + 1;
         if (scale != 0) {
             activeCanvas.setWidth(scale*baseWidth);
             activeCanvas.setHeight(scale*baseHeight);
@@ -417,6 +417,7 @@ public class Display {
             activeCanvas.setWidth(baseWidth);
             activeCanvas.setHeight(baseHeight);
         }
+        return scale;
     }
 
     /**

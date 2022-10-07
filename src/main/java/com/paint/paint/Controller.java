@@ -23,7 +23,6 @@ import java.util.TimerTask;
 //TO-DO LIST
 /*
     SPRINT 5:
-    - Add at least 3 unit tests (trivial is OK!)
     - Timer's countdown shall be visible to the user, with view toggleable on/off
 
 
@@ -46,7 +45,7 @@ import java.util.TimerTask;
 public class Controller {
     //=====FXML LOADS=====//
     /** imageTabs is the TabPane that contains each canvas for image editing*/
-    @FXML private TabPane imageTabs;
+    @FXML public TabPane imageTabs;
 
     /** editToggles is the toggle group containing all toggle buttons on the menubar*/
     @FXML private ToggleGroup editToggles;
@@ -157,7 +156,7 @@ public class Controller {
      * @since 2.3.1
      */
     @FXML
-    protected void canvasSizeUpdate() {Display.updateCanvasSize(Display.getActiveCanvas(), Display.getActiveCanvas().getGraphicsContext2D(), canvasSizeSlider);}
+    protected void canvasSizeUpdate() {Display.updateCanvasSize(Display.getActiveCanvas(), Display.getActiveCanvas().getGraphicsContext2D(), canvasSizeSlider.getValue());}
 
     @FXML
     protected void undo() { Display.undo(Display.getActiveStack(), Display.getUndoStack()); }
@@ -225,5 +224,8 @@ public class Controller {
         Menu.colorPickerConfig(colorPicker);
         Display.firstTab = true;
         Display.createNewTab(imageTabs, "untitled");
+        paintTest.getPolygonXSidesTest();
+        paintTest.getPolygonYSidesTest();
+        paintTest.canvasRescaleTest();
     }
 }

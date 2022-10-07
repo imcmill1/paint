@@ -37,5 +37,7 @@ public class Main extends Application { //creates main class extending Applicati
      * <p> The main for the project. This single line main is run one time, and launches the application.</p>
      * @param args default string argument parameters for main()
      */
-    public static void main(String[] args) {launch();} //main only launches the application.
+    public static void main(String[] args) {
+        launch();
+    } //main only launches the application.
 }

@@ -53,25 +53,27 @@ public class fileIO { //create public class fileIO which is static by default as
         saveFile.getExtensionFilters().addAll(new FileChooser.ExtensionFilter("Image Files", "*.png", "*.jpg", "*.bmp"));
         saveFile.setTitle("Save As...");
         File file = saveFile.showSaveDialog(fileStage);
-        String newFileExt = FilenameUtils.getExtension(file.getAbsolutePath());
-        System.out.println("New ext: " + newFileExt);
         try {
-            String oldFileExt = FilenameUtils.getExtension(tab.getLastSavedFile().getAbsolutePath());
-            System.out.println("Old ext: " + oldFileExt);
-            if(newFileExt != oldFileExt) {
-                Display.showFiletypeWarning(tab.getParentTabPane(), tab);
+            String newFileExt = FilenameUtils.getExtension(file.getAbsolutePath());
+            try {
+                String oldFileExt = FilenameUtils.getExtension(tab.getLastSavedFile().getAbsolutePath());
+                if (newFileExt != oldFileExt) {
+                    Display.showFiletypeWarning(tab.getParentTabPane(), tab);
+                    WritableImage saveImg = new WritableImage((int) stackPane.getWidth(), (int) stackPane.getHeight());
+                    stackPane.snapshot(null, saveImg);
+                    ImageIO.write(SwingFXUtils.fromFXImage(saveImg, null), "png", file);
+                    tab.setLastSavedFile(file);
+                }
+            }
+
+            catch (Exception e) {
                 WritableImage saveImg = new WritableImage((int) stackPane.getWidth(), (int) stackPane.getHeight());
                 stackPane.snapshot(null, saveImg);
                 ImageIO.write(SwingFXUtils.fromFXImage(saveImg, null), "png", file);
                 tab.setLastSavedFile(file);
             }
         }
-        catch (Exception e) {
-            WritableImage saveImg = new WritableImage((int) stackPane.getWidth(), (int) stackPane.getHeight());
-            stackPane.snapshot(null, saveImg);
-            ImageIO.write(SwingFXUtils.fromFXImage(saveImg, null), "png", file);
-            tab.setLastSavedFile(file);
-        }
+        catch (Exception e) {}
     }
 
     /**

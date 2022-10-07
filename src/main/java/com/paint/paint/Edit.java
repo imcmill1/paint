@@ -273,7 +273,7 @@ public class Edit {
      * @param sides the number of sides of the desired polygon
      * @param x a boolean input that tells the method whether to return the x-coordinates of the polygon's points, or the y-coordinates.
      * @return returnX, a double array of x-coordinates, or returnY, a double array of y-coordinates
-     * @since 3.4.0
+     * @since 3.2.0
      */
     public static double[] getPolygonSides(double centerX, double centerY, double radius, int sides, boolean x) {
         double[] returnX = new double[sides];
@@ -300,7 +300,7 @@ public class Edit {
      * drawing a straight line on the canvas. </p>
      * @param canvas the active canvas.
      * @param graphContext the active graphics context.
-     * @since 3.4.0
+     * @since 3.2.0
      */
     public static void drawPolygon (Canvas canvas, GraphicsContext graphContext) {
         final Point center = new Point();
@@ -409,7 +409,6 @@ public class Edit {
                 canvas.snapshot(null, snap);
                 Color grabbedColor = snap.getPixelReader().getColor((int) mousePress.getX(), (int) mousePress.getY());
                 colorPicker.setValue(grabbedColor);
-                //TODO set custom cursor
                 graphContext.setStroke(grabbedColor);
                 editToggles.selectToggle(toggleList.get(0));
             }
