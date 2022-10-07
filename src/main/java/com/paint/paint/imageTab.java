@@ -2,6 +2,7 @@ package com.paint.paint;
 
 import javafx.application.Platform;
 import javafx.scene.canvas.Canvas;
+import javafx.scene.control.Label;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.control.Tab;
 import javafx.scene.control.TabPane;
@@ -18,20 +19,35 @@ public class imageTab extends Tab {
     private ScrollPane scrollPane;
     private StackPane stackPane;
     private Canvas canvas;
-    public Timer autoSave;
-    public imageTab() {
+    private Timer autoSave;
+
+    private int timerVal;
+    public imageTab(Label timerLabel) {
         imageTab newTab = this;
         autoSave = new Timer(true);
+        timerVal = 30;
         autoSave.scheduleAtFixedRate( new TimerTask() {
             public void run() {
                 Platform.runLater(() -> {
                     if (lastSavedFile != null) {
-                        try { fileIO.save(stackPane, newTab); }
-                        catch (IOException e) { throw new RuntimeException(e); }
+                        if(timerVal == 0) {
+                            try {
+                                fileIO.save(stackPane, newTab);
+                                timerVal = 30;
+                                timerLabel.setText(Integer.toString(timerVal));
+                            }
+                            catch (IOException e) {
+                                throw new RuntimeException(e);
+                            }
+                        }
+                        else {
+                            timerVal--;
+                            timerLabel.setText(Integer.toString(timerVal));
+                        }
                     }
                 });
             }
-        },0,30000);  // start immediately, run every 30 seconds
+        },0,1000);  // start immediately, run every 30 seconds
     }
     public void setParentTabPane (TabPane tabPane) { parentTabPane = tabPane; }
     public void setScrollPane (ScrollPane inputScroll) { scrollPane = inputScroll; }
@@ -46,5 +62,9 @@ public class imageTab extends Tab {
     public StackPane getStackPane() { return stackPane; }
 
     public Canvas getCanvas() { return canvas; }
+
+    public Timer getTimer() { return autoSave; }
+
+    public int getTimerVal() { return timerVal; }
     public File getLastSavedFile() { return lastSavedFile; }
 }

@@ -10,7 +10,6 @@ import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.control.*;
 import javafx.scene.image.Image;
-import javafx.scene.image.ImageView;
 import javafx.scene.image.WritableImage;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.StackPane;
@@ -22,7 +21,6 @@ import javafx.stage.Stage;
 
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.List;
 
 /**
  * <p> Display.java handles displaying content in the application, including images,
@@ -203,11 +201,9 @@ public class Display {
      * @return newTab, the newly created tab.
      * @since 2.1.1
      */
-    public static imageTab newTab(TabPane tabPane, String name) { //creates a new tab and attaches it to the tabPane
-        imageTab newTab = new imageTab();
-        Label timerLabel = new Label(newTab.autoSave.toString());
+    public static imageTab newTab(TabPane tabPane, String name, Label timerLabel) { //creates a new tab and attaches it to the tabPane
+        imageTab newTab = new imageTab(timerLabel);
         newTab.setText(name);
-        newTab.setContent(timerLabel);
         newTab.setOnCloseRequest(e -> {
             if(getUnsavedChanges() == true) {
                 e.consume();
@@ -288,8 +284,8 @@ public class Display {
      * @param tabName the name that will be given to the tab when it is created.
      * @since 2.1.1
      */
-    public static void createNewTab(TabPane tabPane, String tabName) {
-        imageTab currTab = newTab(tabPane, tabName); //makes a new tab and adds it to the tabpane
+    public static void createNewTab(TabPane tabPane, String tabName, Label timerLabel) {
+        imageTab currTab = newTab(tabPane, tabName, timerLabel); //makes a new tab and adds it to the tabpane
         ScrollPane currScroll = newScroll(currTab); //adds a scrollpane to that tab
         StackPane currStack = newStack(currScroll); //adds a stackpane to that scrollpane
         Canvas currCanvas = newBaseCanvas(currStack); //adds a base canvas to that stackpane (Ho-ro, the rattlin' bog, the bog down in the valley-o....look it up)
@@ -518,6 +514,11 @@ public class Display {
         promptStage.setScene(new Scene(box, 200, 150));
         promptStage.showAndWait();
         return numSides[0];
+    }
+
+    public static void timerDisplayUpdate(CheckBox dispCheck, Label dispBox) {
+        if (dispCheck.isSelected()) { dispBox.setVisible(true); }
+        else dispBox.setVisible(false);
     }
 
 }

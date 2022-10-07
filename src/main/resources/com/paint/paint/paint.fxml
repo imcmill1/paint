@@ -122,6 +122,8 @@
          <items>
             <Label prefHeight="17.0" prefWidth="64.0" text="Canvas Size" />
             <Slider fx:id="canvasSizeSlider" max="1.0" min="-1.0" onMouseReleased="#canvasSizeUpdate" />
+            <CheckBox fx:id="timerDispToggle" mnemonicParsing="false" onAction="#timerDisplayUpdate" text="View Autosave Timer" />
+            <Label fx:id="timerDispBox" />
          </items>
       </ToolBar>
    </bottom>
