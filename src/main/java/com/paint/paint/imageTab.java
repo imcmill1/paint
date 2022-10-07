@@ -14,22 +14,19 @@ import java.util.TimerTask;
 
 public class imageTab extends Tab {
     private File lastSavedFile;
-
     private TabPane parentTabPane;
     private ScrollPane scrollPane;
     private StackPane stackPane;
     private Canvas canvas;
     public Timer autoSave;
     public imageTab() {
+        imageTab newTab = this;
         autoSave = new Timer();
         autoSave.scheduleAtFixedRate( new TimerTask() {
             public void run() {
                 Platform.runLater(() -> {
                     if (lastSavedFile != null) {
-                        try {
-                            System.out.println("Autosaving!");
-                            fileIO.save(stackPane, parentTabPane); //TODO: SAVE DOESN'T REFERENCE IMAGETAB's LAST SAVED FILE
-                        }
+                        try { fileIO.save(stackPane, newTab); }
                         catch (IOException e) { throw new RuntimeException(e); }
                     }
                 });

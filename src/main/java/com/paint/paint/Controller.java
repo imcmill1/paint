@@ -24,10 +24,7 @@ import java.util.TimerTask;
 /*
     SPRINT 5:
     - Add at least 3 unit tests (trivial is OK!)
-    - Timer that allows for autosave
     - Timer's countdown shall be visible to the user, with view toggleable on/off
-    - Ability to save in an alternate file format than the file was originally
-        - There will be a warning when converting file types that data may be lost
 
 
  * KNOWN ISSUES TO FIX:
@@ -81,7 +78,7 @@ public class Controller {
     @FXML
     protected void open() throws IOException { //wrapped open() function
         Display.createNewTab(imageTabs, "untitled" + tabsOpened);
-        String selectedImg = fileIO.open(); //creates string selectedImg and assigns it to a call of fileIO.open()
+        String selectedImg = fileIO.open(imageTabs); //creates string selectedImg and assigns it to a call of fileIO.open()
         Display.showImage(Display.getActiveCanvas(), Display.getActiveCanvas().getGraphicsContext2D(), selectedImg); //passes that string as the path into showImage
         tabsOpened++;
     }
@@ -97,7 +94,7 @@ public class Controller {
      */
     @FXML
     protected void save() throws IOException {
-        fileIO.save(Display.getActiveStack(), imageTabs);
+        fileIO.save(Display.getActiveStack(), (imageTab) imageTabs.getSelectionModel().getSelectedItem());
         Display.setUnsavedChanges(false);
     }
 
@@ -112,7 +109,7 @@ public class Controller {
      */
     @FXML
     protected void saveAs() throws IOException {
-        fileIO.saveAs(Display.getActiveStack(), imageTabs);
+        fileIO.saveAs(Display.getActiveStack(), (imageTab) imageTabs.getSelectionModel().getSelectedItem());
         Display.setUnsavedChanges(false);
     }
 

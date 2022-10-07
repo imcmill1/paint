@@ -20,6 +20,7 @@ import javafx.scene.text.Text;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -84,7 +85,7 @@ public class Display {
      * @param activeTab Used so that the user can override the message and close the tab.
      * @since 2.3.1
      */
-    public static void showSaveWarning(TabPane tabPane, Tab activeTab) {
+    public static void showSaveWarning(TabPane tabPane, imageTab activeTab) {
         Stage unsavedDiag = new Stage();
         unsavedDiag.setTitle("Paint");
         Stage ownerStage = (Stage) tabPane.getScene().getWindow();
@@ -126,6 +127,50 @@ public class Display {
         unsavedDiag.show();
     }
 
+    public static void showFiletypeWarning(TabPane tabPane, imageTab activeTab) {
+        Stage filetypeWarning = new Stage();
+        filetypeWarning.setTitle("Paint");
+        Stage ownerStage = (Stage) tabPane.getScene().getWindow();
+        filetypeWarning.initModality(Modality.APPLICATION_MODAL);
+        filetypeWarning.initOwner(ownerStage);
+
+        StackPane basePane = new StackPane();
+
+        VBox warnMsg = new VBox(20);
+        warnMsg.setAlignment(Pos.CENTER);
+        warnMsg.getChildren().add(new Text("Saving in a filetype other than .PNG may result in corruption or dataloss. \n Are you sure you want to continue?"));
+        warnMsg.setTranslateY(-25);
+
+        Button yes = new Button("Yes");
+        yes.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent actionEvent) { filetypeWarning.close(); }
+        });
+        yes.setTranslateX(-50);
+        yes.setTranslateY(25);
+
+        Button no = new Button("No");
+        no.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent actionEvent) {
+                filetypeWarning.close();
+                try {
+                    fileIO.saveAs(activeStack, activeTab);
+                } catch (IOException e) {
+                    throw new RuntimeException(e);
+                }
+            }
+        });
+        no.setTranslateX(50);
+        no.setTranslateY(25);
+
+        basePane.getChildren().addAll(warnMsg, yes, no);
+
+        Scene warnScene = new Scene(basePane, 400, 100);
+        filetypeWarning.setScene(warnScene);
+        filetypeWarning.show();
+    }
+
     /**
      * <p>This method is used to display an image on the active canvas. It takes in the canvas
      * for the image to be displayed on, the graphics context of that canvas, and the path of the
@@ -160,7 +205,9 @@ public class Display {
      */
     public static imageTab newTab(TabPane tabPane, String name) { //creates a new tab and attaches it to the tabPane
         imageTab newTab = new imageTab();
+        Label timerLabel = new Label(newTab.autoSave.toString());
         newTab.setText(name);
+        newTab.setContent(timerLabel);
         newTab.setOnCloseRequest(e -> {
             if(getUnsavedChanges() == true) {
                 e.consume();
