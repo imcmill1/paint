@@ -16,6 +16,7 @@ import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Text;
+import javafx.scene.transform.Rotate;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 
@@ -514,6 +515,18 @@ public class Display {
         promptStage.setScene(new Scene(box, 200, 150));
         promptStage.showAndWait();
         return numSides[0];
+    }
+
+    public static void rotateCanvasClockwise() {
+        GraphicsContext gc = activeCanvas.getGraphicsContext2D();
+        Rotate r = new Rotate(15, 0, 0);
+        gc.setTransform(r.getMxx(), r.getMyx(), r.getMxy(), r.getMyy(), r.getTx(), r.getTy());
+    }
+
+    public static void rotateCanvasCounterClockwise() {
+        GraphicsContext gc = activeCanvas.getGraphicsContext2D();
+        Rotate r = new Rotate(-15, 0, 0);
+        gc.setTransform(r.getMxx(), r.getMyx(), r.getMxy(), r.getMyy(), r.getTx(), r.getTy());
     }
 
     public static void timerDisplayUpdate(CheckBox dispCheck, Label dispBox) {

@@ -1,13 +1,29 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.scene.control.*?>
-<?import javafx.scene.input.*?>
-<?import javafx.scene.layout.*?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.CheckBox?>
+<?import javafx.scene.control.ChoiceBox?>
+<?import javafx.scene.control.ColorPicker?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.MenuButton?>
+<?import javafx.scene.control.MenuItem?>
+<?import javafx.scene.control.Slider?>
+<?import javafx.scene.control.Tab?>
+<?import javafx.scene.control.TabPane?>
+<?import javafx.scene.control.ToggleButton?>
+<?import javafx.scene.control.ToggleGroup?>
+<?import javafx.scene.control.ToolBar?>
+<?import javafx.scene.control.Tooltip?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.input.KeyCodeCombination?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.ColumnConstraints?>
+<?import javafx.scene.layout.GridPane?>
+<?import javafx.scene.layout.RowConstraints?>
 
-<BorderPane fx:id="rootPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="600.0" prefWidth="800.0" xmlns="http://javafx.com/javafx/17.0.2-ea" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.paint.paint.Controller">
-   <center>
-      <TabPane fx:id="imageTabs" onMouseClicked="#cursorUpdate" onMouseEntered="#updateWidth" onMouseExited="#updateWidth" prefHeight="200.0" prefWidth="200.0" BorderPane.alignment="CENTER" />
-   </center>
+<BorderPane fx:id="rootPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="600.0" prefWidth="800.0" xmlns="http://javafx.com/javafx/18" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.paint.paint.Controller">
    <top>
       <TabPane prefHeight="115.0" prefWidth="800.0" tabClosingPolicy="UNAVAILABLE" BorderPane.alignment="CENTER">
         <tabs>
@@ -15,38 +31,115 @@
             <content>
               <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="90.0" prefWidth="800.0">
                      <children>
-                        <ColorPicker fx:id="colorPicker" layoutX="637.0" layoutY="-1.0" onAction="#updateColor" prefHeight="70.0" prefWidth="163.0" />
-                        <ChoiceBox fx:id="widthChoice" layoutX="487.0" layoutY="-1.0" onMouseExited="#updateWidth" prefHeight="70.0" prefWidth="150.0" />
-                        <ToggleButton fx:id="drawToggle" layoutX="262.0" layoutY="-1.0" mnemonicParsing="false" onAction="#cursorUpdate" prefHeight="70.0" prefWidth="60.0" text="Draw">
+                        <ColorPicker fx:id="colorPicker" layoutX="637.0" layoutY="-1.0" onAction="#updateColor" prefHeight="70.0" prefWidth="163.0">
+                           <tooltip>
+                              <Tooltip text="Color Selector - Select a color from a preset range, or create your own, for use with all drawing tools." wrapText="true" />
+                           </tooltip></ColorPicker>
+                        <ChoiceBox fx:id="widthChoice" layoutX="489.0" layoutY="-1.0" onMouseExited="#updateWidth" prefHeight="70.0" prefWidth="147.0">
+                           <tooltip>
+                              <Tooltip text="Line Width Selector - Select from a range of solid &amp; dashed line widths" wrapText="true" />
+                           </tooltip></ChoiceBox>
+                        <ToggleButton fx:id="drawToggle" alignment="BOTTOM_CENTER" layoutX="262.0" layoutY="-1.0" mnemonicParsing="false" onAction="#cursorUpdate" prefHeight="70.0" prefWidth="60.0" text="Draw" textAlignment="CENTER">
                            <toggleGroup>
                               <ToggleGroup fx:id="editToggles" />
                            </toggleGroup>
+                           <tooltip>
+                              <Tooltip text="Free draw on the canvas" wrapText="true" />
+                           </tooltip>
                         </ToggleButton>
-                        <Button layoutY="24.0" mnemonicParsing="false" onAction="#clearActiveCanvas" prefHeight="25.0" prefWidth="58.0" text="Clear" />
-                        <GridPane fx:id="shapesPane" layoutX="322.0" layoutY="-1.0" prefHeight="70.0" prefWidth="165.0">
+                        <Button layoutY="24.0" mnemonicParsing="false" onAction="#clearActiveCanvas" prefHeight="25.0" prefWidth="58.0" text="Clear">
+                           <tooltip>
+                              <Tooltip text="Clear - Wipes the entire canvas" wrapText="true" />
+                           </tooltip></Button>
+                        <GridPane fx:id="shapesPane" layoutX="323.0" layoutY="-1.0" prefHeight="70.0" prefWidth="165.0">
                           <columnConstraints>
                             <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
                             <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                              <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
                           </columnConstraints>
                           <rowConstraints>
                             <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
                             <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-                              <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
                             <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
                           </rowConstraints>
                            <children>
-                              <ToggleButton fx:id="rtriToggle" minHeight="-Infinity" mnemonicParsing="false" onAction="#cursorUpdate" prefHeight="17.0" prefWidth="82.0" text="Right Triangle" toggleGroup="$editToggles" GridPane.columnIndex="1" />
-                              <ToggleButton fx:id="rectToggle" minHeight="-Infinity" mnemonicParsing="false" onAction="#cursorUpdate" prefHeight="17.0" prefWidth="82.0" text="Rectangle" toggleGroup="$editToggles" GridPane.rowIndex="1" />
-                              <ToggleButton fx:id="sqreToggle" minHeight="-Infinity" mnemonicParsing="false" onAction="#cursorUpdate" prefHeight="17.0" prefWidth="82.0" text="Square" toggleGroup="$editToggles" GridPane.columnIndex="1" GridPane.rowIndex="1" />
-                              <ToggleButton fx:id="circToggle" minHeight="-Infinity" mnemonicParsing="false" onAction="#cursorUpdate" prefHeight="17.0" prefWidth="82.0" text="Circle" toggleGroup="$editToggles" GridPane.rowIndex="3" />
-                              <ToggleButton fx:id="ellpToggle" minHeight="-Infinity" mnemonicParsing="false" onAction="#cursorUpdate" prefHeight="17.0" prefWidth="82.0" text="Ellipse" toggleGroup="$editToggles" GridPane.columnIndex="1" GridPane.rowIndex="3" />
-                              <ToggleButton fx:id="lineToggle" contentDisplay="CENTER" minHeight="-Infinity" mnemonicParsing="false" onAction="#cursorUpdate" prefHeight="17.0" prefWidth="82.0" text="Line" toggleGroup="$editToggles" />
-                              <ToggleButton fx:id="polyToggle" layoutX="10.0" layoutY="27.0" minHeight="-Infinity" mnemonicParsing="false" onAction="#cursorUpdate" prefHeight="17.0" prefWidth="82.0" text="Polygon" toggleGroup="$editToggles" GridPane.rowIndex="2" />
-                              <ToggleButton layoutX="92.0" layoutY="27.0" minHeight="-Infinity" mnemonicParsing="false" onAction="#cursorUpdate" prefHeight="17.0" prefWidth="82.0" GridPane.columnIndex="1" GridPane.rowIndex="2">
-                                 <toggleGroup>
-                                    <ToggleGroup fx:id="editToggles2" />
-                                 </toggleGroup>
-                              </ToggleButton>
+                              <ToggleButton fx:id="rtriToggle" contentDisplay="CENTER" minHeight="-Infinity" mnemonicParsing="false" onAction="#cursorUpdate" prefHeight="23.0" prefWidth="55.0" text="Right Triangle" textFill="TRANSPARENT" toggleGroup="$editToggles" GridPane.columnIndex="1">
+                                 <graphic>
+                                    <ImageView fitHeight="18.0" fitWidth="26.0" pickOnBounds="true" preserveRatio="true">
+                                       <image>
+                                          <Image url="@Tools/trigonometry.png" />
+                                       </image>
+                                    </ImageView>
+                                 </graphic>
+                                 <tooltip>
+                                    <Tooltip text="Right Triangle - Draw a right triangle on the canvas" wrapText="true" />
+                                 </tooltip></ToggleButton>
+                              <ToggleButton fx:id="rectToggle" contentDisplay="CENTER" minHeight="-Infinity" mnemonicParsing="false" onAction="#cursorUpdate" prefHeight="23.0" prefWidth="55.0" text="Rectangle" textFill="TRANSPARENT" toggleGroup="$editToggles" GridPane.rowIndex="1">
+                                 <graphic>
+                                    <ImageView fitHeight="22.0" fitWidth="26.0" pickOnBounds="true" preserveRatio="true">
+                                       <image>
+                                          <Image url="@Tools/rectangle-stroked.png" />
+                                       </image>
+                                    </ImageView>
+                                 </graphic>
+                                 <tooltip>
+                                    <Tooltip text="Rectangle - Draw a rectangle on the canvas" wrapText="true" />
+                                 </tooltip></ToggleButton>
+                              <ToggleButton fx:id="sqreToggle" contentDisplay="CENTER" minHeight="-Infinity" mnemonicParsing="false" onAction="#cursorUpdate" prefHeight="23.0" prefWidth="55.0" text="Square" textFill="TRANSPARENT" toggleGroup="$editToggles" GridPane.columnIndex="1" GridPane.rowIndex="1">
+                                 <graphic>
+                                    <ImageView fitHeight="18.0" fitWidth="21.0" pickOnBounds="true" preserveRatio="true">
+                                       <image>
+                                          <Image url="@Tools/maximize-button.png" />
+                                       </image>
+                                    </ImageView>
+                                 </graphic>
+                                 <tooltip>
+                                    <Tooltip text="Square - Draw a square on the canvas" wrapText="true" />
+                                 </tooltip></ToggleButton>
+                              <ToggleButton fx:id="circToggle" contentDisplay="CENTER" minHeight="-Infinity" mnemonicParsing="false" onAction="#cursorUpdate" prefHeight="23.0" prefWidth="55.0" text="Circle" textFill="TRANSPARENT" toggleGroup="$editToggles" GridPane.rowIndex="2">
+                                 <graphic>
+                                    <ImageView fitHeight="20.0" fitWidth="25.0" pickOnBounds="true" preserveRatio="true">
+                                       <image>
+                                          <Image url="@Tools/circled--v1.png" />
+                                       </image>
+                                    </ImageView>
+                                 </graphic>
+                                 <tooltip>
+                                    <Tooltip text="Circle - Draw a circle on the canvas" wrapText="true" />
+                                 </tooltip></ToggleButton>
+                              <ToggleButton fx:id="ellpToggle" contentDisplay="CENTER" minHeight="-Infinity" mnemonicParsing="false" onAction="#cursorUpdate" prefHeight="23.0" prefWidth="55.0" text="Ellipse" textFill="TRANSPARENT" toggleGroup="$editToggles" GridPane.columnIndex="2" GridPane.rowIndex="1">
+                                 <graphic>
+                                    <ImageView fitHeight="19.0" fitWidth="25.0" pickOnBounds="true" preserveRatio="true">
+                                       <image>
+                                          <Image url="@Tools/ellipse-stroked.png" />
+                                       </image>
+                                    </ImageView>
+                                 </graphic>
+                                 <tooltip>
+                                    <Tooltip text="Ellipse - Draw an ellipse on the canvas" wrapText="true" />
+                                 </tooltip></ToggleButton>
+                              <ToggleButton fx:id="lineToggle" contentDisplay="CENTER" minHeight="-Infinity" mnemonicParsing="false" onAction="#cursorUpdate" prefHeight="23.0" prefWidth="55.0" text="Line" textFill="TRANSPARENT" toggleGroup="$editToggles">
+                                 <graphic>
+                                    <ImageView fitHeight="17.0" fitWidth="25.0" pickOnBounds="true" preserveRatio="true">
+                                       <image>
+                                          <Image url="@Tools/line.png" />
+                                       </image>
+                                    </ImageView>
+                                 </graphic>
+                                 <tooltip>
+                                    <Tooltip text="Line - Draw a straight line on the canvas" wrapText="true" />
+                                 </tooltip></ToggleButton>
+                              <ToggleButton fx:id="polyToggle" contentDisplay="CENTER" layoutX="10.0" layoutY="27.0" minHeight="-Infinity" mnemonicParsing="false" onAction="#cursorUpdate" prefHeight="23.0" prefWidth="55.0" text="Polygon" textFill="TRANSPARENT" toggleGroup="$editToggles" GridPane.columnIndex="2">
+                                 <graphic>
+                                    <ImageView fitHeight="15.0" fitWidth="18.0" pickOnBounds="true" preserveRatio="true">
+                                       <image>
+                                          <Image url="@Tools/external-Polygon-basic-elements-others-inmotus-design.png" />
+                                       </image>
+                                    </ImageView>
+                                 </graphic>
+                                 <tooltip>
+                                    <Tooltip text="Polygon - Draw a regular polygon of any number of sides on the canvas" wrapText="true" />
+                                 </tooltip></ToggleButton>
                            </children>
                         </GridPane>
                         <Label layoutX="386.0" layoutY="69.0" prefHeight="10.0" prefWidth="38.0" text="Shapes" />
@@ -61,12 +154,72 @@
                               <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
                            </rowConstraints>
                            <children>
-                              <ToggleButton mnemonicParsing="false" onAction="#cursorUpdate" prefHeight="37.0" prefWidth="55.0" toggleGroup="$editToggles" />
-                              <ToggleButton mnemonicParsing="false" onAction="#cursorUpdate" prefHeight="45.0" prefWidth="55.0" text="Fill" toggleGroup="$editToggles" GridPane.columnIndex="1" />
-                              <ToggleButton fx:id="erseToggle" mnemonicParsing="false" onAction="#cursorUpdate" prefHeight="46.0" prefWidth="55.0" text="Eraser" toggleGroup="$editToggles" GridPane.rowIndex="1" />
-                              <ToggleButton fx:id="grabToggle" mnemonicParsing="false" onAction="#cursorUpdate" prefHeight="46.0" prefWidth="55.0" text="Color Grabber" toggleGroup="$editToggles" GridPane.columnIndex="1" GridPane.rowIndex="1" />
-                              <ToggleButton mnemonicParsing="false" onAction="#cursorUpdate" prefHeight="45.0" prefWidth="55.0" text="Text" toggleGroup="$editToggles" GridPane.columnIndex="2" />
-                              <ToggleButton mnemonicParsing="false" onAction="#cursorUpdate" prefHeight="36.0" prefWidth="55.0" text="Magnifier" toggleGroup="$editToggles" GridPane.columnIndex="2" GridPane.rowIndex="1" />
+                              <ToggleButton fx:id="rotateButton" mnemonicParsing="false" onAction="#cursorUpdate" prefHeight="37.0" prefWidth="55.0" toggleGroup="$editToggles">
+                                 <graphic>
+                                    <ImageView fitHeight="18.0" fitWidth="16.0" pickOnBounds="true" preserveRatio="true">
+                                       <image>
+                                          <Image url="@Tools/rotate-to-portrait.png" />
+                                       </image>
+                                    </ImageView>
+                                 </graphic>
+                                 <tooltip>
+                                    <Tooltip text="Rotate - INOP" wrapText="true" />
+                                 </tooltip></ToggleButton>
+                              <ToggleButton mnemonicParsing="false" onAction="#cursorUpdate" prefHeight="45.0" prefWidth="55.0" toggleGroup="$editToggles" GridPane.columnIndex="1">
+                                 <graphic>
+                                    <ImageView fitHeight="18.0" fitWidth="16.0" pickOnBounds="true" preserveRatio="true">
+                                       <image>
+                                          <Image url="@Tools/fill-color.png" />
+                                       </image>
+                                    </ImageView>
+                                 </graphic>
+                                 <tooltip>
+                                    <Tooltip text="Fill - INOP" wrapText="true" />
+                                 </tooltip></ToggleButton>
+                              <ToggleButton fx:id="erseToggle" contentDisplay="CENTER" mnemonicParsing="false" onAction="#cursorUpdate" prefHeight="46.0" prefWidth="55.0" text="Eraser" textFill="TRANSPARENT" toggleGroup="$editToggles" GridPane.rowIndex="1">
+                                 <graphic>
+                                    <ImageView fitHeight="18.0" fitWidth="16.0" pickOnBounds="true" preserveRatio="true">
+                                       <image>
+                                          <Image url="@Tools/eraser.png" />
+                                       </image>
+                                    </ImageView>
+                                 </graphic>
+                                 <tooltip>
+                                    <Tooltip text="Eraser - Erase anything from the canvas using the selected line width" wrapText="true" />
+                                 </tooltip></ToggleButton>
+                              <ToggleButton fx:id="grabToggle" contentDisplay="CENTER" mnemonicParsing="false" onAction="#cursorUpdate" prefHeight="46.0" prefWidth="55.0" text="Color Grabber" textFill="TRANSPARENT" toggleGroup="$editToggles" GridPane.columnIndex="1" GridPane.rowIndex="1">
+                                 <graphic>
+                                    <ImageView fitHeight="18.0" fitWidth="16.0" pickOnBounds="true" preserveRatio="true">
+                                       <image>
+                                          <Image url="@Tools/color-dropper.png" />
+                                       </image>
+                                    </ImageView>
+                                 </graphic>
+                                 <tooltip>
+                                    <Tooltip text="Color Grabber - Grab a color from the canvas and use it with drawing tools" wrapText="true" />
+                                 </tooltip></ToggleButton>
+                              <ToggleButton mnemonicParsing="false" onAction="#cursorUpdate" prefHeight="45.0" prefWidth="55.0" toggleGroup="$editToggles" GridPane.columnIndex="2">
+                                 <graphic>
+                                    <ImageView fitHeight="18.0" fitWidth="16.0" pickOnBounds="true" preserveRatio="true">
+                                       <image>
+                                          <Image url="@Tools/text.png" />
+                                       </image>
+                                    </ImageView>
+                                 </graphic>
+                                 <tooltip>
+                                    <Tooltip text="Text - INOP" wrapText="true" />
+                                 </tooltip></ToggleButton>
+                              <ToggleButton mnemonicParsing="false" onAction="#cursorUpdate" prefHeight="36.0" prefWidth="55.0" toggleGroup="$editToggles" GridPane.columnIndex="2" GridPane.rowIndex="1">
+                                 <graphic>
+                                    <ImageView fitHeight="18.0" fitWidth="16.0" pickOnBounds="true" preserveRatio="true">
+                                       <image>
+                                          <Image url="@Tools/zoom-to-extents.png" />
+                                       </image>
+                                    </ImageView>
+                                 </graphic>
+                                 <tooltip>
+                                    <Tooltip text="Magnifier - INOP" wrapText="true" />
+                                 </tooltip></ToggleButton>
                            </children>
                         </GridPane>
                         <Label layoutX="194.0" layoutY="69.0" prefHeight="10.0" prefWidth="38.0" text="Tools" />
@@ -90,6 +243,9 @@
                               <MenuItem mnemonicParsing="false" onAction="#saveAs" text="Save As..." />
                             <MenuItem mnemonicParsing="false" onAction="#helpShow" text="Help &amp; About" />
                           </items>
+                           <tooltip>
+                              <Tooltip text="File Menu - Contains new, open, save, save as, and help functions" wrapText="true" />
+                           </tooltip>
                         </MenuButton>
                         <GridPane layoutX="59.0" layoutY="-1.0" prefHeight="70.0" prefWidth="105.0">
                           <columnConstraints>
@@ -101,15 +257,80 @@
                             <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
                           </rowConstraints>
                            <children>
-                              <ToggleButton fx:id="copyToggle" mnemonicParsing="false" onAction="#cursorUpdate" prefHeight="37.0" prefWidth="55.0" text="Copy" toggleGroup="$editToggles" />
-                              <ToggleButton fx:id="psteToggle" mnemonicParsing="false" onAction="#cursorUpdate" prefHeight="37.0" prefWidth="55.0" text="Paste" toggleGroup="$editToggles" GridPane.columnIndex="1" />
-                              <ToggleButton fx:id="slctToggle" mnemonicParsing="false" onAction="#cursorUpdate" prefHeight="37.0" prefWidth="55.0" text="Select" toggleGroup="$editToggles" GridPane.rowIndex="1" />
-                              <ToggleButton fx:id="moveToggle" mnemonicParsing="false" onAction="#cursorUpdate" prefHeight="37.0" prefWidth="55.0" text="Move" toggleGroup="$editToggles" GridPane.columnIndex="1" GridPane.rowIndex="1" />
+                              <ToggleButton fx:id="copyToggle" contentDisplay="CENTER" mnemonicParsing="false" onAction="#cursorUpdate" prefHeight="37.0" prefWidth="55.0" text="Copy" textFill="TRANSPARENT" toggleGroup="$editToggles">
+                                 <graphic>
+                                    <ImageView fitHeight="22.0" fitWidth="21.0" pickOnBounds="true" preserveRatio="true">
+                                       <image>
+                                          <Image url="@Tools/copy--v1.png" />
+                                       </image>
+                                    </ImageView>
+                                 </graphic>
+                                 <tooltip>
+                                    <Tooltip text="Copy - Copies the selected area on the canvas to the clipboard" wrapText="true" />
+                                 </tooltip></ToggleButton>
+                              <ToggleButton fx:id="psteToggle" contentDisplay="CENTER" mnemonicParsing="false" onAction="#cursorUpdate" prefHeight="37.0" prefWidth="55.0" text="Paste" textFill="TRANSPARENT" toggleGroup="$editToggles" GridPane.columnIndex="1">
+                                 <graphic>
+                                    <ImageView fitHeight="40.0" fitWidth="25.0" pickOnBounds="true" preserveRatio="true">
+                                       <image>
+                                          <Image url="@Tools/paste.png" />
+                                       </image>
+                                    </ImageView>
+                                 </graphic>
+                                 <tooltip>
+                                    <Tooltip text="Paste - Pastes from the clipboard onto the canvas" wrapText="true" />
+                                 </tooltip></ToggleButton>
+                              <ToggleButton fx:id="slctToggle" contentDisplay="CENTER" mnemonicParsing="false" onAction="#cursorUpdate" prefHeight="37.0" prefWidth="55.0" text="Select" textFill="TRANSPARENT" toggleGroup="$editToggles" GridPane.rowIndex="1">
+                                 <graphic>
+                                    <ImageView fitHeight="27.0" fitWidth="27.0" pickOnBounds="true" preserveRatio="true">
+                                       <image>
+                                          <Image url="@Tools/select-none.png" />
+                                       </image>
+                                    </ImageView>
+                                 </graphic>
+                                 <tooltip>
+                                    <Tooltip text="Select - Select a rectangular area on the canvas" wrapText="true" />
+                                 </tooltip></ToggleButton>
+                              <ToggleButton fx:id="moveToggle" contentDisplay="CENTER" mnemonicParsing="false" onAction="#cursorUpdate" prefHeight="37.0" prefWidth="55.0" text="Move" textFill="TRANSPARENT" toggleGroup="$editToggles" GridPane.columnIndex="1" GridPane.rowIndex="1">
+                                 <graphic>
+                                    <ImageView fitHeight="27.0" fitWidth="26.0" pickOnBounds="true" preserveRatio="true">
+                                       <image>
+                                          <Image url="@Tools/move.png" />
+                                       </image>
+                                    </ImageView>
+                                 </graphic>
+                                 <tooltip>
+                                    <Tooltip text="Move - Moves the selected area on the canvas to a new location" wrapText="true" />
+                                 </tooltip></ToggleButton>
                            </children>
                         </GridPane>
                         <Label layoutX="92.0" layoutY="69.0" prefHeight="10.0" prefWidth="38.0" text="Image" />
-                        <Button fx:id="undoButton" layoutY="49.0" mnemonicParsing="false" onAction="#undo" prefWidth="29.0" text="Undo" />
-                        <Button fx:id="redoButton" layoutX="29.0" layoutY="49.0" mnemonicParsing="false" onAction="#redo" prefWidth="29.0" text="Redo" />
+                        <Button fx:id="undoButton" layoutY="49.0" mnemonicParsing="false" onAction="#undo" prefWidth="29.0">
+                           <graphic>
+                              <ImageView fitHeight="13.0" fitWidth="19.0" pickOnBounds="true" preserveRatio="true">
+                                 <image>
+                                    <Image url="@Tools/undo.png" />
+                                 </image>
+                              </ImageView>
+                           </graphic>
+                           <tooltip>
+                              <Tooltip text="Undo - Undo the last action" wrapText="true" />
+                           </tooltip></Button>
+                        <Button fx:id="redoButton" layoutX="29.0" layoutY="49.0" mnemonicParsing="false" onAction="#redo" prefWidth="29.0">
+                           <graphic>
+                              <ImageView fitHeight="13.0" fitWidth="19.0" pickOnBounds="true" preserveRatio="true">
+                                 <image>
+                                    <Image url="@Tools/redo.png" />
+                                 </image>
+                              </ImageView>
+                           </graphic>
+                           <tooltip>
+                              <Tooltip text="Redo - Redo the last undone action" wrapText="true" />
+                           </tooltip></Button>
+                        <ImageView fitHeight="36.0" fitWidth="27.0" layoutX="279.0" layoutY="14.0" pickOnBounds="true" preserveRatio="true">
+                           <image>
+                              <Image url="@Tools/edit.png" />
+                           </image>
+                        </ImageView>
                      </children>
                   </AnchorPane>
             </content>
@@ -120,11 +341,23 @@
    <bottom>
       <ToolBar prefHeight="40.0" prefWidth="200.0" BorderPane.alignment="CENTER">
          <items>
-            <Label prefHeight="17.0" prefWidth="64.0" text="Canvas Size" />
-            <Slider fx:id="canvasSizeSlider" max="1.0" min="-1.0" onMouseReleased="#canvasSizeUpdate" />
-            <CheckBox fx:id="timerDispToggle" mnemonicParsing="false" onAction="#timerDisplayUpdate" text="View Autosave Timer" />
+            <Label prefHeight="17.0" prefWidth="64.0" text="Canvas Size">
+               <tooltip>
+                  <Tooltip text="Adjust the size of the canvas" wrapText="true" />
+               </tooltip></Label>
+            <Slider fx:id="canvasSizeSlider" max="1.0" min="-1.0" onMouseReleased="#canvasSizeUpdate">
+               <tooltip>
+                  <Tooltip text="Adjust the size of the canvas" wrapText="true" />
+               </tooltip></Slider>
             <Label fx:id="timerDispBox" />
+            <CheckBox fx:id="timerDispToggle" mnemonicParsing="false" onAction="#timerDisplayUpdate" text="View Autosave Timer">
+               <tooltip>
+                  <Tooltip text="Toggles viewing of the autosave timer on/off. Autosave functionality not affected." wrapText="true" />
+               </tooltip></CheckBox>
          </items>
       </ToolBar>
    </bottom>
+   <center>
+      <TabPane fx:id="imageTabs" onMouseClicked="#cursorUpdate" onMouseEntered="#updateWidth" onMouseExited="#updateWidth" prefHeight="200.0" prefWidth="470.0" BorderPane.alignment="CENTER" />
+   </center>
 </BorderPane>

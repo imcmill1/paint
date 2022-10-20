@@ -24,8 +24,6 @@ import java.util.TimerTask;
 /* SPRINT 6
     - Allow rotation of an image, as well as mirror it horizontally and vertically
     - Allow rotation of a selection
-    - Have icons for drawing tools
-    - Have tool tips for buttons that appear on hover
     - Threaded activity logging that keeps track of what the user does and logs it in a text file.
 
  * KNOWN ISSUES TO FIX:
@@ -172,6 +170,12 @@ public class Controller {
 
     @FXML
     protected void timerDisplayUpdate() { Display.timerDisplayUpdate(timerDispToggle, timerDispBox); }
+
+    @FXML
+    protected void rotateCanvasClockwise() { Display.rotateCanvasClockwise(); }
+
+    @FXML
+    protected void rotateCanvasCounterClockwise() { Display.rotateCanvasCounterClockwise(); }
 
     //=====EDIT METHODS=====//
     //Methods from the Edit class. As with above, these methods must be wrapped in a controller method

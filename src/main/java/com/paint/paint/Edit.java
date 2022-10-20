@@ -597,7 +597,6 @@ public class Edit {
     public static void cursorUpdate (Canvas canvas, GraphicsContext graphContext, ToggleGroup editToggles, ColorPicker colorPicker) {
         removeHandlers(canvas); //start by removing previous event handlers
         String selected; //creates a blank string
-        List<Toggle> toggleList = (List) editToggles.getToggles(); //grabs an observable list of all toggles in the editToggles group
         try { //try to get the selected toggle, will fail if null
             selected = editToggles.getSelectedToggle().toString(); //get string for the selected toggle
             selected = selected.substring(53); //get just the end of the string with the button label
