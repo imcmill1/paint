@@ -21,9 +21,14 @@ import java.util.TimerTask;
  */
 
 //TO-DO LIST
-/*
+/* SPRINT 6
+    - Allow rotation of an image, as well as mirror it horizontally and vertically
+    - Allow rotation of a selection
+    - Have icons for drawing tools
+    - Have tool tips for buttons that appear on hover
+    - Threaded activity logging that keeps track of what the user does and logs it in a text file.
+
  * KNOWN ISSUES TO FIX:
- *  - Add custom icons for the shapes and tools toolbar
     - Make Undo/Redo less janky. It works, but sometimes does unpredictable things.
     - Somehow fix copy/paste to use the system clipboard.
     - Fix timer display so that it displays only the current tab's autosave timer
