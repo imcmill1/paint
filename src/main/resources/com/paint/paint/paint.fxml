@@ -35,23 +35,30 @@
                            <tooltip>
                               <Tooltip text="Color Selector - Select a color from a preset range, or create your own, for use with all drawing tools." wrapText="true" />
                            </tooltip></ColorPicker>
-                        <ChoiceBox fx:id="widthChoice" layoutX="489.0" layoutY="-1.0" onMouseExited="#updateWidth" prefHeight="70.0" prefWidth="147.0">
+                        <ChoiceBox fx:id="widthChoice" layoutX="517.0" layoutY="-1.0" onMouseExited="#updateWidth" prefHeight="70.0" prefWidth="119.0">
                            <tooltip>
                               <Tooltip text="Line Width Selector - Select from a range of solid &amp; dashed line widths" wrapText="true" />
                            </tooltip></ChoiceBox>
-                        <ToggleButton fx:id="drawToggle" alignment="BOTTOM_CENTER" layoutX="262.0" layoutY="-1.0" mnemonicParsing="false" onAction="#cursorUpdate" prefHeight="70.0" prefWidth="60.0" text="Draw" textAlignment="CENTER">
+                        <ToggleButton fx:id="drawToggle" alignment="BOTTOM_CENTER" contentDisplay="TOP" layoutX="311.0" layoutY="-1.0" mnemonicParsing="false" onAction="#cursorUpdate" prefHeight="70.0" prefWidth="49.0" text="Draw" textAlignment="CENTER">
                            <toggleGroup>
                               <ToggleGroup fx:id="editToggles" />
                            </toggleGroup>
                            <tooltip>
                               <Tooltip text="Free draw on the canvas" wrapText="true" />
                            </tooltip>
+                           <graphic>
+                              <ImageView fitHeight="36.0" fitWidth="27.0" pickOnBounds="true" preserveRatio="true">
+                                 <image>
+                                    <Image url="@Tools/edit.png" />
+                                 </image>
+                              </ImageView>
+                           </graphic>
                         </ToggleButton>
                         <Button layoutY="24.0" mnemonicParsing="false" onAction="#clearActiveCanvas" prefHeight="25.0" prefWidth="58.0" text="Clear">
                            <tooltip>
                               <Tooltip text="Clear - Wipes the entire canvas" wrapText="true" />
                            </tooltip></Button>
-                        <GridPane fx:id="shapesPane" layoutX="323.0" layoutY="-1.0" prefHeight="70.0" prefWidth="165.0">
+                        <GridPane fx:id="shapesPane" layoutX="360.0" layoutY="-1.0" prefHeight="70.0" prefWidth="157.0">
                           <columnConstraints>
                             <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
                             <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
@@ -142,8 +149,8 @@
                                  </tooltip></ToggleButton>
                            </children>
                         </GridPane>
-                        <Label layoutX="386.0" layoutY="69.0" prefHeight="10.0" prefWidth="38.0" text="Shapes" />
-                        <GridPane fx:id="toolsPane" layoutX="163.0" layoutY="-1.0" prefHeight="70.0" prefWidth="99.0">
+                        <Label layoutX="416.0" layoutY="69.0" prefHeight="10.0" prefWidth="38.0" text="Shapes" />
+                        <GridPane fx:id="toolsPane" layoutX="163.0" layoutY="-1.0" prefHeight="70.0" prefWidth="148.0">
                            <columnConstraints>
                               <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
                               <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
@@ -154,17 +161,6 @@
                               <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
                            </rowConstraints>
                            <children>
-                              <ToggleButton fx:id="rotateButton" mnemonicParsing="false" onAction="#cursorUpdate" prefHeight="37.0" prefWidth="55.0" toggleGroup="$editToggles">
-                                 <graphic>
-                                    <ImageView fitHeight="18.0" fitWidth="16.0" pickOnBounds="true" preserveRatio="true">
-                                       <image>
-                                          <Image url="@Tools/rotate-to-portrait.png" />
-                                       </image>
-                                    </ImageView>
-                                 </graphic>
-                                 <tooltip>
-                                    <Tooltip text="Rotate - INOP" wrapText="true" />
-                                 </tooltip></ToggleButton>
                               <ToggleButton mnemonicParsing="false" onAction="#cursorUpdate" prefHeight="45.0" prefWidth="55.0" toggleGroup="$editToggles" GridPane.columnIndex="1">
                                  <graphic>
                                     <ImageView fitHeight="18.0" fitWidth="16.0" pickOnBounds="true" preserveRatio="true">
@@ -220,9 +216,25 @@
                                  <tooltip>
                                     <Tooltip text="Magnifier - INOP" wrapText="true" />
                                  </tooltip></ToggleButton>
+                              <MenuButton mnemonicParsing="false" prefHeight="45.0" prefWidth="55.0">
+                                <items>
+                                  <MenuItem mnemonicParsing="false" text="Action 1" />
+                                  <MenuItem mnemonicParsing="false" text="Action 2" />
+                                </items>
+                                 <graphic>
+                                    <ImageView fitHeight="15.0" fitWidth="14.0" pickOnBounds="true" preserveRatio="true">
+                                       <image>
+                                          <Image url="@Tools/rotate-to-portrait.png" />
+                                       </image>
+                                    </ImageView>
+                                 </graphic>
+                                 <tooltip>
+                                    <Tooltip text="Rotate - Rotate either your selection or the entire canvas." />
+                                 </tooltip>
+                              </MenuButton>
                            </children>
                         </GridPane>
-                        <Label layoutX="194.0" layoutY="69.0" prefHeight="10.0" prefWidth="38.0" text="Tools" />
+                        <Label layoutX="218.0" layoutY="69.0" prefHeight="10.0" prefWidth="38.0" text="Tools" />
                         <MenuButton fx:id="fileButton" layoutY="2.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="58.0" text="File">
                           <items>
                           <MenuItem mnemonicParsing="false" onAction="#createNewTab" text="New">
@@ -326,11 +338,6 @@
                            <tooltip>
                               <Tooltip text="Redo - Redo the last undone action" wrapText="true" />
                            </tooltip></Button>
-                        <ImageView fitHeight="36.0" fitWidth="27.0" layoutX="279.0" layoutY="14.0" pickOnBounds="true" preserveRatio="true">
-                           <image>
-                              <Image url="@Tools/edit.png" />
-                           </image>
-                        </ImageView>
                      </children>
                   </AnchorPane>
             </content>

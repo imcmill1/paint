@@ -171,12 +171,6 @@ public class Controller {
     @FXML
     protected void timerDisplayUpdate() { Display.timerDisplayUpdate(timerDispToggle, timerDispBox); }
 
-    @FXML
-    protected void rotateCanvasClockwise() { Display.rotateCanvasClockwise(); }
-
-    @FXML
-    protected void rotateCanvasCounterClockwise() { Display.rotateCanvasCounterClockwise(); }
-
     //=====EDIT METHODS=====//
     //Methods from the Edit class. As with above, these methods must be wrapped in a controller method
 

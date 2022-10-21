@@ -516,19 +516,6 @@ public class Display {
         promptStage.showAndWait();
         return numSides[0];
     }
-
-    public static void rotateCanvasClockwise() {
-        GraphicsContext gc = activeCanvas.getGraphicsContext2D();
-        Rotate r = new Rotate(15, 0, 0);
-        gc.setTransform(r.getMxx(), r.getMyx(), r.getMxy(), r.getMyy(), r.getTx(), r.getTy());
-    }
-
-    public static void rotateCanvasCounterClockwise() {
-        GraphicsContext gc = activeCanvas.getGraphicsContext2D();
-        Rotate r = new Rotate(-15, 0, 0);
-        gc.setTransform(r.getMxx(), r.getMyx(), r.getMxy(), r.getMyy(), r.getTx(), r.getTy());
-    }
-
     public static void timerDisplayUpdate(CheckBox dispCheck, Label dispBox) {
         if (dispCheck.isSelected()) { dispBox.setVisible(true); }
         else dispBox.setVisible(false);
