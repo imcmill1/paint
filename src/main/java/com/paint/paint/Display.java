@@ -16,6 +16,7 @@ import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Text;
+import javafx.scene.transform.Rotate;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 
@@ -515,7 +516,6 @@ public class Display {
         promptStage.showAndWait();
         return numSides[0];
     }
-
     public static void timerDisplayUpdate(CheckBox dispCheck, Label dispBox) {
         if (dispCheck.isSelected()) { dispBox.setVisible(true); }
         else dispBox.setVisible(false);

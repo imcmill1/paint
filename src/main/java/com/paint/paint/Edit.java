@@ -556,7 +556,8 @@ public class Edit {
     public static void move(StackPane stack, Canvas canvas, GraphicsContext graphContext, Rectangle2D selection) {
         final Point center = new Point();
         SnapshotParameters sp = new SnapshotParameters();
-        sp.setViewport(selection);
+        try { sp.setViewport(selection); }
+        catch (Exception e) {}
         WritableImage img = new WritableImage((int)selection.getWidth(), (int)selection.getHeight());
         stack.snapshot(sp, img);
         /*Clipboard clipboard = Clipboard.getSystemClipboard();
@@ -597,7 +598,6 @@ public class Edit {
     public static void cursorUpdate (Canvas canvas, GraphicsContext graphContext, ToggleGroup editToggles, ColorPicker colorPicker) {
         removeHandlers(canvas); //start by removing previous event handlers
         String selected; //creates a blank string
-        List<Toggle> toggleList = (List) editToggles.getToggles(); //grabs an observable list of all toggles in the editToggles group
         try { //try to get the selected toggle, will fail if null
             selected = editToggles.getSelectedToggle().toString(); //get string for the selected toggle
             selected = selected.substring(53); //get just the end of the string with the button label
@@ -612,46 +612,57 @@ public class Edit {
 
             case "": //case also covered by the catch block, here for redundancy.
                 removeHandlers(canvas); //just remove handlers
+                selection = null;
                 break;
 
             case "'Draw'":
+                selection = null;
                 graphContext.setStroke(colorPicker.getValue());
                 freeDraw(canvas, graphContext);
                 break;
 
             case "'Line'":
+                selection = null;
                 drawLine(canvas, graphContext);
                 break;
 
             case "'Right Triangle'":
+                selection = null;
                 drawRightTri(canvas, graphContext);
                 break;
 
             case "'Rectangle'":
+                selection = null;
                 drawRectangle(canvas, graphContext);
                 break;
 
             case "'Square'":
+                selection = null;
                 drawSquare(canvas, graphContext);
                 break;
 
             case "'Polygon'":
+                selection = null;
                 drawPolygon(canvas, graphContext);
                 break;
 
             case "'Circle'":
+                selection = null;
                 drawCircle(canvas, graphContext);
                 break;
 
             case "'Ellipse'":
+                selection = null;
                 drawEllipse(canvas, graphContext);
                 break;
 
             case "'Color Grabber'":
+                selection = null;
                 colorGrabber(canvas, graphContext, editToggles, colorPicker);
                 break;
 
             case "'Eraser'":
+                selection = null;
                 eraser(canvas, graphContext);
                 break;
 
@@ -664,6 +675,7 @@ public class Edit {
                 break;
 
             case "'Paste'":
+                selection = null;
                 paste(canvas, graphContext);
                 break;
 
