@@ -63,9 +63,11 @@ public class Edit {
                 case "Width = 1px":
                     graphContext.setLineWidth(1);
                     break;
+
                 case "Width = 3px":
                     graphContext.setLineWidth(3);
                     break;
+
                 case "Width = 5px":
                     graphContext.setLineWidth(5);
                     break;
@@ -595,7 +597,7 @@ public class Edit {
      * @param editToggles the ToggleGroup containing all the tool toggle buttons.
      * @param colorPicker the ColorPicker used for selecting the color to be used by the tools.
      */
-    public static void cursorUpdate (Canvas canvas, GraphicsContext graphContext, ToggleGroup editToggles, ColorPicker colorPicker) {
+    public static String cursorUpdate (Canvas canvas, GraphicsContext graphContext, ToggleGroup editToggles, ColorPicker colorPicker) {
         removeHandlers(canvas); //start by removing previous event handlers
         String selected; //creates a blank string
         try { //try to get the selected toggle, will fail if null
@@ -607,85 +609,111 @@ public class Edit {
             selected = ""; //if the selected toggle was null, set selected to an empty string
             removeHandlers(canvas); //remove handlers
         }
-
+        String lastTool = null;
         switch (selected) {
 
             case "": //case also covered by the catch block, here for redundancy.
                 removeHandlers(canvas); //just remove handlers
                 selection = null;
+                lastTool =  "";
                 break;
 
             case "'Draw'":
                 selection = null;
                 graphContext.setStroke(colorPicker.getValue());
                 freeDraw(canvas, graphContext);
+                lastTool =  "Free draw";
                 break;
 
             case "'Line'":
                 selection = null;
                 drawLine(canvas, graphContext);
+                lastTool =  "Straight line";
                 break;
 
             case "'Right Triangle'":
                 selection = null;
                 drawRightTri(canvas, graphContext);
+                lastTool =  "Right Triangle";
                 break;
 
             case "'Rectangle'":
                 selection = null;
                 drawRectangle(canvas, graphContext);
+                lastTool =  "Rectangle";
                 break;
 
             case "'Square'":
                 selection = null;
                 drawSquare(canvas, graphContext);
+                lastTool =  "Square";
                 break;
 
             case "'Polygon'":
                 selection = null;
                 drawPolygon(canvas, graphContext);
+                lastTool =  "Polygon";
                 break;
 
             case "'Circle'":
                 selection = null;
                 drawCircle(canvas, graphContext);
+                lastTool =  "Circle";
                 break;
 
             case "'Ellipse'":
                 selection = null;
                 drawEllipse(canvas, graphContext);
+                lastTool =  "Ellipse";
                 break;
 
             case "'Color Grabber'":
                 selection = null;
                 colorGrabber(canvas, graphContext, editToggles, colorPicker);
+                lastTool =  "Color Grabber";
                 break;
 
             case "'Eraser'":
                 selection = null;
                 eraser(canvas, graphContext);
+                lastTool =  "Eraser";
                 break;
 
             case "'Select'":
                 select(canvas, graphContext);
+                lastTool =  "Select";
                 break;
 
             case "'Copy'":
                 copy((StackPane)canvas.getParent(), selection);
+                lastTool =  "Select";
                 break;
 
             case "'Paste'":
                 selection = null;
                 paste(canvas, graphContext);
+                lastTool =  "Paste";
                 break;
 
             case "'Move'":
                 move((StackPane)canvas.getParent(), canvas, graphContext, selection);
+                lastTool =  "Move";
                 break;
 
         }
+        return lastTool;
+    }
 
+    public static void rotateClockwise90(Canvas canvas) {
+        if (selection == null) { //if selection is null, rotate the whole canvas
+            canvas.setRotate(90);
+        }
+    }
 
+    public static void rotateCounterClockwise90(Canvas canvas) {
+        if (selection == null) { //if selection is null, rotate the whole canvas
+            canvas.setRotate(-90);
+        }
     }
 
 }

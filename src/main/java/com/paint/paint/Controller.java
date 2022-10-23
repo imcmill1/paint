@@ -4,12 +4,14 @@
  */
 package com.paint.paint;
 
+import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.control.*;
 import javafx.scene.layout.StackPane;
 
-import java.io.IOException;
+import java.io.*;
+import java.time.LocalDateTime;
 import java.util.Timer;
 import java.util.TimerTask;
 
@@ -24,7 +26,6 @@ import java.util.TimerTask;
 /* SPRINT 6
     - Allow rotation of an image, as well as mirror it horizontally and vertically
     - Allow rotation of a selection
-    - Threaded activity logging that keeps track of what the user does and logs it in a text file.
 
  * KNOWN ISSUES TO FIX:
     - Make Undo/Redo less janky. It works, but sometimes does unpredictable things.
@@ -66,6 +67,7 @@ public class Controller {
     /** tabsOpened is an internal variable that ticks up every time a new canvas is opened*/
     private int tabsOpened = 1;
 
+    public static String lastEvent;
 
     //=====FILE IO METHODS=====//
     //These are the methods from the fileIO static class. They have to be wrapped in a method here in the controller for them to be used
@@ -84,6 +86,7 @@ public class Controller {
         String selectedImg = fileIO.open(imageTabs); //creates string selectedImg and assigns it to a call of fileIO.open()
         Display.showImage(Display.getActiveCanvas(), Display.getActiveCanvas().getGraphicsContext2D(), selectedImg); //passes that string as the path into showImage
         tabsOpened++;
+        lastEvent = "Image Opened";
     }
 
     /**
@@ -99,6 +102,7 @@ public class Controller {
     protected void save() throws IOException {
         fileIO.save(Display.getActiveStack(), (imageTab) imageTabs.getSelectionModel().getSelectedItem());
         Display.setUnsavedChanges(false);
+        lastEvent = "Save";
     }
 
     /**
@@ -114,6 +118,7 @@ public class Controller {
     protected void saveAs() throws IOException {
         fileIO.saveAs(Display.getActiveStack(), (imageTab) imageTabs.getSelectionModel().getSelectedItem());
         Display.setUnsavedChanges(false);
+        lastEvent = "Save As";
     }
 
     //=====DISPLAY METHODS=====//
@@ -134,6 +139,7 @@ public class Controller {
 
         catch (Exception e) {}
         tabsOpened++;
+        lastEvent = "New Tab Created";
     }
 
     /**
@@ -144,6 +150,7 @@ public class Controller {
     @FXML
     protected void clearActiveCanvas() {
         Display.clearActiveCanvas(imageTabs, Display.getActiveCanvas());
+        lastEvent = "Canvas Clear";
     }
 
     /**
@@ -160,13 +167,22 @@ public class Controller {
      * @since 2.3.1
      */
     @FXML
-    protected void canvasSizeUpdate() {Display.updateCanvasSize(Display.getActiveCanvas(), Display.getActiveCanvas().getGraphicsContext2D(), canvasSizeSlider.getValue());}
+    protected void canvasSizeUpdate() {
+        Display.updateCanvasSize(Display.getActiveCanvas(), Display.getActiveCanvas().getGraphicsContext2D(), canvasSizeSlider.getValue());
+        lastEvent = "Canvas Resize";
+    }
 
     @FXML
-    protected void undo() { Display.undo(Display.getActiveStack(), Display.getUndoStack()); }
+    protected void undo() {
+        Display.undo(Display.getActiveStack(), Display.getUndoStack());
+        lastEvent = "Undo";
+    }
 
     @FXML
-    protected void redo() { Display.redo(Display.getActiveStack(), Display.getRedoStack()); }
+    protected void redo() {
+        Display.redo(Display.getActiveStack(), Display.getRedoStack());
+        lastEvent = "Redo";
+    }
 
     @FXML
     protected void timerDisplayUpdate() { Display.timerDisplayUpdate(timerDispToggle, timerDispBox); }
@@ -181,7 +197,10 @@ public class Controller {
      */
     @FXML
     protected void updateWidth() {
-        try {Edit.updateWidth(Display.getActiveCanvas().getGraphicsContext2D(), widthChoice);}
+        try {
+            Edit.updateWidth(Display.getActiveCanvas().getGraphicsContext2D(), widthChoice);
+            lastEvent = "Width Update";
+        }
 
         catch (Exception e) {}
     }
@@ -192,7 +211,10 @@ public class Controller {
      */
     @FXML
     protected void updateColor() {
-        try {Edit.updateColor(Display.getActiveCanvas().getGraphicsContext2D(), colorPicker);}
+        try {
+            Edit.updateColor(Display.getActiveCanvas().getGraphicsContext2D(), colorPicker);
+            lastEvent = "Color Update";
+        }
 
         catch (Exception e) {}
     }
@@ -209,10 +231,20 @@ public class Controller {
             Display.setUnsavedChanges(true);
             Edit.updateWidth(Display.getActiveCanvas().getGraphicsContext2D(), widthChoice);
             Edit.updateColor(Display.getActiveCanvas().getGraphicsContext2D(), colorPicker);
-            Edit.cursorUpdate(Display.getActiveCanvas(), Display.getActiveCanvas().getGraphicsContext2D(), editToggles, colorPicker);
+            lastEvent = Edit.cursorUpdate(Display.getActiveCanvas(), Display.getActiveCanvas().getGraphicsContext2D(), editToggles, colorPicker);
         }
 
         catch (Exception e) {}
+    }
+
+    @FXML
+    protected void rotateClockwise90() {
+        Edit.rotateClockwise90(Display.getActiveCanvas());
+    }
+
+    @FXML
+    protected void rotateCounterClockwise90() {
+        Edit.rotateCounterClockwise90(Display.getActiveCanvas());
     }
 
     //=====INITIALIZE=====//
@@ -226,12 +258,32 @@ public class Controller {
      * createNewTab so that the application opens a blank tab on startup.</p>
      * @since 1.4.0
      */
-    public void initialize() {
+    public void initialize() throws IOException {
         Menu.widthChoiceConfig(widthChoice);
         Menu.colorPickerConfig(colorPicker);
         Display.firstTab = true;
         Display.createNewTab(imageTabs, "untitled", timerDispBox);
         Menu.timerDisplayConfig(timerDispBox);
+        File logFile = new File("C:\\Users\\ianmc\\IdeaProjects\\paint\\src\\logfiles\\eventLog.txt");
+        logFile.createNewFile();
+        FileWriter wiper = new FileWriter("C:\\Users\\ianmc\\IdeaProjects\\paint\\src\\logfiles\\eventLog.txt", false);
+        wiper.flush();
+        Timer logger = new Timer(true);
+        logger.scheduleAtFixedRate( new TimerTask() {
+            public void run() {
+                Platform.runLater(() -> {
+                    try {
+                        FileWriter fw = new FileWriter("C:\\Users\\ianmc\\IdeaProjects\\paint\\src\\logfiles\\eventLog.txt", true);
+                        BufferedWriter bw = new BufferedWriter(fw);
+                        PrintWriter pw = new PrintWriter(bw);
+                        pw.println("Most recent event: " + lastEvent + " as of " + LocalDateTime.now());
+                        pw.flush();
+                    } catch (IOException e) {
+                        throw new RuntimeException(e);
+                    }
+                });
+            }
+        },0,5000);  // start immediately, run every second
         /*
         paintTest.getPolygonXSidesTest();
         paintTest.getPolygonYSidesTest();

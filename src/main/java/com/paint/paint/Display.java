@@ -483,7 +483,7 @@ public class Display {
         VBox helpMsg = new VBox(20);
         helpMsg.setAlignment(Pos.CENTER);
         helpMsg.getChildren().add(new Text("About this application:\n" +
-                                              "ISM Pain(t) v2.0.3\n" +
+                                              "ISM Pain(t) v4.0.2\n" +
                                               "Author: Ian McMillan\n" +
                                               "Questions? Email the author:\n" +
                                               "ian.mcmillan1@valpo.edu\n"));
@@ -516,6 +516,8 @@ public class Display {
         promptStage.showAndWait();
         return numSides[0];
     }
+
+
     public static void timerDisplayUpdate(CheckBox dispCheck, Label dispBox) {
         if (dispCheck.isSelected()) { dispBox.setVisible(true); }
         else dispBox.setVisible(false);

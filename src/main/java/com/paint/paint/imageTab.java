@@ -20,8 +20,8 @@ public class imageTab extends Tab {
     private StackPane stackPane;
     private Canvas canvas;
     private Timer autoSave;
-
     private int timerVal;
+
     public imageTab(Label timerLabel) {
         imageTab newTab = this;
         autoSave = new Timer(true);
@@ -47,7 +47,7 @@ public class imageTab extends Tab {
                     }
                 });
             }
-        },0,1000);  // start immediately, run every 30 seconds
+        },0,1000);  // start immediately, run every second
     }
     public void setParentTabPane (TabPane tabPane) { parentTabPane = tabPane; }
     public void setScrollPane (ScrollPane inputScroll) { scrollPane = inputScroll; }
