@@ -35,9 +35,15 @@ public class Menu extends Node {
      * <p> This method configures the color picker so that it can be used for selecting the
      * color being used by the cursor. It simply sets a default color, black. </p>
      * @param colorPicker the ColorPicker object to be configured.
+     * @since 1.4.0
      */
     public static void colorPickerConfig (ColorPicker colorPicker) {colorPicker.setValue(Color.BLACK);}
 
+    /**
+     * <p> This method configures the timer display label so that its default state is invisible. </p>
+     * @param timerDisplayBox the timer display label.
+     * @since 3.6.0
+     */
     public static void timerDisplayConfig (Label timerDisplayBox) {
         timerDisplayBox.setVisible(false);
     }

@@ -172,18 +172,35 @@ public class Controller {
         lastEvent = "Canvas Resize";
     }
 
+    /**
+     * <p> This method performs an undo action on the active stack. It calls the Display method undo(). </p>
+     * @implNote <p>Currently, the undo/redo functionality relies on a single undo/redo stack. This means that all image tabs
+     * SHARE one stack, and an action can be "undone" on one tab, and then "redone" on a different tab. </p>
+     * @since 3.2.0
+     */
     @FXML
     protected void undo() {
         Display.undo(Display.getActiveStack(), Display.getUndoStack());
         lastEvent = "Undo";
     }
 
+    /**
+     * <p> This method performs a redo action on the active stack. It calls the Display method redo(). </p>
+     * @implNote <p>Currently, the undo/redo functionality relies on a single undo/redo stack. This means that all image tabs
+     * SHARE one stack, and an action can be "undone" on one tab, and then "redone" on a different tab. </p>
+     * @since 3.2.0
+     */
     @FXML
     protected void redo() {
         Display.redo(Display.getActiveStack(), Display.getRedoStack());
         lastEvent = "Redo";
     }
 
+    /**
+     * <p> This method wraps the Display timerDisplayUpdate() method, and implements the functionality of the
+     * timer display checkbox. </p>
+     * @since 3.6.0
+     */
     @FXML
     protected void timerDisplayUpdate() { Display.timerDisplayUpdate(timerDispToggle, timerDispBox); }
 
@@ -237,11 +254,23 @@ public class Controller {
         catch (Exception e) {}
     }
 
+    /**
+     * <p> This method wraps the now deprecated rotateClockwise90() method in the Edit class. Its functionality
+     * is bugged and is not slated to be fixed, so this method is also considered deprecated. </p>
+     * @deprecated
+     * @since 4.1.0
+     */
     @FXML
     protected void rotateClockwise90() {
         Edit.rotateClockwise90(Display.getActiveCanvas());
     }
 
+    /**
+     * <p> This method wraps the now deprecated rotateCounterClockwise90() method in the Edit class. Its functionality
+     * is bugged and is not slated to be fixed, so this method is also considered deprecated. </p>
+     * @deprecated
+     * @since 4.1.0
+     */
     @FXML
     protected void rotateCounterClockwise90() {
         Edit.rotateCounterClockwise90(Display.getActiveCanvas());

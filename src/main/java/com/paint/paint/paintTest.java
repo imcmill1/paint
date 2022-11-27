@@ -3,8 +3,21 @@ package com.paint.paint;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
 
+/**
+ * <p> paintTest.java is a class file containing my three unit tests, which test the polygon math calculations and
+ * the canvas rescaling factor calculations. </p>
+ * @author ianmc
+ * @since 3.5.0
+ */
 public class paintTest {
 
+    /**
+     * <p> This method contains an array of predefined x-values for the 5 vertices of a polygon at 0,0 with a radius of 100.
+     * It then creates a testX array that contains the values returned from the Edit.getPolygonSides() method, and compares them
+     * to the expected values. It returns true if the values match, and false if they do not.</p>
+     * @since 3.5.0
+     * @return the result of the test comparison
+     */
     public static boolean getPolygonXSidesTest() {
         double[] expectedX = new double[5]; //define expected points for given input
         expectedX[0] = 0;
@@ -23,6 +36,13 @@ public class paintTest {
         return true;
     }
 
+    /**
+     * <p> This method contains an array of predefined y-values for the 5 vertices of a polygon at 0,0 with a radius of 100.
+     * It then creates a testY array that contains the values returned from the Edit.getPolygonSides() method, and compares them
+     * to the expected values. It returns true if the values match, and false if they do not.</p>
+     * @since 3.5.0
+     * @return the result of the test comparison
+     */
     public static boolean getPolygonYSidesTest() {
         double[] expectedY = new double[5]; //define expected points for given input
         expectedY[0] = -100;
@@ -41,6 +61,13 @@ public class paintTest {
         return true;
     }
 
+    /**
+     * <p> This method creates a dummy canvas object with a test graphics context, and then an expected scalar value. It then
+     * creates a testScale value which is assigned to the return value of Display.updateCanvasSize with an input value of 0. If the test scale matches
+     * the expected scale (both 1) it returns true, otherwise, returns false. </p>
+     * @since 3.5.0
+     * @return the result of the test comparison
+     */
     public static boolean canvasRescaleTest() {
         Canvas testCanvas = new Canvas();
         GraphicsContext testGC = testCanvas.getGraphicsContext2D();

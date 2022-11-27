@@ -517,7 +517,12 @@ public class Display {
         return numSides[0];
     }
 
-
+    /**
+     * <p> This method takes in a checkbox object and a label object and toggles viewing the autosave timer on or off.</p>
+     * @param dispCheck the checkbox object that gets toggled
+     * @param dispBox the label object containing the timer text.
+     * @since 3.6.0
+     */
     public static void timerDisplayUpdate(CheckBox dispCheck, Label dispBox) {
         if (dispCheck.isSelected()) { dispBox.setVisible(true); }
         else dispBox.setVisible(false);

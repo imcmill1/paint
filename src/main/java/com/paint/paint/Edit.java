@@ -704,12 +704,26 @@ public class Edit {
         return lastTool;
     }
 
+    /**
+     * <p> This method was to be used to rotate the canvas clockwise. It currently works, but is bugged.
+     * As such, this method is to be considered deprecated, and its functionality is no longer tied to a controller method.</p>
+     *
+     * @param canvas the active canvas
+     * @deprecated
+     */
     public static void rotateClockwise90(Canvas canvas) {
         if (selection == null) { //if selection is null, rotate the whole canvas
             canvas.setRotate(90);
         }
     }
 
+    /**
+     * <p> This method was to be used to rotate the canvas counter clockwise. It currently works, but is bugged.
+     * As such, this method is to be considered deprecated, and its functionality is no longer tied to a controller method.</p>
+     *
+     * @param canvas the active canvas
+     * @deprecated
+     */
     public static void rotateCounterClockwise90(Canvas canvas) {
         if (selection == null) { //if selection is null, rotate the whole canvas
             canvas.setRotate(-90);
